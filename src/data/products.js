@@ -1,0 +1,38 @@
+export const products = [
+  {
+    id: 1,
+    name: "Midnight Black Signature Tee",
+    price: 2499,
+    category: "tshirt",
+    collection: "Signature",
+    isNew: true,
+    image: "/tshirt1.jpg",
+  },
+  {
+    id: 2,
+    name: "Ivory Luxe Shirt",
+    price: 3499,
+    category: "shirt",
+    collection: "Classic",
+    isNew: false,
+    image: "/shirt1.jpg",
+  },
+  {
+    id: 3,
+    name: "Desert Beige Oversized Tee",
+    price: 2799,
+    category: "tshirt",
+    collection: "Signature",
+    isNew: true,
+    image: "/tshirt2.jpg",
+  },
+  {
+    id: 4,
+    name: "Royal Navy Premium Shirt",
+    price: 3799,
+    category: "shirt",
+    collection: "Classic",
+    isNew: true,
+    image: "/shirt2.jpg",
+  },
+];
