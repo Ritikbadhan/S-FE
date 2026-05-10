@@ -10,6 +10,14 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   startGlobalLoading();
+  if (typeof FormData !== "undefined" && config.data instanceof FormData) {
+    if (typeof config.headers?.delete === "function") {
+      config.headers.delete("Content-Type");
+    } else if (config.headers) {
+      delete config.headers["Content-Type"];
+      delete config.headers["content-type"];
+    }
+  }
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("auth_token");
     if (token) {

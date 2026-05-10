@@ -168,6 +168,7 @@ export default function ProductEditorScreen({ productId = "" }) {
           id: `upload_${Date.now()}_${index}`,
           src: await readFileAsDataUrl(file),
           name: file.name,
+          file,
         }))
       );
 
@@ -292,6 +293,39 @@ export default function ProductEditorScreen({ productId = "" }) {
     };
   };
 
+  const buildMultipartPayload = () => {
+    const existingImages = form.images
+      .filter((image) => !image.file && image.src)
+      .map((image) => image.src);
+    const payload = {
+      ...buildPayload(),
+      images: existingImages,
+    };
+    const data = new FormData();
+
+    Object.entries(payload).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+
+      if (Array.isArray(value) || typeof value === "object") {
+        data.append(key, JSON.stringify(value));
+      } else {
+        data.append(key, String(value));
+      }
+    });
+
+    form.images.forEach((image) => {
+      if (image.file instanceof File) {
+        data.append("images", image.file);
+      }
+    });
+
+    if (existingImages.length) {
+      data.append("existingImages", JSON.stringify(existingImages));
+    }
+
+    return data;
+  };
+
   /* ---------------- Submit ---------------- */
 
   const handleSubmit = async (event) => {
@@ -321,7 +355,7 @@ export default function ProductEditorScreen({ productId = "" }) {
     }
 
     try {
-      const payload = buildPayload();
+      const payload = buildMultipartPayload();
 
       if (isEditing) {
         await productsApi.update(productId, payload);
