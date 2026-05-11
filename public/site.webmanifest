@@ -1,0 +1,24 @@
+{
+  "name": "SHARQ LABEL",
+  "short_name": "SHARQ",
+  "description": "Luxury menswear redefined with premium shirts, T-shirts, new arrivals, and refined everyday essentials.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/sharq_icon_192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/sharq_icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
