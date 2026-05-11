@@ -1,0 +1,218 @@
+/* =========================================
+   AG GRID - CLEAN MODERN ADMIN STYLE
+========================================= */
+
+.ag-theme-quartz {
+  /* Core Colors */
+  --ag-background-color: #ffffff;
+  --ag-foreground-color: #0f172a;
+
+  /* Header */
+  --ag-header-background-color: #ffffff;
+  --ag-header-foreground-color: #64748b;
+
+  /* Borders */
+  --ag-border-color: #eef2f7;
+  --ag-row-border-color: #f1f5f9;
+
+  /* Rows */
+  --ag-row-hover-color: #f8fafc;
+  --ag-selected-row-background-color: #f1f5f9;
+
+  /* Typography */
+ --ag-font-size: 14px;
+--ag-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Sizing */
+  --ag-row-height: 68px;
+  --ag-header-height: 56px;
+
+  /* Cell spacing */
+  --ag-cell-horizontal-padding: 18px;
+
+  /* Remove harsh borders */
+  --ag-borders: none;
+  --ag-borders-row: solid 1px;
+
+  border-radius: 18px;
+  overflow: hidden;
+
+  background: #ffffff;
+}
+
+/* =========================================
+   GRID WRAPPER
+========================================= */
+
+.ag-theme-quartz .ag-root-wrapper {
+  border: 1px solid #f1f5f9;
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.ag-theme-quartz .ag-header {
+  border-bottom: 1px solid #eef2f7;
+  background: #ffffff;
+}
+
+.ag-theme-quartz .ag-header-cell {
+  border-right: none !important;
+
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+
+  letter-spacing: 0.01em;
+}
+
+.ag-theme-quartz .ag-header-cell-label {
+  gap: 6px;
+}
+
+/* =========================================
+   ROWS
+========================================= */
+
+.ag-theme-quartz .ag-row {
+  border-bottom: 1px solid #f8fafc;
+
+  transition: background 0.2s ease;
+}
+
+.ag-theme-quartz .ag-row:last-child {
+  border-bottom: none;
+}
+
+.ag-theme-quartz .ag-row:hover {
+  background: #fafbfd;
+}
+
+/* =========================================
+   CELLS
+========================================= */
+
+.ag-theme-quartz .ag-cell {
+  border: none !important;
+
+  display: flex;
+  align-items: center;
+
+  color: #0f172a;
+
+  font-size: 0.875rem;
+}
+
+/* Remove ugly focus outline */
+
+.ag-theme-quartz .ag-cell-focus,
+.ag-theme-quartz .ag-cell-no-focus {
+  border: none !important;
+}
+
+.ag-theme-quartz .ag-cell:focus {
+  outline: none !important;
+}
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.ag-theme-quartz .ag-paging-panel {
+  border-top: 1px solid #eef2f7;
+
+  height: 58px;
+
+  color: #64748b;
+  font-size: 0.82rem;
+
+  padding: 0 16px;
+}
+
+/* =========================================
+   FILTER / MENU ICONS
+========================================= */
+
+.ag-theme-quartz .ag-icon {
+  color: #94a3b8;
+}
+
+/* =========================================
+   SORT ICONS
+========================================= */
+
+.ag-theme-quartz .ag-sort-indicator-icon {
+  color: #94a3b8;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+.ag-theme-quartz ::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.ag-theme-quartz ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ag-theme-quartz ::-webkit-scrollbar-thumb {
+  background: #dbe3ec;
+  border-radius: 20px;
+}
+
+.ag-theme-quartz ::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* =========================================
+   REMOVE EXTRA AG GRID STYLES
+========================================= */
+
+.ag-theme-quartz .ag-root-wrapper-body {
+  border: none;
+}
+
+.ag-theme-quartz .ag-layout-normal {
+  border: none;
+}
+
+.ag-theme-quartz .ag-center-cols-container {
+  width: 100% !important;
+}
+
+/* =========================================
+   CHECKBOXES
+========================================= */
+
+.ag-theme-quartz .ag-checkbox-input-wrapper {
+  border-radius: 6px;
+}
+
+/* =========================================
+   MOBILE IMPROVEMENTS
+========================================= */
+
+@media (max-width: 768px) {
+  .ag-theme-quartz {
+    --ag-row-height: 60px;
+    --ag-header-height: 50px;
+    --ag-font-size: 13px;
+    --ag-cell-horizontal-padding: 14px;
+  }
+
+  .ag-theme-quartz .ag-cell {
+    font-size: 0.82rem;
+  }
+
+  .ag-theme-quartz .ag-header-cell {
+    font-size: 0.75rem;
+  }
+}

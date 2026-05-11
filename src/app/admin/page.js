@@ -207,403 +207,380 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminGuard>
-      <AdminShell title="Admin Dashboard">
-        {error && (
-          <Alert severity="error" sx={{ mb: { xs: 2, sm: 3 }, borderRadius: { xs: 2, sm: 2.5 } }}>
-            {error}
-          </Alert>
-        )}
+   <AdminShell title="Admin Dashboard">
+  {/* ERROR */}
 
-        <Box sx={{
-          display: 'flex', 
-          flexDirection: { xs: "column", md: "row" },
-          gap: { xs: 3, sm: 4, md: 5 }, 
-          width: "100%"
-        }}>
-          <Box sx={{ width: { xs: "100%", md: "50%" } }}>
-            <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }} sx={{ mb: { xs: 3, sm: 4 } }}>
-              <Grid item xs={6} sm={6} md={6}>
-                <StatCard
-                  label="Revenue"
-                  value={currency(summary.revenue)}
-                  icon={<AttachMoneyIcon/>}
-                />
-              </Grid>
+  {error && (
+    <Alert
+      severity="error"
+      sx={{
+        mb: 3,
+        borderRadius: "16px",
+      }}
+    >
+      {error}
+    </Alert>
+  )}
 
-              <Grid item xs={6} sm={6} md={6}>
-                <StatCard
-                  label="Orders"
-                  value={summary.orders}
-                  icon={<ShoppingCartIcon />}
-                />
-              </Grid>
+  {/* PAGE HEADER */}
 
-              <Grid item xs={6} sm={6} md={6}>
-                <StatCard
-                  label="Products"
-                  value={summary.products}
-                  icon={<InventoryIcon />}
-                />
-              </Grid>
+  <Box sx={{ mb: 4 }}>
+    <Typography
+      sx={{
+        fontSize: "2rem",
+        fontWeight: 800,
+        color: "#0f172a",
+        letterSpacing: "-0.03em",
+      }}
+    >
+      Dashboard
+    </Typography>
 
-              <Grid item xs={6} sm={6} md={6}>
-                <StatCard
-                  label="Users"
-                  value={summary.users}
-                  icon={<PeopleIcon />}
-                />
-              </Grid>
-            </Grid>
+    <Typography
+      sx={{
+        color: "#64748b",
+        mt: 0.5,
+        fontSize: "0.95rem",
+      }}
+    >
+      Overview of revenue, orders, products and stock activity.
+    </Typography>
+  </Box>
 
-            <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-              {/* ORDER STATUS */}
-              <Grid item xs={12} md={12}>
-                <Paper sx={{ 
-                  p: { xs: 2.5, sm: 3 },
-                  borderRadius: { xs: 2.5, sm: 3 },
-                  border: `1px solid ${theme.palette.divider}`,
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                    borderColor: theme.palette.primary.light,
-                  },
-                }}>
-                  <Typography variant="h6" sx={{ 
-                    mb: { xs: 2, sm: 2.5 },
-                    fontSize: { xs: "1.1rem", sm: "1.25rem" },
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    "&::before": {
-                      content: '""',
-                      width: 4,
-                      height: 24,
-                      background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                      borderRadius: 2,
-                    },
-                  }}>
-                    Order Status
-                  </Typography>
+  {/* STATS */}
 
-                  {orderStatus.length ? (
-                    <Stack spacing={{ xs: 1.5, sm: 2 }}>
-                      {orderStatus.map((item) => (
-                        <Stack
-                          key={item._id}
-                          direction="row"
-                          justifyContent="space-between"
-                          alignItems="center"
-                          sx={{
-                            p: { xs: 1.5, sm: 2 },
-                            borderRadius: { xs: 1.5, sm: 2 },
-                            background: theme.palette.action.hover,
-                            transition: "all 0.3s ease",
-                            "&:hover": {
-                              transform: "translateX(8px)",
-                              background: theme.palette.action.selected,
-                              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                            },
-                          }}
-                        >
-                          <Typography sx={{
-                            fontSize: { xs: "0.875rem", sm: "0.938rem" },
-                            fontWeight: 500,
-                          }}>
-                            {item._id}
-                          </Typography>
-                          <Chip 
-                            label={item.count} 
-                            size="small"
-                            color={statusColor(item._id)}
-                            sx={{
-                              fontWeight: 600,
-                              minWidth: 45,
-                              fontSize: { xs: "0.75rem", sm: "0.813rem" },
-                            }}
-                          />
-                        </Stack>
-                      ))}
-                    </Stack>
-                  ) : (
-                    <Typography sx={{ 
-                      opacity: 0.7,
-                      textAlign: "center",
-                      py: { xs: 2, sm: 3 },
-                      fontSize: { xs: "0.875rem", sm: "0.938rem" },
-                    }}>
-                      No order data yet
-                    </Typography>
-                  )}
-                </Paper>
-              </Grid>
+  <Grid container spacing={2.5} sx={{ mb: 3 }}>
+    <Grid item xs={12} sm={6} lg={3}>
+      <StatCard
+        label="Revenue"
+        value={currency(summary.revenue)}
+        icon={<AttachMoneyIcon />}
+      />
+    </Grid>
 
-              {/* LOW STOCK */}
-              <Grid item xs={12} md={12}>
-                <Paper sx={{ 
-                  p: { xs: 2.5, sm: 3 },
-                  borderRadius: { xs: 2.5, sm: 3 },
-                  border: `1px solid ${theme.palette.divider}`,
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                    borderColor: theme.palette.warning.light,
-                  },
-                }}>
-                  <Typography variant="h6" sx={{ 
-                    mb: { xs: 2, sm: 2.5 },
-                    fontSize: { xs: "1.1rem", sm: "1.25rem" },
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    "&::before": {
-                      content: '""',
-                      width: 4,
-                      height: 24,
-                      background: `linear-gradient(135deg, ${theme.palette.warning.main}, ${theme.palette.warning.dark})`,
-                      borderRadius: 2,
-                    },
-                  }}>
-                    Low Stock Products
-                  </Typography>
+    <Grid item xs={12} sm={6} lg={3}>
+      <StatCard
+        label="Orders"
+        value={summary.orders}
+        icon={<ShoppingCartIcon />}
+      />
+    </Grid>
 
-                  {lowStock.length ? (
-                    <Stack spacing={{ xs: 1.5, sm: 2 }}>
-                      {lowStock.map((item) => (
-                        <Stack
-                          key={`${item._id}-${item.size}`}
-                          direction="row"
-                          justifyContent="space-between"
-                          alignItems="center"
-                          sx={{
-                            p: { xs: 1.5, sm: 2 },
-                            borderRadius: { xs: 1.5, sm: 2 },
-                            background: theme.palette.action.hover,
-                            transition: "all 0.3s ease",
-                            "&:hover": {
-                              transform: "translateX(8px)",
-                              background: theme.palette.action.selected,
-                              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                            },
-                          }}
-                        >
-                          <Typography sx={{
-                            fontSize: { xs: "0.813rem", sm: "0.875rem" },
-                            fontWeight: 500,
-                            flex: 1,
-                            pr: 1,
-                          }}>
-                            {item.productName}
-                            <Typography
-                              component="span"
-                              sx={{
-                                fontSize: { xs: "0.688rem", sm: "0.75rem" },
-                                opacity: 0.7,
-                                ml: 0.5,
-                              }}
-                            >
-                              ({item.size}/{item.color})
-                            </Typography>
-                          </Typography>
+    <Grid item xs={12} sm={6} lg={3}>
+      <StatCard
+        label="Products"
+        value={summary.products}
+        icon={<InventoryIcon />}
+      />
+    </Grid>
 
-                          <Chip
-                            size="small"
-                            color="warning"
-                            label={`Stock: ${item.stock}`}
-                            sx={{
-                              fontWeight: 600,
-                              minWidth: { xs: 75, sm: 85 },
-                              fontSize: { xs: "0.688rem", sm: "0.75rem" },
-                            }}
-                          />
-                        </Stack>
-                      ))}
-                    </Stack>
-                  ) : (
-                    <Typography sx={{ 
-                      opacity: 0.7,
-                      textAlign: "center",
-                      py: { xs: 2, sm: 3 },
-                      fontSize: { xs: "0.875rem", sm: "0.938rem" },
-                    }}>
-                      All products sufficiently stocked
-                    </Typography>
-                  )}
-                </Paper>
-              </Grid>
-            </Grid>
-          </Box>
+    <Grid item xs={12} sm={6} lg={3}>
+      <StatCard
+        label="Users"
+        value={summary.users}
+        icon={<PeopleIcon />}
+      />
+    </Grid>
+  </Grid>
 
-          <Box sx={{ width: { xs: "100%", md: "50%" } }}>
-            <Grid item xs={12}>
-              <Paper sx={{ 
-                p: { xs: 2.5, sm: 3 },
-                borderRadius: { xs: 2.5, sm: 3 },
-                border: `1px solid ${theme.palette.divider}`,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                  borderColor: theme.palette.primary.light,
-                },
-              }}>
-                <Typography variant="h6" sx={{ 
-                  mb: { xs: 2, sm: 2.5 },
-                  fontSize: { xs: "1.1rem", sm: "1.25rem" },
-                  fontWeight: 600,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  "&::before": {
-                    content: '""',
-                    width: 4,
-                    height: 24,
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                    borderRadius: 2,
-                  },
-                }}>
-                  Recent Orders
-                </Typography>
+  {/* MAIN DASHBOARD GRID */}
 
-                {recentOrders.length ? (
-                  <TableContainer
+  <Grid container spacing={3}>
+    {/* RECENT ORDERS */}
+
+    <Grid item xs={12} lg={8}>
+      <Paper
+        sx={{
+          borderRadius: "24px",
+          border: "1px solid #eef2f7",
+          boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          sx={{
+            px: 3,
+            py: 2.5,
+            borderBottom: "1px solid #f1f5f9",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "1.1rem",
+              fontWeight: 700,
+              color: "#0f172a",
+            }}
+          >
+            Recent Orders
+          </Typography>
+        </Box>
+
+        {recentOrders.length ? (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow
+                  sx={{
+                    background: "#fafbfd",
+                  }}
+                >
+                  <TableCell
                     sx={{
-                      borderRadius: { xs: 1.5, sm: 2 },
-                      border: `1px solid ${theme.palette.divider}`,
-                      overflowX: "auto",
-                      maxHeight: { md: 600 },
-                      "&::-webkit-scrollbar": {
-                        height: "8px",
-                        width: "8px",
+                      fontWeight: 700,
+                      color: "#64748b",
+                      borderBottom: "1px solid #eef2f7",
+                    }}
+                  >
+                    Order ID
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      fontWeight: 700,
+                      color: "#64748b",
+                      borderBottom: "1px solid #eef2f7",
+                    }}
+                  >
+                    Status
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      fontWeight: 700,
+                      color: "#64748b",
+                      borderBottom: "1px solid #eef2f7",
+                    }}
+                  >
+                    Date
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      fontWeight: 700,
+                      color: "#64748b",
+                      borderBottom: "1px solid #eef2f7",
+                    }}
+                  >
+                    Total
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {recentOrders.map((order) => (
+                  <TableRow
+                    key={order._id}
+                    hover
+                    sx={{
+                      "& td": {
+                        borderBottom: "1px solid #f8fafc",
+                        py: 2,
                       },
-                      "&::-webkit-scrollbar-track": {
-                        background: theme.palette.action.hover,
-                        borderRadius: "4px",
-                      },
-                      "&::-webkit-scrollbar-thumb": {
-                        background: theme.palette.primary.main,
-                        borderRadius: "4px",
-                        "&:hover": {
-                          background: theme.palette.primary.dark,
-                        },
+
+                      "&:hover": {
+                        background: "#fafbfd",
                       },
                     }}
                   >
-                    <Table size={isSmallMobile ? "small" : "medium"} sx={{ minWidth: { xs: 500, sm: 600 } }}>
-                      <TableHead>
-                        <TableRow sx={{ background: theme.palette.action.hover }}>
-                          <TableCell sx={{
-                            fontWeight: 700,
-                            fontSize: { xs: "0.813rem", sm: "0.875rem" },
-                            py: { xs: 1.5, sm: 2 },
-                          }}>
-                            Order ID
-                          </TableCell>
-                          <TableCell sx={{
-                            fontWeight: 700,
-                            fontSize: { xs: "0.813rem", sm: "0.875rem" },
-                            py: { xs: 1.5, sm: 2 },
-                          }}>
-                            Status
-                          </TableCell>
-                          <TableCell sx={{
-                            fontWeight: 700,
-                            fontSize: { xs: "0.813rem", sm: "0.875rem" },
-                            py: { xs: 1.5, sm: 2 },
-                          }}>
-                            Date
-                          </TableCell>
-                          <TableCell sx={{
-                            fontWeight: 700,
-                            fontSize: { xs: "0.813rem", sm: "0.875rem" },
-                            py: { xs: 1.5, sm: 2 },
-                          }}>
-                            Total
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
+                    <TableCell
+                      sx={{
+                        fontWeight: 600,
+                        color: "#2563eb",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      {order._id.substring(0, 12)}...
+                    </TableCell>
 
-                      <TableBody>
-                        {recentOrders.map((order) => (
-                          <TableRow 
-                            key={order._id} 
-                            hover
-                            sx={{
-                              cursor: "pointer",
-                              transition: "all 0.2s ease",
-                              "&:hover": {
-                                background: theme.palette.action.hover,
-                              },
-                              "&:last-child td": {
-                                borderBottom: 0,
-                              },
-                            }}
-                          >
-                            <TableCell sx={{
-                              fontSize: { xs: "0.75rem", sm: "0.813rem" },
-                              fontFamily: "monospace",
-                              color: theme.palette.primary.main,
-                              fontWeight: 600,
-                              py: { xs: 1.5, sm: 2 },
-                            }}>
-                              {isSmallMobile ? `${order._id.substring(0, 8)}...` : order._id}
-                            </TableCell>
+                    <TableCell>
+                      <Chip
+                        size="small"
+                        label={order.orderStatus}
+                        color={statusColor(order.orderStatus)}
+                        sx={{
+                          fontWeight: 600,
+                        }}
+                      />
+                    </TableCell>
 
-                            <TableCell sx={{ py: { xs: 1.5, sm: 2 } }}>
-                              <Chip
-                                size="small"
-                                label={order.orderStatus}
-                                color={statusColor(order.orderStatus)}
-                                sx={{
-                                  fontSize: { xs: "0.688rem", sm: "0.75rem" },
-                                  fontWeight: 600,
-                                  height: { xs: 22, sm: 24 },
-                                }}
-                              />
-                            </TableCell>
+                    <TableCell
+                      sx={{
+                        color: "#64748b",
+                      }}
+                    >
+                      {new Date(order.createdAt).toLocaleDateString(
+                        "en-IN"
+                      )}
+                    </TableCell>
 
-                            <TableCell sx={{
-                              fontSize: { xs: "0.75rem", sm: "0.813rem" },
-                              color: theme.palette.text.secondary,
-                              py: { xs: 1.5, sm: 2 },
-                            }}>
-                              {new Date(order.createdAt).toLocaleDateString("en-IN", {
-                                day: "numeric",
-                                month: "short",
-                                year: isSmallMobile ? "2-digit" : "numeric",
-                              })}
-                            </TableCell>
-
-                            <TableCell sx={{
-                              fontSize: { xs: "0.813rem", sm: "0.875rem" },
-                              fontWeight: 600,
-                              py: { xs: 1.5, sm: 2 },
-                            }}>
-                              {currency(order.totalAmount)}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                ) : (
-                  <Typography sx={{ 
-                    opacity: 0.7,
-                    textAlign: "center",
-                    py: { xs: 4, sm: 6 },
-                    fontSize: { xs: "0.875rem", sm: "0.938rem" },
-                  }}>
-                    No recent orders
-                  </Typography>
-                )}
-              </Paper>
-            </Grid>
+                    <TableCell
+                      sx={{
+                        fontWeight: 700,
+                        color: "#0f172a",
+                      }}
+                    >
+                      {currency(order.totalAmount)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Box
+            sx={{
+              py: 8,
+              textAlign: "center",
+              color: "#94a3b8",
+            }}
+          >
+            No recent orders
           </Box>
-        </Box>
-      </AdminShell>
+        )}
+      </Paper>
+    </Grid>
+
+    {/* RIGHT SIDEBAR */}
+
+    <Grid item xs={12} lg={4}>
+      <Stack spacing={3}>
+        {/* ORDER STATUS */}
+
+        <Paper
+          sx={{
+            borderRadius: "24px",
+            border: "1px solid #eef2f7",
+            boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
+            p: 3,
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "1.05rem",
+              fontWeight: 700,
+              mb: 2.5,
+              color: "#0f172a",
+            }}
+          >
+            Order Status
+          </Typography>
+
+          <Stack spacing={1.5}>
+            {orderStatus.length ? (
+              orderStatus.map((item) => (
+                <Stack
+                  key={item._id}
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{
+                    p: 1.5,
+                    borderRadius: "14px",
+                    background: "#fafbfd",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item._id}
+                  </Typography>
+
+                  <Chip
+                    size="small"
+                    label={item.count}
+                    color={statusColor(item._id)}
+                    sx={{
+                      fontWeight: 700,
+                    }}
+                  />
+                </Stack>
+              ))
+            ) : (
+              <Typography color="text.secondary">
+                No order data
+              </Typography>
+            )}
+          </Stack>
+        </Paper>
+
+        {/* LOW STOCK */}
+
+        <Paper
+          sx={{
+            borderRadius: "24px",
+            border: "1px solid #eef2f7",
+            boxShadow: "0 1px 2px rgba(15,23,42,0.04)",
+            p: 3,
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "1.05rem",
+              fontWeight: 700,
+              mb: 2.5,
+              color: "#0f172a",
+            }}
+          >
+            Low Stock Products
+          </Typography>
+
+          <Stack spacing={1.5}>
+            {lowStock.length ? (
+              lowStock.map((item) => (
+                <Stack
+                  key={`${item._id}-${item.size}`}
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{
+                    p: 1.5,
+                    borderRadius: "14px",
+                    background: "#fafbfd",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      {item.productName}
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        fontSize: "0.76rem",
+                        color: "#94a3b8",
+                      }}
+                    >
+                      {item.size} / {item.color}
+                    </Typography>
+                  </Box>
+
+                  <Chip
+                    size="small"
+                    color="warning"
+                    label={item.stock}
+                    sx={{
+                      fontWeight: 700,
+                    }}
+                  />
+                </Stack>
+              ))
+            ) : (
+              <Typography color="text.secondary">
+                All products are healthy
+              </Typography>
+            )}
+          </Stack>
+        </Paper>
+      </Stack>
+    </Grid>
+  </Grid>
+</AdminShell>
     </AdminGuard>
   );
 }

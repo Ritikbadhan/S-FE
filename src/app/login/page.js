@@ -42,7 +42,7 @@ export default function LoginPage() {
       const data = await login(email, password);
       const loggedInUser = data?.user || null;
       toast.success("Logged in successfully.");
-      router.push(isAdminUser(loggedInUser) ? "/admin" : "/account");
+      router.push(isAdminUser(loggedInUser) ? "/admin/products" : "/account");
     } catch (err) {
       const message = err.message || "Login failed";
       setError(message);

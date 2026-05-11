@@ -1,11 +1,10 @@
 import "./globals.css";
 import ThemeContextProvider from "../context/ThemeContext";
 import CartProvider from "../context/CartContext";
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
 import WishlistProvider from "@/context/WishlistContext";
 import AuthProvider from "@/context/AuthContext";
 import { PageLoaderProvider, ToastProvider } from "@/components/common";
+import AppChrome from "@/components/layout/AppChrome";
 
 export const metadata = {
   title: "Sharq Label",
@@ -35,9 +34,7 @@ export default function RootLayout({ children }) {
               <ToastProvider>
                 <CartProvider>
                   <WishlistProvider>
-                    <Navbar />
-                    {children}
-                    <Footer />
+                    <AppChrome>{children}</AppChrome>
                   </WishlistProvider>
                 </CartProvider>
               </ToastProvider>
