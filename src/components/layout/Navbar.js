@@ -32,7 +32,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/admin/productsPanelSettingsOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
@@ -262,7 +262,7 @@ export default function Navbar() {
                       {canSeeAdmin && (
                         <Button
                           component={Link}
-                          href="/admin"
+                          href="/admin/products"
                           startIcon={<AdminPanelSettingsOutlinedIcon />}
                           sx={{
                             ...navLinkStyle,
@@ -590,7 +590,7 @@ export default function Navbar() {
                   <ListItem disablePadding>
                     <ListItemButton
                       component={Link}
-                      href="/admin"
+                      href="/admin/products"
                       onClick={handleMobileMenuClose}
                       sx={{
                         py: 1.75,
