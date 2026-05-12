@@ -7,7 +7,7 @@ export const newArrivalsPageContent = {
     { value: "most-viewed", label: "Most Viewed" },
   ],
   hero: {
-    imageSrc: "/NewArrivals.jpeg",
+    imageSrc: "/new.png",
     // dropDateLabel: "Drop Date: 28 February 2026",
     title: "NEW ARRIVALS",
     subtitle: "The Latest Expressions of SHARQ",

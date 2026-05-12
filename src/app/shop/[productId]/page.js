@@ -447,9 +447,9 @@ export default function ProductDetailsPage() {
         </Breadcrumbs>
 
         {/* Main Product Section */}
-        <Grid container spacing={{ xs: 3, md: 4 }}>
-          {/* Image Gallery */}
-          <Grid item xs={12} md={7}>
+      <Grid container spacing={{ xs: 3, md: 4 }} alignItems="flex-start">
+  {/* Image Gallery */}
+  <Grid item xs={12} md={5}>
             <Box
               sx={{
                 position: "sticky",
@@ -458,14 +458,14 @@ export default function ProductDetailsPage() {
             >
               <Grid container spacing={1.5}>
                 {/* Thumbnails */}
-                <Grid item xs={12} md={2}>
+                <Grid item xs={12} md={3.5}>
                   <Stack
                     direction={{ xs: "row", md: "column" }}
                     spacing={1.5}
                     sx={{
                       overflowX: { xs: "auto", md: "visible" },
                       overflowY: { md: "auto" },
-                      maxHeight: { md: "600px" },
+                      maxHeight: { md: "850px" },
                       pb: { xs: 1, md: 0 },
                     }}
                   >
@@ -478,6 +478,7 @@ export default function ProductDetailsPage() {
                           cursor: "pointer",
                           overflow: "hidden",
                           borderRadius: 2,
+                          minWidth: { xs: 110, md: 160 },
                           border:
                             selectedImageIndex === idx
                               ? `2px solid ${brand.primary}`
@@ -495,8 +496,8 @@ export default function ProductDetailsPage() {
                           src={image}
                           alt={`${getName(product)}-${idx + 1}`}
                           sx={{
-                            width: { xs: 80, md: "100%" },
-                            height: { xs: 100, md: 120 },
+                             width: { xs: 110, md: 160 },
+height: { xs: 110, md: 190 },
                             objectFit: "cover",
                             display: "block",
                           }}
@@ -507,7 +508,7 @@ export default function ProductDetailsPage() {
                 </Grid>
 
                 {/* Main Image */}
-                <Grid item xs={12} md={10}>
+                <Grid item xs={12} md={9.5}>
                   <Paper
                     elevation={0}
                     sx={{
@@ -519,17 +520,21 @@ export default function ProductDetailsPage() {
                     }}
                   >
                     <Box
-                      component="img"
-                      src={activeImage}
-                      alt={getName(product)}
-                      sx={{
-                        width: "100%",
-                        aspectRatio: "4 / 5",
-                        objectFit: "cover",
-                        transition: "transform 0.5s ease",
-                        "&:hover": { transform: "scale(1.05)" },
-                      }}
-                    />
+  component="img"
+  src={activeImage}
+  alt={getName(product)}
+  sx={{
+ width: "96%",
+maxWidth: "660px",
+    margin: "0 auto",
+    display: "block",
+    aspectRatio: "3.7 / 5",
+    objectFit: "cover",
+    borderRadius: 2,
+    transition: "transform 0.5s ease",
+    "&:hover": { transform: "scale(1.03)" },
+  }}
+/>
 
                     {/* Discount Badge */}
                     {off > 0 && (
@@ -555,7 +560,7 @@ export default function ProductDetailsPage() {
           </Grid>
 
           {/* Product Info */}
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={7}>
             <Paper
               elevation={0}
               sx={{
@@ -652,7 +657,7 @@ export default function ProductDetailsPage() {
                       </Typography>
                     )}
                   </Stack>
-                  <Typography
+                  {/* <Typography
                     sx={{
                       fontSize: { xs: "0.8125rem", sm: "0.875rem" },
                       color: brand.success,
@@ -661,7 +666,7 @@ export default function ProductDetailsPage() {
                     }}
                   >
                     EMI from {currency(Math.max(1, Math.ceil(price / 3)))}/month
-                  </Typography>
+                  </Typography> */}
                   <Typography
                     sx={{
                       fontSize: { xs: "0.875rem", sm: "0.9375rem" },
@@ -736,51 +741,6 @@ export default function ProductDetailsPage() {
                   >
                     📏 Size guide available • {modelInfo}
                   </Typography>
-                </Box>
-
-                {/* Color Selector */}
-                <Box>
-                  <Typography
-                    sx={{
-                      fontWeight: 600,
-                      mb: 1.5,
-                      fontSize: { xs: "0.9375rem", sm: "1rem" },
-                      color: brand.text,
-                    }}
-                  >
-                    Select Color
-                  </Typography>
-                  <Stack direction="row" spacing={1.5}>
-                    {getColors(product).map((color) => (
-                      <Chip
-                        key={String(color)}
-                        label={String(color)}
-                        onClick={() => setSelectedColor(String(color))}
-                        variant={
-                          selectedColor === String(color) ? "filled" : "outlined"
-                        }
-                        color={
-                          selectedColor === String(color) ? "primary" : "default"
-                        }
-                        icon={
-                          selectedColor === String(color) ? (
-                            <CheckCircleIcon />
-                          ) : undefined
-                        }
-                        sx={{
-                          height: { xs: 36, sm: 40 },
-                          fontSize: { xs: "0.875rem", sm: "0.9375rem" },
-                          fontWeight: 600,
-                          px: 2,
-                          transition: "all 0.2s ease",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                            boxShadow: brand.shadowButton,
-                          },
-                        }}
-                      />
-                    ))}
-                  </Stack>
                 </Box>
 
                 {/* Stock Status */}
@@ -972,20 +932,6 @@ export default function ProductDetailsPage() {
                         }}
                       >
                         COD available • Delivery by {estimatedDate}
-                      </Typography>
-                    </Stack>
-                    <Stack direction="row" spacing={1.5} alignItems="center">
-                      <VerifiedUserOutlinedIcon
-                        sx={{ color: brand.primary, fontSize: 22 }}
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: { xs: "0.875rem", sm: "0.9375rem" },
-                          color: brand.text,
-                          fontWeight: 500,
-                        }}
-                      >
-                        100% Authentic & Quality Checked
                       </Typography>
                     </Stack>
                   </Stack>
@@ -1287,7 +1233,7 @@ export default function ProductDetailsPage() {
         </Box>
 
         {/* Craft & Detail */}
-        <Box sx={{ mt: { xs: 5, md: 7 } }}>
+        {/* <Box sx={{ mt: { xs: 5, md: 7 } }}>
           <Typography
             variant="h5"
             sx={{
@@ -1343,7 +1289,7 @@ export default function ProductDetailsPage() {
               </Grid>
             ))}
           </Grid>
-        </Box>
+        </Box> */}
 
         {/* Reviews Section */}
         <Box sx={{ mt: { xs: 5, md: 7 } }}>

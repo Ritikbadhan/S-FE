@@ -1,7 +1,7 @@
 export const homePageContent = {
-  video: {
-    src: "/homevideo.mp4",
-    fallbackText: "Your browser does not support the video tag.",
+  image: {
+    src: "/Home.jpg",
+    alt: "SHARQ LABEL Hero Banner",
   },
   hero: {
     title: "SHARQ LABEL",

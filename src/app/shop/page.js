@@ -113,14 +113,14 @@ export default function ShopPage() {
         sorted.sort((a, b) =>
           getProductName(a).localeCompare(getProductName(b), undefined, {
             sensitivity: "base",
-          }),
+          })
         );
         break;
       case "name-desc":
         sorted.sort((a, b) =>
           getProductName(b).localeCompare(getProductName(a), undefined, {
             sensitivity: "base",
-          }),
+          })
         );
         break;
       case "newest":
@@ -129,7 +129,7 @@ export default function ShopPage() {
       case "featured":
       default:
         sorted.sort(
-          (a, b) => Number(isNewProduct(b)) - Number(isNewProduct(a)),
+          (a, b) => Number(isNewProduct(b)) - Number(isNewProduct(a))
         );
         break;
     }
@@ -146,7 +146,7 @@ export default function ShopPage() {
 
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredProducts.length / ITEMS_PER_PAGE),
+    Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)
   );
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -185,7 +185,8 @@ export default function ShopPage() {
       <Box
         sx={{
           width: "100%",
-          height: { xs: "40vh", sm: "50vh", md: "60vh" },
+          height: { xs: "42vh", sm: "60vh", md: "90vh" },
+          minHeight: { xs: 320, sm: 500, md: 700 },
           position: "relative",
           display: "flex",
           alignItems: "center",
@@ -194,11 +195,9 @@ export default function ShopPage() {
         }}
       >
         <Box
-          component="video"
-          autoPlay
-          muted
-          loop
-          playsInline
+          component="img"
+          src={shopPageContent.hero.imageSrc}
+          alt="Shop Banner"
           sx={{
             position: "absolute",
             top: 0,
@@ -208,9 +207,7 @@ export default function ShopPage() {
             objectFit: "cover",
             zIndex: 0,
           }}
-        >
-          <source src={shopPageContent.hero.videoSrc} type="video/mp4" />
-        </Box>
+        />
 
         <Box
           sx={{
@@ -234,10 +231,19 @@ export default function ShopPage() {
             <Typography
               variant="h2"
               sx={{
-                letterSpacing: { xs: 2, sm: 3, md: 4 },
+                letterSpacing: { xs: 1, sm: 2, md: 4 },
                 fontWeight: 700,
-                mb: { xs: 1.5, sm: 2 },
-                fontSize: { xs: "2rem", sm: "2.75rem", md: "3.5rem" },
+                mb: { xs: 1, sm: 2 },
+                fontSize: {
+                  xs: "1.8rem",
+                  sm: "2.5rem",
+                  md: "3.5rem",
+                },
+                lineHeight: {
+                  xs: 1.2,
+                  sm: 1.3,
+                },
+                px: 1,
                 color: "#FFFFFF",
                 textShadow: brand.heroTextShadow,
               }}
@@ -263,9 +269,17 @@ export default function ShopPage() {
           <Fade in timeout={1400}>
             <Typography
               sx={{
-                fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                fontSize: {
+                  xs: "0.9rem",
+                  sm: "1rem",
+                  md: "1.25rem",
+                },
                 color: "rgba(255, 255, 255, 0.9)",
-                lineHeight: 1.8,
+                lineHeight: {
+                  xs: 1.6,
+                  sm: 1.8,
+                },
+                px: { xs: 1, sm: 2 },
                 fontStyle: "italic",
               }}
             >
@@ -310,7 +324,16 @@ export default function ShopPage() {
           minHeight: "60vh",
         }}
       >
-        <Container maxWidth="xl">
+        <Container
+          maxWidth="xl"
+          sx={{
+            px: {
+              xs: 1.5,
+              sm: 2,
+              md: 3,
+            },
+          }}
+        >
           {/* Page Title */}
           <Box sx={{ textAlign: "center", mb: { xs: 4, md: 5 } }}>
             <Typography
@@ -387,7 +410,9 @@ export default function ShopPage() {
                   startIcon={<FilterListOutlined />}
                   sx={{ fontSize: "0.875rem" }}
                 >
-                  {showFilters ? shopPageContent.filters.toggleLabels.hide : shopPageContent.filters.toggleLabels.show}
+                  {showFilters
+                    ? shopPageContent.filters.toggleLabels.hide
+                    : shopPageContent.filters.toggleLabels.show}
                 </AppButton>
               )}
             </Box>
@@ -400,7 +425,7 @@ export default function ShopPage() {
                   gap: { xs: 2, sm: 2.5 },
                   gridTemplateColumns: {
                     xs: "1fr",
-                    sm: "repeat(2, 1fr)",
+                    sm: "1fr 1fr",
                     md: "repeat(3, 1fr)",
                     lg: "repeat(6, 1fr)",
                   },
@@ -424,7 +449,9 @@ export default function ShopPage() {
                       "& .MuiOutlinedInput-root": {
                         borderRadius: 2,
                         backgroundColor:
-                          theme.palette.mode === "dark" ? brand.bg : "transparent",
+                          theme.palette.mode === "dark"
+                            ? brand.bg
+                            : "transparent",
                         "&:hover": {
                           borderColor: brand.primary,
                         },
@@ -434,7 +461,9 @@ export default function ShopPage() {
                 </Box>
 
                 <FormControl fullWidth>
-                  <InputLabel>{shopPageContent.filters.categoryLabel}</InputLabel>
+                  <InputLabel>
+                    {shopPageContent.filters.categoryLabel}
+                  </InputLabel>
                   <Select
                     label={shopPageContent.filters.categoryLabel}
                     value={selectedCategory}
@@ -449,7 +478,9 @@ export default function ShopPage() {
                       },
                     }}
                   >
-                    <MenuItem value="all">{shopPageContent.filters.categoryAllLabel}</MenuItem>
+                    <MenuItem value="all">
+                      {shopPageContent.filters.categoryAllLabel}
+                    </MenuItem>
                     {categories.map((category) => (
                       <MenuItem key={category} value={category}>
                         {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -459,7 +490,9 @@ export default function ShopPage() {
                 </FormControl>
 
                 <FormControl fullWidth>
-                  <InputLabel>{shopPageContent.filters.collectionLabel}</InputLabel>
+                  <InputLabel>
+                    {shopPageContent.filters.collectionLabel}
+                  </InputLabel>
                   <Select
                     label={shopPageContent.filters.collectionLabel}
                     value={selectedCollection}
@@ -474,17 +507,22 @@ export default function ShopPage() {
                       },
                     }}
                   >
-                    <MenuItem value="all">{shopPageContent.filters.collectionAllLabel}</MenuItem>
+                    <MenuItem value="all">
+                      {shopPageContent.filters.collectionAllLabel}
+                    </MenuItem>
                     {collections.map((collection) => (
                       <MenuItem key={collection} value={collection}>
-                        {collection.charAt(0).toUpperCase() + collection.slice(1)}
+                        {collection.charAt(0).toUpperCase() +
+                          collection.slice(1)}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
 
                 <FormControl fullWidth>
-                  <InputLabel>{shopPageContent.filters.availabilityLabel}</InputLabel>
+                  <InputLabel>
+                    {shopPageContent.filters.availabilityLabel}
+                  </InputLabel>
                   <Select
                     label={shopPageContent.filters.availabilityLabel}
                     value={stockFilter}
@@ -499,11 +537,13 @@ export default function ShopPage() {
                       },
                     }}
                   >
-                    {shopPageContent.filters.availabilityOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
+                    {shopPageContent.filters.availabilityOptions.map(
+                      (option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      )
+                    )}
                   </Select>
                 </FormControl>
 
@@ -619,10 +659,7 @@ export default function ShopPage() {
                 gap: 2,
               }}
             >
-              <CircularProgress
-                size={50}
-                sx={{ color: brand.primary }}
-              />
+              <CircularProgress size={50} sx={{ color: brand.primary }} />
               <Typography sx={{ color: brand.textMuted, fontSize: "1rem" }}>
                 {shopPageContent.states.loading}
               </Typography>
@@ -637,15 +674,10 @@ export default function ShopPage() {
                 borderRadius: 3,
               }}
             >
-              <Typography
-                variant="h6"
-                sx={{ color: brand.error, mb: 1 }}
-              >
+              <Typography variant="h6" sx={{ color: brand.error, mb: 1 }}>
                 {shopPageContent.states.errorTitle}
               </Typography>
-              <Typography sx={{ color: brand.textMuted }}>
-                {error}
-              </Typography>
+              <Typography sx={{ color: brand.textMuted }}>{error}</Typography>
             </Paper>
           ) : filteredProducts.length === 0 ? (
             <Paper
@@ -699,11 +731,11 @@ export default function ShopPage() {
             </Paper>
           ) : (
             <>
-              <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+              <Grid container spacing={{ xs: 1.5, sm: 2.5, md: 4 }}>
                 {paginatedProducts.map((product) => (
                   <Grid
                     item
-                    xs={12}
+                    xs={6}
                     sm={6}
                     md={4}
                     lg={3}
@@ -799,8 +831,8 @@ export default function ShopPage() {
             }}
           >
             {shopPageContent.cta.description}
-        </Typography>
-      </Container>
+          </Typography>
+        </Container>
       </Box>
     </>
   );

@@ -142,7 +142,7 @@ export default function CollectionPage() {
       <Box
         sx={{
           width: "100%",
-          height: { xs: "40vh", sm: "50vh", md: "60vh" },
+          height: { xs: "60vh", sm: "75vh", md: "95vh" },
           position: "relative",
           display: "flex",
           alignItems: "center",
@@ -182,7 +182,12 @@ export default function CollectionPage() {
                   letterSpacing: { xs: 2, sm: 3, md: 4 },
                   fontWeight: 700,
                   mb: { xs: 1.5, sm: 2 },
-                  fontSize: { xs: "2rem", sm: "2.75rem", md: "3.5rem" },
+                    fontSize: {
+                      xs: "2rem",
+                      sm: "2.8rem",
+                      md: "3.8rem",
+                      lg: "4rem",
+                    },
                   color: "#FFFFFF",
                   textShadow: brand.heroTextShadow,
                 }}
@@ -195,7 +200,12 @@ export default function CollectionPage() {
                   letterSpacing: { xs: 3, sm: 4, md: 6 },
                   color: brand.accent,
                   fontWeight: 300,
-                  fontSize: { xs: "0.875rem", sm: "1rem", md: "1.125rem" },
+              fontSize: {
+                xs: "0.6rem",
+                sm: "1rem",
+                md: "1.4rem",
+                lg: "1.6rem",
+              },
                   mb: { xs: 2, sm: 3 },
                 }}
               >
@@ -204,7 +214,12 @@ export default function CollectionPage() {
 
               <Typography
                 sx={{
-                  fontSize: { xs: "1rem", sm: "1.125rem", md: "1.25rem" },
+                 fontSize: {
+                  xs: "1rem",
+                  sm: "1.2rem",
+                  md: "1.5rem",
+                  lg: "1.75rem",
+              },
                   color: "rgba(255, 255, 255, 0.9)",
                   lineHeight: 1.8,
                   fontStyle: "italic",

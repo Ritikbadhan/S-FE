@@ -8,7 +8,7 @@ export const shopPageContent = {
     { value: "newest", label: "Newest First" },
   ],
   hero: {
-    videoSrc: "/shopvideo.mp4",
+    imageSrc: "/Shop.jpg",
     title: "SHARQ LABEL",
     eyebrow: "REFINED. FEARLESS. DISTINCT.",
     subtitle: "Luxury is not what you wear. It is how you carry it.",

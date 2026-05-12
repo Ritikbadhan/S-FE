@@ -42,7 +42,7 @@ export const collectionPageContent = {
     },
   ],
   hero: {
-    imageSrc: "/CollectionImage.jpeg",
+    imageSrc: "/collection.png",
     title: "THE COLLECTION",
     eyebrow: "STRUCTURED. MODERN. DELIBERATE.",
     subtitle:

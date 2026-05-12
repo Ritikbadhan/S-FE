@@ -5,7 +5,7 @@ import { AppButton } from "@/components/common";
 import { homePageContent } from "@/workflow/pages/home";
 
 export default function HomePage() {
-  const { video, hero } = homePageContent;
+  const { image, hero } = homePageContent;
 
   return (
     <Box
@@ -19,24 +19,19 @@ export default function HomePage() {
       }}
     >
       {/* 🎥 Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          zIndex: 0,
-        }}
-      >
-        <source src={video.src} type="video/mp4" />
-        {video.fallbackText}
-      </video>
+    <img
+  src={image.src}
+  alt={image.alt}
+  style={{
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    zIndex: 0,
+  }}
+/>
 
       {/* 🌑 Dark Overlay */}
       <Box
