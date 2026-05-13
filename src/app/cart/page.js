@@ -98,19 +98,19 @@ export default function CartPage() {
     }
   }, []);
 
-const handleOpenAddressPopup = () => {
-  setOpenAddressPopup(true);
-};
+  const handleOpenAddressPopup = () => {
+    setOpenAddressPopup(true);
+  };
 
-const handleCloseAddressPopup = () => {
-  setOpenAddressPopup(false);
-};
+  const handleCloseAddressPopup = () => {
+    setOpenAddressPopup(false);
+  };
 
-const [openEditAddressPopup, setOpenEditAddressPopup] = useState(false);
+  const [openEditAddressPopup, setOpenEditAddressPopup] = useState(false);
 
-const handleOpenEditPopup = () => {
-  setOpenEditAddressPopup(true);
-};
+  const handleOpenEditPopup = () => {
+    setOpenEditAddressPopup(true);
+  };
 
   const handleCloseEditPopup = () => {
     setOpenEditAddressPopup(false);
@@ -138,12 +138,16 @@ const handleOpenEditPopup = () => {
     handleCloseEditPopup();
   };
 
-  const itemCount = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+  const itemCount = cart.reduce(
+    (sum, item) => sum + Number(item.quantity || 1),
+    0
+  );
 
   const subtotal = useMemo(
     () =>
       cart.reduce(
-        (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1),
+        (sum, item) =>
+          sum + Number(item.price || 0) * Number(item.quantity || 1),
         0
       ),
     [cart]
@@ -160,7 +164,10 @@ const handleOpenEditPopup = () => {
   );
 
   const productDiscount = Math.max(0, compareSubtotal - subtotal);
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD || subtotal === 0 ? 0 : STANDARD_SHIPPING;
+  const shipping =
+    subtotal >= FREE_SHIPPING_THRESHOLD || subtotal === 0
+      ? 0
+      : STANDARD_SHIPPING;
   const gst = Math.max(0, Math.round((subtotal - couponValue) * GST_RATE));
   const total = Math.max(0, subtotal - couponValue + shipping + gst);
 
@@ -243,7 +250,9 @@ const handleOpenEditPopup = () => {
             mb: 3,
           }}
         >
-          <ShoppingBagOutlinedIcon sx={{ fontSize: 56, color: "primary.main" }} />
+          <ShoppingBagOutlinedIcon
+            sx={{ fontSize: 56, color: "primary.main" }}
+          />
         </Box>
         <Typography variant="h4" sx={{ mb: 1 }}>
           Your bag is empty
@@ -259,670 +268,617 @@ const handleOpenEditPopup = () => {
   }
 
   return (
-  <Box
-    sx={{
-      bgcolor: "#fff",
-      minHeight: "100vh",
-      py: { xs: 3, md: 5 },
-    }}
-  >
-    <Container maxWidth="xl">
-      <Grid container spacing={3}>
-        {/* LEFT SECTION */}
-        <Grid item xs={12} lg={8}>
-          {/* ADDRESS SECTION */}
-          <Card
-            sx={{
-              border: "1px solid #e5e5e5",
-              borderRadius: 1,
-              boxShadow: "none",
-              mb: 2,
-            }}
-          >
-            <CardContent
+    <Box
+      sx={{
+        bgcolor: theme.palette.mode === "dark" ? "#1A2332" : "#fff",
+        minHeight: "100vh",
+        py: { xs: 3, md: 5 },
+      }}
+    >
+      <Container maxWidth="xl">
+        <Grid container spacing={3}>
+          {/* LEFT SECTION */}
+          <Grid item xs={12} lg={8}>
+            {/* ADDRESS SECTION */}
+            <Card
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                py: 2,
+                border: "1px solid #e5e5e5",
+                borderRadius: 1,
+                boxShadow: "none",
+                mb: 2,
               }}
             >
-              <Box>
-                <Typography fontWeight={600}>
-                  Deliver to: {selectedAddress ? selectedAddress.name : "Bharti Pawar"}, {selectedAddress ? selectedAddress.pinCode : "121004"}
+              <CardContent
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  py: 2,
+                }}
+              >
+                <Box sx={{ pr: 2 }}>
+                  <Typography
+                    fontWeight={600}
+                    sx={{
+                      mb: 0.8,
+                      fontSize: "15px",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    Deliver to:{" "}
+                    {selectedAddress ? selectedAddress.name : "BHARTI PAWAR"},{" "}
+                    {selectedAddress ? selectedAddress.pinCode : "121004"}
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      lineHeight: 1.6,
+                      maxWidth: "85%",
+                    }}
+                  >
+                    {selectedAddress
+                      ? `${selectedAddress.houseNumber}, ${selectedAddress.address}, ${selectedAddress.city}, ${selectedAddress.state}`
+                      : "2065, HOUSE, BALLABGARH FARIDABAD, Haryana"}
+                  </Typography>
+                </Box>
+
+                <AppButton variant="outlined" onClick={handleOpenAddressPopup}>
+                  CHANGE ADDRESS
+                </AppButton>
+              </CardContent>
+            </Card>
+
+            {/* OFFER SECTION */}
+            <Card
+              sx={{
+                border: "1px solid #e5e5e5",
+                borderRadius: 1,
+                boxShadow: "none",
+                mb: 3,
+              }}
+            >
+              <CardContent>
+                <Typography fontWeight={600}>Available Offers</Typography>
+
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  7.5% Assured Cashback on minimum spend of ₹100
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {selectedAddress ? `${selectedAddress.houseNumber}, ${selectedAddress.address}, ${selectedAddress.city}, ${selectedAddress.state}` : "Bharti Saree Kendra, Near Lal Kothi, Subhash Colony, Ballabgarh, Faridabad"}
-                </Typography>
-              </Box>
+              </CardContent>
+            </Card>
 
-             <AppButton
-  variant="outlined"
-  onClick={handleOpenAddressPopup}
->
-  CHANGE ADDRESS
-</AppButton>
-            </CardContent>
-          </Card>
+            {/* CART ITEMS */}
+            <Stack spacing={2}>
+              {cart.map((item) => {
+                const itemPrice = Number(item.price || 0);
+                const originalPrice = getOriginalPrice(item);
 
-          {/* OFFER SECTION */}
-          <Card
-            sx={{
-              border: "1px solid #e5e5e5",
-              borderRadius: 1,
-              boxShadow: "none",
-              mb: 3,
-            }}
-          >
-            <CardContent>
-              <Typography fontWeight={600}>
-                Available Offers
-              </Typography>
+                const discountPercent =
+                  originalPrice > itemPrice
+                    ? Math.round(
+                        ((originalPrice - itemPrice) / originalPrice) * 100
+                      )
+                    : 0;
 
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                7.5% Assured Cashback on minimum spend of ₹100
-              </Typography>
-            </CardContent>
-          </Card>
+                return (
+                  <Card
+                    key={getProductId(item)}
+                    sx={{
+                      border: "1px solid #e5e5e5",
+                      borderRadius: 1,
+                      boxShadow: "none",
+                    }}
+                  >
+                    <CardContent sx={{ p: 2 }}>
+                      <Grid container spacing={2}>
+                        {/* IMAGE */}
+                        <Grid item xs={12} sm={3}>
+                          <Box
+                            component="img"
+                            src={item.image || "/homepic.jpeg"}
+                            alt={item.name}
+                            sx={{
+                              width: "100%",
+                              height: 180,
+                              objectFit: "cover",
+                              borderRadius: 1,
+                            }}
+                          />
+                        </Grid>
 
-          {/* CART ITEMS */}
-          <Stack spacing={2}>
-            {cart.map((item) => {
-              const itemPrice = Number(item.price || 0);
-              const originalPrice = getOriginalPrice(item);
-
-              const discountPercent =
-                originalPrice > itemPrice
-                  ? Math.round(
-                      ((originalPrice - itemPrice) /
-                        originalPrice) *
-                        100
-                    )
-                  : 0;
-
-              return (
-                <Card
-                  key={getProductId(item)}
-                  sx={{
-                    border: "1px solid #e5e5e5",
-                    borderRadius: 1,
-                    boxShadow: "none",
-                  }}
-                >
-                  <CardContent sx={{ p: 2 }}>
-                    <Grid container spacing={2}>
-                      {/* IMAGE */}
-                      <Grid item xs={12} sm={3}>
-                        <Box
-                          component="img"
-                          src={item.image || "/homepic.jpeg"}
-                          alt={item.name}
-                          sx={{
-                            width: "100%",
-                            height: 180,
-                            objectFit: "cover",
-                            borderRadius: 1,
-                          }}
-                        />
-                      </Grid>
-
-                      {/* DETAILS */}
-                      <Grid item xs={12} sm={9}>
-                        <Box
-                          display="flex"
-                          justifyContent="space-between"
-                        >
-                          <Box sx={{ width: "100%" }}>
-                            <Typography
-                              sx={{
-                                fontWeight: 700,
-                                fontSize: 18,
-                              }}
-                            >
-                              {item.brand || item.name}
-                            </Typography>
-
-                            <Typography
-                              sx={{
-                                color: "text.secondary",
-                                mb: 1,
-                              }}
-                            >
-                              {item.name}
-                            </Typography>
-
-                            <Typography
-                              variant="body2"
-                              sx={{ mb: 1 }}
-                            >
-                              Size: {getItemSize(item)} | Qty:{" "}
-                              {item.quantity}
-                            </Typography>
-
-                            {/* PRICE */}
-                            <Stack
-                              direction="row"
-                              spacing={1}
-                              alignItems="center"
-                              sx={{ mb: 1 }}
-                            >
-                              <Typography fontWeight={700}>
-                                {currency(itemPrice)}
+                        {/* DETAILS */}
+                        <Grid item xs={12} sm={9}>
+                          <Box display="flex" justifyContent="space-between">
+                            <Box sx={{ width: "100%" }}>
+                              <Typography
+                                sx={{
+                                  fontWeight: 700,
+                                  fontSize: 18,
+                                }}
+                              >
+                                {item.brand || item.name}
                               </Typography>
 
                               <Typography
                                 sx={{
-                                  textDecoration:
-                                    "line-through",
-                                  color: "gray",
+                                  color: "text.secondary",
+                                  mb: 1,
                                 }}
                               >
-                                {currency(originalPrice)}
+                                {item.name}
                               </Typography>
 
-                              {discountPercent > 0 && (
+                              <Typography variant="body2" sx={{ mb: 1 }}>
+                                Size: {getItemSize(item)} | Qty: {item.quantity}
+                              </Typography>
+
+                              {/* PRICE */}
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                                sx={{ mb: 1 }}
+                              >
+                                <Typography fontWeight={700}>
+                                  {currency(itemPrice)}
+                                </Typography>
+
                                 <Typography
                                   sx={{
-                                    color: "#ff3f6c",
-                                    fontWeight: 600,
+                                    textDecoration: "line-through",
+                                    color: "gray",
                                   }}
                                 >
-                                  {discountPercent}% OFF
+                                  {currency(originalPrice)}
                                 </Typography>
-                              )}
-                            </Stack>
 
-                            {/* QUANTITY CONTROLS */}
-                            <Stack
-                              direction="row"
-                              spacing={1}
-                              alignItems="center"
-                              sx={{ mb: 2 }}
-                            >
-                              <IconButton
-                                onClick={() =>
-                                  changeQuantity(item, -1)
-                                }
+                                {discountPercent > 0 && (
+                                  <Typography
+                                    sx={{
+                                      color: "#ff3f6c",
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    {discountPercent}% OFF
+                                  </Typography>
+                                )}
+                              </Stack>
+
+                              {/* QUANTITY CONTROLS */}
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                                sx={{ mb: 2 }}
+                              >
+                                <IconButton
+                                  onClick={() => changeQuantity(item, -1)}
+                                  sx={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: 1,
+                                  }}
+                                >
+                                  <RemoveIcon fontSize="small" />
+                                </IconButton>
+
+                                <Typography>{item.quantity}</Typography>
+
+                                <IconButton
+                                  onClick={() => changeQuantity(item, 1)}
+                                  sx={{
+                                    border: "1px solid #ddd",
+                                    borderRadius: 1,
+                                  }}
+                                >
+                                  <AddIcon fontSize="small" />
+                                </IconButton>
+                              </Stack>
+
+                              <Typography
+                                variant="body2"
                                 sx={{
-                                  border:
-                                    "1px solid #ddd",
-                                  borderRadius: 1,
+                                  color: "text.secondary",
+                                  mb: 1,
                                 }}
                               >
-                                <RemoveIcon fontSize="small" />
-                              </IconButton>
-
-                              <Typography>
-                                {item.quantity}
+                                Delivery by {estimatedDeliveryDate()}
                               </Typography>
 
-                              <IconButton
-                                onClick={() =>
-                                  changeQuantity(item, 1)
-                                }
-                                sx={{
-                                  border:
-                                    "1px solid #ddd",
-                                  borderRadius: 1,
-                                }}
-                              >
-                                <AddIcon fontSize="small" />
-                              </IconButton>
-                            </Stack>
+                              {/* ACTION BUTTONS */}
+                              <Stack direction="row" spacing={1} mt={1}>
+                                <AppButton
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() => handleMoveToWishlist(item)}
+                                >
+                                  MOVE TO WISHLIST
+                                </AppButton>
 
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color: "text.secondary",
-                                mb: 1,
-                              }}
+                                <AppButton
+                                  variant="outlined"
+                                  color="error"
+                                  size="small"
+                                  onClick={() =>
+                                    handleRemove(getProductId(item))
+                                  }
+                                >
+                                  REMOVE
+                                </AppButton>
+                              </Stack>
+                            </Box>
+
+                            <IconButton
+                              onClick={() => handleRemove(getProductId(item))}
                             >
-                              Delivery by{" "}
-                              {estimatedDeliveryDate()}
-                            </Typography>
-
-                            {/* ACTION BUTTONS */}
-                            <Stack
-                              direction="row"
-                              spacing={1}
-                              mt={1}
-                            >
-                              <AppButton
-                                variant="outlined"
-                                size="small"
-                                onClick={() =>
-                                  handleMoveToWishlist(
-                                    item
-                                  )
-                                }
-                              >
-                                MOVE TO WISHLIST
-                              </AppButton>
-
-                              <AppButton
-                                variant="outlined"
-                                color="error"
-                                size="small"
-                                onClick={() =>
-                                  handleRemove(
-                                    getProductId(item)
-                                  )
-                                }
-                              >
-                                REMOVE
-                              </AppButton>
-                            </Stack>
+                              <DeleteOutlineIcon />
+                            </IconButton>
                           </Box>
-
-                          <IconButton
-                            onClick={() =>
-                              handleRemove(
-                                getProductId(item)
-                              )
-                            }
-                          >
-                            <DeleteOutlineIcon />
-                          </IconButton>
-                        </Box>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </Stack>
-        </Grid>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </Stack>
+          </Grid>
 
-        {/* RIGHT SECTION */}
-        <Grid item xs={12} lg={4}>
-          <Card
-            sx={{
-              border: "1px solid #e5e5e5",
-              borderRadius: 1,
-              boxShadow: "none",
-              position: { lg: "sticky" },
-              top: 20,
-            }}
-          >
-            <CardContent>
-              <Typography fontWeight={700} mb={2}>
-                PRICE DETAILS ({itemCount} Items)
-              </Typography>
+          {/* RIGHT SECTION */}
+          <Grid item xs={12} lg={4}>
+            <Card
+              sx={{
+                border: "1px solid #e5e5e5",
+                borderRadius: 1,
+                boxShadow: "none",
+                position: { lg: "sticky" },
+                top: 20,
+              }}
+            >
+              <CardContent>
+                <Typography fontWeight={700} mb={2}>
+                  PRICE DETAILS ({itemCount} Items)
+                </Typography>
 
-              <Stack spacing={1.5}>
-                <Box display="flex" justifyContent="space-between">
-                  <Typography>Total MRP</Typography>
-                  <Typography>
-                    {currency(compareSubtotal)}
-                  </Typography>
-                </Box>
+                <Stack spacing={1.5}>
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography>Total MRP</Typography>
+                    <Typography>{currency(compareSubtotal)}</Typography>
+                  </Box>
 
-                <Box display="flex" justifyContent="space-between">
-                  <Typography>
-                    Discount on MRP
-                  </Typography>
-                  <Typography color="success.main">
-                    -{currency(productDiscount)}
-                  </Typography>
-                </Box>
-
-                {couponValue > 0 && (
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                  >
-                    <Typography>
-                      Coupon Discount
-                    </Typography>
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography>Discount on MRP</Typography>
                     <Typography color="success.main">
-                      -{currency(couponValue)}
+                      -{currency(productDiscount)}
                     </Typography>
                   </Box>
+
+                  {couponValue > 0 && (
+                    <Box display="flex" justifyContent="space-between">
+                      <Typography>Coupon Discount</Typography>
+                      <Typography color="success.main">
+                        -{currency(couponValue)}
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography>Shipping</Typography>
+                    <Typography>
+                      {shipping === 0 ? "Free" : currency(shipping)}
+                    </Typography>
+                  </Box>
+
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography>GST</Typography>
+                    <Typography>{currency(gst)}</Typography>
+                  </Box>
+
+                  <Divider />
+
+                  <Box display="flex" justifyContent="space-between">
+                    <Typography fontWeight={700}>Total Amount</Typography>
+                    <Typography fontWeight={700}>{currency(total)}</Typography>
+                  </Box>
+                </Stack>
+
+                <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
+                  <AppInput
+                    size="small"
+                    placeholder="Enter Code"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                  />
+                  <AppButton onClick={handleApplyCoupon}>APPLY</AppButton>
+                </Stack>
+
+                {couponLabel && (
+                  <Typography
+                    sx={{
+                      color: "success.main",
+                      mt: 1,
+                      fontSize: 14,
+                    }}
+                  >
+                    Applied: {couponLabel}
+                  </Typography>
                 )}
 
-                <Box display="flex" justifyContent="space-between">
-                  <Typography>Shipping</Typography>
-                  <Typography>
-                    {shipping === 0
-                      ? "Free"
-                      : currency(shipping)}
-                  </Typography>
-                </Box>
-
-                <Box display="flex" justifyContent="space-between">
-                  <Typography>GST</Typography>
-                  <Typography>{currency(gst)}</Typography>
-                </Box>
-
-                <Divider />
-
-                <Box display="flex" justifyContent="space-between">
-                  <Typography fontWeight={700}>
-                    Total Amount
-                  </Typography>
-                  <Typography fontWeight={700}>
-                    {currency(total)}
-                  </Typography>
-                </Box>
-              </Stack>
-
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ mt: 3 }}
-              >
-                <AppInput
-                  size="small"
-                  placeholder="Enter Code"
-                  value={couponCode}
-                  onChange={(e) =>
-                    setCouponCode(e.target.value)
-                  }
-                />
-                <AppButton onClick={handleApplyCoupon}>
-                  APPLY
-                </AppButton>
-              </Stack>
-
-              {couponLabel && (
-                <Typography
+                <AppButton
+                  fullWidth
                   sx={{
-                    color: "success.main",
-                    mt: 1,
-                    fontSize: 14,
+                    mt: 3,
+                    py: 1.5,
                   }}
+                  component={Link}
+                  href="/checkout"
                 >
-                  Applied: {couponLabel}
-                </Typography>
-              )}
+                  PLACE ORDER
+                </AppButton>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
+      <Dialog
+        open={openAddressPopup}
+        onClose={handleCloseAddressPopup}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle
+          sx={{
+            fontWeight: 700,
+            fontSize: "24px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          Select Delivery Address
+          <IconButton onClick={handleCloseAddressPopup}>✕</IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          {/* PINCODE */}
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              mb: 3,
+              mt: 1,
+            }}
+          >
+            <AppInput fullWidth placeholder="Enter Pincode" />
+
+            <AppButton variant="outlined">CHECK</AppButton>
+          </Box>
+
+          {/* SAVED ADDRESS HEADER */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mb: 2,
+            }}
+          >
+            <Typography fontWeight={700}>SAVED ADDRESS</Typography>
+
+            <Typography
+              sx={{
+                color: "#ff3f6c",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+              onClick={handleOpenEditPopup}
+            >
+              + Add New Address
+            </Typography>
+          </Box>
+
+          {/* SAVED ADDRESSES */}
+          {addresses.map((addr) => (
+            <Card
+              key={addr.id}
+              sx={{
+                border: "1px solid #e5e5e5",
+                mb: 2,
+                boxShadow: "none",
+              }}
+            >
+              <CardContent>
+                <Stack direction="row" spacing={2} alignItems="flex-start">
+                  <Radio
+                    checked={selectedAddress?.id === addr.id}
+                    onChange={() => setSelectedAddress(addr)}
+                  />
+
+                  <Box sx={{ flex: 1 }}>
+                    <Typography fontWeight={700}>{addr.name}</Typography>
+
+                    <Typography variant="body2">
+                      {addr.houseNumber}, {addr.address}, {addr.city},{" "}
+                      {addr.state} - {addr.pinCode}
+                    </Typography>
+
+                    <Typography sx={{ mt: 1 }}>
+                      Mobile: <b>{addr.mobile}</b>
+                    </Typography>
+
+                    <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                      <AppButton
+                        size="small"
+                        onClick={() => {
+                          setSelectedAddress(addr);
+                          handleCloseAddressPopup();
+                          toast.success("Address selected.");
+                        }}
+                      >
+                        DELIVER HERE
+                      </AppButton>
+
+                      <AppButton
+                        variant="outlined"
+                        size="small"
+                        onClick={handleOpenEditPopup}
+                      >
+                        EDIT
+                      </AppButton>
+
+                      <AppButton
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() => {
+                          const updated = addresses.filter(
+                            (a) => a.id !== addr.id
+                          );
+                          setAddresses(updated);
+                          localStorage.setItem(
+                            "addresses",
+                            JSON.stringify(updated)
+                          );
+                          if (selectedAddress?.id === addr.id) {
+                            setSelectedAddress(updated[0] || null);
+                          }
+                          toast.info("Address deleted.");
+                        }}
+                      >
+                        DELETE
+                      </AppButton>
+                    </Stack>
+                  </Box>
+                </Stack>
+              </CardContent>
+            </Card>
+          ))}
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={openEditAddressPopup}
+        onClose={handleCloseEditPopup}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            fontWeight: 700,
+            fontSize: "22px",
+          }}
+        >
+          ADD NEW ADDRESS
+          <IconButton onClick={handleCloseEditPopup}>✕</IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          <Stack spacing={3} sx={{ mt: 2 }}>
+            {/* CONTACT DETAILS */}
+            <Typography fontWeight={700}>CONTACT DETAILS</Typography>
+
+            <AppInput
+              fullWidth
+              placeholder="Name*"
+              value={addressForm.name}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, name: e.target.value })
+              }
+            />
+
+            <AppInput
+              fullWidth
+              placeholder="Mobile No*"
+              value={addressForm.mobile}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, mobile: e.target.value })
+              }
+            />
+
+            {/* ADDRESS */}
+            <Typography fontWeight={700}>ADDRESS</Typography>
+
+            <AppInput
+              fullWidth
+              placeholder="Pin Code*"
+              value={addressForm.pinCode}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, pinCode: e.target.value })
+              }
+            />
+
+            <AppInput
+              fullWidth
+              placeholder="House Number/Tower/Block*"
+              value={addressForm.houseNumber}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, houseNumber: e.target.value })
+              }
+            />
+
+            <Typography
+              sx={{
+                color: "#f5a623",
+                fontSize: 14,
+                mt: -2,
+              }}
+            >
+              *House Number will allow a doorstep delivery
+            </Typography>
+
+            <AppInput
+              fullWidth
+              placeholder="Address (locality, building, street)*"
+              value={addressForm.address}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, address: e.target.value })
+              }
+            />
+
+            <AppInput
+              fullWidth
+              placeholder="City*"
+              value={addressForm.city}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, city: e.target.value })
+              }
+            />
+
+            <AppInput
+              fullWidth
+              placeholder="State*"
+              value={addressForm.state}
+              onChange={(e) =>
+                setAddressForm({ ...addressForm, state: e.target.value })
+              }
+            />
+
+            {/* BUTTONS */}
+            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+              <AppButton
+                fullWidth
+                variant="outlined"
+                onClick={handleCloseEditPopup}
+              >
+                Cancel
+              </AppButton>
 
               <AppButton
                 fullWidth
+                onClick={handleSaveAddress}
                 sx={{
-                  mt: 3,
-                  py: 1.5,
+                  bgcolor: "#ff3f6c",
+                  "&:hover": {
+                    bgcolor: "#ff3f6c",
+                  },
                 }}
-                component={Link}
-                href="/checkout"
               >
-                PLACE ORDER
+                Save
               </AppButton>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </Container>
-    <Dialog
-  open={openAddressPopup}
-  onClose={handleCloseAddressPopup}
-  maxWidth="sm"
-  fullWidth
->
-  <DialogTitle
-    sx={{
-      fontWeight: 700,
-      fontSize: "24px",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-    }}
-  >
-    Select Delivery Address
-
-    <IconButton onClick={handleCloseAddressPopup}>
-      ✕
-    </IconButton>
-  </DialogTitle>
-
-  <DialogContent>
-    {/* PINCODE */}
-    <Box
-      sx={{
-        display: "flex",
-        gap: 1,
-        mb: 3,
-        mt: 1,
-      }}
-    >
-      <AppInput
-        fullWidth
-        placeholder="Enter Pincode"
-      />
-
-      <AppButton variant="outlined">
-        CHECK
-      </AppButton>
-    </Box>
-
-    {/* SAVED ADDRESS HEADER */}
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        mb: 2,
-      }}
-    >
-      <Typography fontWeight={700}>
-        SAVED ADDRESS
-      </Typography>
-
-      <Typography
-        sx={{
-          color: "#ff3f6c",
-          fontWeight: 600,
-          cursor: "pointer",
-        }}
-        onClick={handleOpenEditPopup}
-      >
-        + Add New Address
-      </Typography>
-    </Box>
-
-    {/* SAVED ADDRESSES */}
-    {addresses.map((addr) => (
-      <Card
-        key={addr.id}
-        sx={{
-          border: "1px solid #e5e5e5",
-          mb: 2,
-          boxShadow: "none",
-        }}
-      >
-        <CardContent>
-          <Stack
-            direction="row"
-            spacing={2}
-            alignItems="flex-start"
-          >
-            <Radio
-              checked={selectedAddress?.id === addr.id}
-              onChange={() => setSelectedAddress(addr)}
-            />
-
-            <Box sx={{ flex: 1 }}>
-              <Typography fontWeight={700}>
-                {addr.name}
-              </Typography>
-
-              <Typography variant="body2">
-                {addr.houseNumber}, {addr.address}, {addr.city}, {addr.state} - {addr.pinCode}
-              </Typography>
-
-              <Typography sx={{ mt: 1 }}>
-                Mobile: <b>{addr.mobile}</b>
-              </Typography>
-
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ mt: 2 }}
-              >
-                <AppButton
-                  size="small"
-                  onClick={() => {
-                    setSelectedAddress(addr);
-                    handleCloseAddressPopup();
-                    toast.success("Address selected.");
-                  }}
-                >
-                  DELIVER HERE
-                </AppButton>
-
-                <AppButton
-                  variant="outlined"
-                  size="small"
-                  onClick={handleOpenEditPopup}
-                >
-                  EDIT
-                </AppButton>
-
-                <AppButton
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                  onClick={() => {
-                    const updated = addresses.filter(a => a.id !== addr.id);
-                    setAddresses(updated);
-                    localStorage.setItem("addresses", JSON.stringify(updated));
-                    if (selectedAddress?.id === addr.id) {
-                      setSelectedAddress(updated[0] || null);
-                    }
-                    toast.info("Address deleted.");
-                  }}
-                >
-                  DELETE
-                </AppButton>
-              </Stack>
-            </Box>
+            </Stack>
           </Stack>
-        </CardContent>
-      </Card>
-    ))}
-  </DialogContent>
-</Dialog>
-<Dialog
-  open={openEditAddressPopup}
-  onClose={handleCloseEditPopup}
-  maxWidth="sm"
-  fullWidth
->
-  <DialogTitle
-    sx={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      fontWeight: 700,
-      fontSize: "22px",
-    }}
-  >
-    ADD NEW ADDRESS
-
-    <IconButton onClick={handleCloseEditPopup}>
-      ✕
-    </IconButton>
-  </DialogTitle>
-
-  <DialogContent>
-    <Stack spacing={3} sx={{ mt: 2 }}>
-      {/* CONTACT DETAILS */}
-      <Typography fontWeight={700}>
-        CONTACT DETAILS
-      </Typography>
-
-      <AppInput
-        fullWidth
-        placeholder="Name*"
-        value={addressForm.name}
-        onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
-      />
-
-      <AppInput
-        fullWidth
-        placeholder="Mobile No*"
-        value={addressForm.mobile}
-        onChange={(e) => setAddressForm({ ...addressForm, mobile: e.target.value })}
-      />
-
-      {/* ADDRESS */}
-      <Typography fontWeight={700}>
-        ADDRESS
-      </Typography>
-
-      <AppInput
-        fullWidth
-        placeholder="Pin Code*"
-        value={addressForm.pinCode}
-        onChange={(e) => setAddressForm({ ...addressForm, pinCode: e.target.value })}
-      />
-
-      <AppInput
-        fullWidth
-        placeholder="House Number/Tower/Block*"
-        value={addressForm.houseNumber}
-        onChange={(e) => setAddressForm({ ...addressForm, houseNumber: e.target.value })}
-      />
-
-      <Typography
-        sx={{
-          color: "#f5a623",
-          fontSize: 14,
-          mt: -2,
-        }}
-      >
-        *House Number will allow a doorstep delivery
-      </Typography>
-
-      <AppInput
-        fullWidth
-        placeholder="Address (locality, building, street)*"
-        value={addressForm.address}
-        onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
-      />
-
-      <AppInput
-        fullWidth
-        placeholder="City*"
-        value={addressForm.city}
-        onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
-      />
-
-      <AppInput
-        fullWidth
-        placeholder="State*"
-        value={addressForm.state}
-        onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
-      />
-
-      {/* BUTTONS */}
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{ mt: 2 }}
-      >
-        <AppButton
-          fullWidth
-          variant="outlined"
-          onClick={handleCloseEditPopup}
-        >
-          Cancel
-        </AppButton>
-
-        <AppButton
-          fullWidth
-          onClick={handleSaveAddress}
-          sx={{
-            bgcolor: "#ff3f6c",
-            "&:hover": {
-              bgcolor: "#ff3f6c",
-            },
-          }}
-        >
-          Save
-        </AppButton>
-      </Stack>
-    </Stack>
-  </DialogContent>
-</Dialog>
-  </Box>
-);
+        </DialogContent>
+      </Dialog>
+    </Box>
+  );
 }

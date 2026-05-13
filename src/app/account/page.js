@@ -45,7 +45,12 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useRouter } from "next/navigation";
 import { AppButton, AppInput, useToast } from "@/components/common";
 import { useAuth } from "@/context/AuthContext";
-import { addressesApi, createReturnApi, getAccountApi, getReturnsApi } from "@/lib/api";
+import {
+  addressesApi,
+  createReturnApi,
+  getAccountApi,
+  getReturnsApi,
+} from "@/lib/api";
 import { WishlistContext } from "@/context/WishlistContext";
 import {
   Dialog,
@@ -60,18 +65,31 @@ const TABS = [
   { key: "orders", label: "Orders", icon: <ReceiptLongOutlinedIcon /> },
   { key: "wishlist", label: "Wishlist", icon: <FavoriteBorderOutlinedIcon /> },
   { key: "addresses", label: "Addresses", icon: <PlaceOutlinedIcon /> },
-  { key: "payments", label: "Payment Methods", icon: <CreditCardOutlinedIcon /> },
-  { key: "profile", label: "Profile Details", icon: <PersonOutlineOutlinedIcon /> },
+  {
+    key: "payments",
+    label: "Payment Methods",
+    icon: <CreditCardOutlinedIcon />,
+  },
+  {
+    key: "profile",
+    label: "Profile Details",
+    icon: <PersonOutlineOutlinedIcon />,
+  },
   { key: "returns", label: "Returns", icon: <AutorenewOutlinedIcon /> },
   { key: "logout", label: "Logout", icon: <LogoutOutlinedIcon /> },
 ];
 
-const getOrderId = (order) => order?.id || order?._id || `ORD-${Math.random().toString(36).slice(2, 8)}`;
-const getOrderRouteId = (order) => order?.id || order?._id || order?.orderId || "";
-const getOrderDate = (order) => order?.date || order?.createdAt || new Date().toISOString();
+const getOrderId = (order) =>
+  order?.id || order?._id || `ORD-${Math.random().toString(36).slice(2, 8)}`;
+const getOrderRouteId = (order) =>
+  order?.id || order?._id || order?.orderId || "";
+const getOrderDate = (order) =>
+  order?.date || order?.createdAt || new Date().toISOString();
 const getOrderStatus = (order) => order?.status || "Processing";
-const getOrderTotal = (order) => Number(order?.total || order?.totalAmount || 0);
-const getOrderItems = (order) => (Array.isArray(order?.items) ? order.items : []);
+const getOrderTotal = (order) =>
+  Number(order?.total || order?.totalAmount || 0);
+const getOrderItems = (order) =>
+  Array.isArray(order?.items) ? order.items : [];
 const formatOrderAddress = (value) => {
   if (!value) return "Address not available";
   if (typeof value === "string") return value;
@@ -90,8 +108,10 @@ const formatOrderAddress = (value) => {
   }
   return "Address not available";
 };
-const getAddressId = (address) => address?.id || address?._id || address?.addressId;
-const currency = (value) => `₹${Math.round(Number(value || 0)).toLocaleString("en-IN")}`;
+const getAddressId = (address) =>
+  address?.id || address?._id || address?.addressId;
+const currency = (value) =>
+  `₹${Math.round(Number(value || 0)).toLocaleString("en-IN")}`;
 
 const normalizeAddresses = (data) => {
   const root = data?.addresses || data?.data || data;
@@ -116,7 +136,8 @@ const normalizePaymentMethods = (data) => {
   const list = Array.isArray(root) ? root : [];
   return list.map((method, index) => ({
     id: method?.id || method?._id || `pm-${index + 1}`,
-    label: method?.label || method?.provider || method?.type || "Payment Method",
+    label:
+      method?.label || method?.provider || method?.type || "Payment Method",
     type: method?.type || method?.method || "Card",
     masked: method?.maskedNumber || method?.masked || method?.value || "",
   }));
@@ -166,10 +187,10 @@ export default function AccountPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isSmallMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  
+
   const { isAuthenticated, isLoading, logout } = useAuth();
   const { wishlist } = useContext(WishlistContext);
-  
+
   const [activeTab, setActiveTab] = useState("dashboard");
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -202,18 +223,42 @@ export default function AccountPage() {
         ]);
 
         if (!active) return;
-        const profile = account?.profile?.user || account?.profile?.data || account?.profile || account?.user || null;
-        const orderList = account?.orders?.orders || account?.orders?.data || account?.orders || [];
+        const profile =
+          account?.profile?.user ||
+          account?.profile?.data ||
+          account?.profile ||
+          account?.user ||
+          null;
+        const orderList =
+          account?.orders?.orders ||
+          account?.orders?.data ||
+          account?.orders ||
+          [];
         const addressList = normalizeAddresses(account?.addresses || []);
-        const fallbackAddresses = addressList.length
-          ? addressList
-          : normalizeAddresses(await addressesApi.list().catch(() => []));
-        const returnList = normalizeReturns(account?.returns || returnsData);
+        const localAddresses = JSON.parse(
+          localStorage.getItem("addresses") || "[]"
+        );
+
+        const fallbackAddresses = localAddresses.map((address, index) => ({
+          id: address?.id || `addr-${index + 1}`,
+          name: address?.name || "",
+          line1: `${address?.houseNumber || ""} ${address?.address || ""}`,
+          line2: "",
+          city: address?.city || "",
+          state: address?.state || "",
+          pincode: address?.pinCode || "",
+          phone: address?.mobile || "",
+          landmark: "",
+          instructions: "",
+          isDefault: index === 0,
+        }));
 
         setUser(profile);
         setOrders(Array.isArray(orderList) ? orderList : []);
         setAddresses(fallbackAddresses);
-        setPaymentMethods(normalizePaymentMethods(account?.paymentMethods || []));
+        setPaymentMethods(
+          normalizePaymentMethods(account?.paymentMethods || [])
+        );
         setCouponData(normalizeRewards(account?.rewards || {}));
         setReturns(returnList);
       } catch (err) {
@@ -233,13 +278,18 @@ export default function AccountPage() {
   useEffect(() => {
     if (returns.length) return;
     const returnCandidates = orders
-      .filter((order) => ["Delivered", "Shipped", "Processing", "On the Way"].includes(getOrderStatus(order)))
+      .filter((order) =>
+        ["Delivered", "Shipped", "Processing", "On the Way"].includes(
+          getOrderStatus(order)
+        )
+      )
       .flatMap((order) =>
         getOrderItems(order).map((item, index) => ({
           id: `${getOrderId(order)}-${index + 1}`,
           orderId: getOrderId(order),
           productId: item?.productId || item?.id || "",
-          name: item?.name || item?.productName || item?.product?.name || "Item",
+          name:
+            item?.name || item?.productName || item?.product?.name || "Item",
           size: item?.size || item?.variant?.size || "N/A",
           color: item?.color || item?.variant?.color || "N/A",
           status: "Eligible",
@@ -265,7 +315,8 @@ export default function AccountPage() {
     boxShadow: theme.palette.brand?.shadowCard || "0 2px 8px rgba(0,0,0,0.05)",
     transition: "all 0.3s ease",
     "&:hover": {
-      boxShadow: theme.palette.brand?.shadowCardStrong || "0 4px 16px rgba(0,0,0,0.1)",
+      boxShadow:
+        theme.palette.brand?.shadowCardStrong || "0 4px 16px rgba(0,0,0,0.1)",
       borderColor: theme.palette.primary.light + "40",
     },
   };
@@ -280,7 +331,8 @@ export default function AccountPage() {
     overflow: "hidden",
     "&:hover": {
       transform: "translateY(-6px)",
-      boxShadow: theme.palette.brand?.shadowCardStrong || "0 6px 20px rgba(0,0,0,0.12)",
+      boxShadow:
+        theme.palette.brand?.shadowCardStrong || "0 6px 20px rgba(0,0,0,0.12)",
     },
     "&::before": {
       content: '""',
@@ -319,7 +371,13 @@ export default function AccountPage() {
 
   const saveAddress = async () => {
     const payload = { ...addressForm };
-    if (!payload.name || !payload.line1 || !payload.city || !payload.pincode || !payload.phone) {
+    if (
+      !payload.name ||
+      !payload.line1 ||
+      !payload.city ||
+      !payload.pincode ||
+      !payload.phone
+    ) {
       toast.info("Fill required address fields.");
       return;
     }
@@ -327,7 +385,9 @@ export default function AccountPage() {
     try {
       if (payload.id) {
         await addressesApi.update(payload.id, payload);
-        setAddresses((prev) => prev.map((item) => (item.id === payload.id ? payload : item)));
+        setAddresses((prev) =>
+          prev.map((item) => (item.id === payload.id ? payload : item))
+        );
         toast.success("Address updated.");
       } else {
         const created = await addressesApi.create(payload);
@@ -335,15 +395,23 @@ export default function AccountPage() {
         if (normalized.length) {
           setAddresses((prev) => [...prev, normalized[0]]);
         } else {
-          setAddresses((prev) => [...prev, { ...payload, id: `addr-${Date.now()}` }]);
+          setAddresses((prev) => [
+            ...prev,
+            { ...payload, id: `addr-${Date.now()}` },
+          ]);
         }
         toast.success("Address added.");
       }
     } catch (err) {
       if (payload.id) {
-        setAddresses((prev) => prev.map((item) => (item.id === payload.id ? payload : item)));
+        setAddresses((prev) =>
+          prev.map((item) => (item.id === payload.id ? payload : item))
+        );
       } else {
-        setAddresses((prev) => [...prev, { ...payload, id: `addr-${Date.now()}` }]);
+        setAddresses((prev) => [
+          ...prev,
+          { ...payload, id: `addr-${Date.now()}` },
+        ]);
       }
       toast.info("Saved locally. Address API not available.");
     } finally {
@@ -401,7 +469,9 @@ export default function AccountPage() {
       .then(() => {
         setReturns((prev) =>
           prev.map((entry) =>
-            entry.id === returnId ? { ...entry, status: "Requested", reason } : entry
+            entry.id === returnId
+              ? { ...entry, status: "Requested", reason }
+              : entry
           )
         );
         toast.success("Return request submitted.");
@@ -423,11 +493,13 @@ export default function AccountPage() {
   const SidebarContent = () => (
     <Box sx={{ height: "100%" }}>
       {/* User Profile Section */}
-      <Box sx={{ 
-        p: { xs: 2, sm: 2.5 },
-        background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.primary.main}08)`,
-        borderBottom: `1px solid ${theme.palette.divider}`,
-      }}>
+      <Box
+        sx={{
+          p: { xs: 2, sm: 2.5 },
+          background: `linear-gradient(135deg, ${theme.palette.primary.main}15, ${theme.palette.primary.main}08)`,
+          borderBottom: `1px solid ${theme.palette.divider}`,
+        }}
+      >
         <Stack direction="row" spacing={1.5} alignItems="center">
           <Avatar
             sx={{
@@ -441,8 +513,8 @@ export default function AccountPage() {
             {user?.name?.charAt(0)?.toUpperCase() || "U"}
           </Avatar>
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography 
-              sx={{ 
+            <Typography
+              sx={{
                 fontWeight: 700,
                 fontSize: { xs: "0.938rem", sm: "1rem" },
                 mb: 0.25,
@@ -453,8 +525,8 @@ export default function AccountPage() {
             >
               {user?.name || "User"}
             </Typography>
-            <Typography 
-              sx={{ 
+            <Typography
+              sx={{
                 opacity: 0.7,
                 fontSize: { xs: "0.75rem", sm: "0.813rem" },
                 overflow: "hidden",
@@ -480,11 +552,20 @@ export default function AccountPage() {
               mb: 0.5,
               py: { xs: 1, sm: 1.2 },
               px: { xs: 1.5, sm: 2 },
-              backgroundColor: activeTab === tab.key ? `${theme.palette.primary.main}15` : "transparent",
-              borderLeft: activeTab === tab.key ? `3px solid ${theme.palette.primary.main}` : "3px solid transparent",
+              backgroundColor:
+                activeTab === tab.key
+                  ? `${theme.palette.primary.main}15`
+                  : "transparent",
+              borderLeft:
+                activeTab === tab.key
+                  ? `3px solid ${theme.palette.primary.main}`
+                  : "3px solid transparent",
               transition: "all 0.3s ease",
               "&:hover": {
-                backgroundColor: activeTab === tab.key ? `${theme.palette.primary.main}20` : theme.palette.action.hover,
+                backgroundColor:
+                  activeTab === tab.key
+                    ? `${theme.palette.primary.main}20`
+                    : theme.palette.action.hover,
                 transform: "translateX(4px)",
               },
               ...(tab.key === "logout" && {
@@ -495,10 +576,13 @@ export default function AccountPage() {
               }),
             }}
           >
-            <ListItemIcon 
-              sx={{ 
+            <ListItemIcon
+              sx={{
                 minWidth: { xs: 36, sm: 40 },
-                color: activeTab === tab.key ? theme.palette.primary.main : "inherit",
+                color:
+                  activeTab === tab.key
+                    ? theme.palette.primary.main
+                    : "inherit",
                 ...(tab.key === "logout" && {
                   color: theme.palette.error.main,
                 }),
@@ -506,14 +590,14 @@ export default function AccountPage() {
             >
               {tab.icon}
             </ListItemIcon>
-            <ListItemText 
-              primary={tab.label} 
-              sx={{ 
-                "& .MuiTypography-root": { 
+            <ListItemText
+              primary={tab.label}
+              sx={{
+                "& .MuiTypography-root": {
                   fontSize: { xs: "0.875rem", sm: "0.938rem" },
                   fontWeight: activeTab === tab.key ? 600 : 500,
-                } 
-              }} 
+                },
+              }}
             />
           </ListItemButton>
         ))}
@@ -523,9 +607,21 @@ export default function AccountPage() {
 
   if (isLoading || loading) {
     return (
-      <Container sx={{ py: { xs: 6, sm: 8, md: 10 }, display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+      <Container
+        sx={{
+          py: { xs: 6, sm: 8, md: 10 },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
         <CircularProgress size={48} thickness={4} />
-        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ fontWeight: 500 }}
+        >
           Loading your account...
         </Typography>
       </Container>
@@ -547,11 +643,25 @@ export default function AccountPage() {
               mx: "auto",
             }}
           >
-            <Typography variant="h4" sx={{ mb: 2, fontWeight: 700, fontSize: { xs: "1.75rem", sm: "2rem" } }}>
+            <Typography
+              variant="h4"
+              sx={{
+                mb: 2,
+                fontWeight: 700,
+                fontSize: { xs: "1.75rem", sm: "2rem" },
+              }}
+            >
               My Account
             </Typography>
-            <Typography sx={{ mb: 3, opacity: 0.75, fontSize: { xs: "0.938rem", sm: "1rem" } }}>
-              Please sign in to view your account details and manage your orders.
+            <Typography
+              sx={{
+                mb: 3,
+                opacity: 0.75,
+                fontSize: { xs: "0.938rem", sm: "1rem" },
+              }}
+            >
+              Please sign in to view your account details and manage your
+              orders.
             </Typography>
             <AppButton component={Link} href="/login" size="large">
               Go to Login
@@ -564,7 +674,10 @@ export default function AccountPage() {
 
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, minHeight: "100vh" }}>
-      <Container maxWidth={false} sx={{ py: { xs: 2, sm: 3, md: 4 }, px: { xs: 1.5, sm: 2, md: 3 } }}>
+      <Container
+        maxWidth={false}
+        sx={{ py: { xs: 2, sm: 3, md: 4 }, px: { xs: 1.5, sm: 2, md: 3 } }}
+      >
         {/* Mobile Header */}
         {isMobile && (
           <Fade in timeout={300}>
@@ -580,7 +693,13 @@ export default function AccountPage() {
                 justifyContent: "space-between",
               }}
             >
-              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: { xs: "1.1rem", sm: "1.25rem" } }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: { xs: "1.1rem", sm: "1.25rem" },
+                }}
+              >
                 My Account
               </Typography>
               <IconButton
@@ -604,10 +723,10 @@ export default function AccountPage() {
           {!isMobile && (
             <Grid item xs={12} md={3}>
               <Fade in timeout={400}>
-                <Card 
-                  sx={{ 
-                    ...panelCardSx, 
-                    position: "sticky", 
+                <Card
+                  sx={{
+                    ...panelCardSx,
+                    position: "sticky",
                     top: { md: 24 },
                     maxHeight: "calc(100vh - 48px)",
                     overflow: "auto",
@@ -657,12 +776,16 @@ export default function AccountPage() {
                   <Stack spacing={{ xs: 2.5, sm: 3 }}>
                     {/* Welcome Section */}
                     <Box>
-                      <Typography 
-                        variant="h4" 
-                        sx={{ 
-                          mb: 0.5, 
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          mb: 0.5,
                           fontWeight: 700,
-                          fontSize: { xs: "1.75rem", sm: "2rem", md: "2.25rem" },
+                          fontSize: {
+                            xs: "1.75rem",
+                            sm: "2rem",
+                            md: "2.25rem",
+                          },
                           background: `linear-gradient(135deg, ${theme.palette.text.primary}, ${theme.palette.primary.main})`,
                           backgroundClip: "text",
                           WebkitBackgroundClip: "text",
@@ -671,31 +794,75 @@ export default function AccountPage() {
                       >
                         Welcome back, {user?.name || "Member"}!
                       </Typography>
-                      <Typography sx={{ opacity: 0.65, fontSize: { xs: "0.875rem", sm: "0.938rem" } }}>
-                        Last order: {lastOrder ? new Date(getOrderDate(lastOrder)).toLocaleDateString("en-IN") : "No orders yet"}
+                      <Typography
+                        sx={{
+                          opacity: 0.65,
+                          fontSize: { xs: "0.875rem", sm: "0.938rem" },
+                        }}
+                      >
+                        Last order:{" "}
+                        {lastOrder
+                          ? new Date(
+                              getOrderDate(lastOrder)
+                            ).toLocaleDateString("en-IN")
+                          : "No orders yet"}
                       </Typography>
                     </Box>
 
                     {/* Stats Grid */}
                     <Grid container spacing={{ xs: 1.5, sm: 2 }}>
                       {[
-                        { label: "Orders Placed", value: ordersPlaced, icon: <ShoppingBagOutlinedIcon />, color: theme.palette.primary.main },
-                        { label: "Wishlist Items", value: wishlistItems, icon: <FavoriteBorderOutlinedIcon />, color: theme.palette.error.main },
-                        { label: "Saved Addresses", value: savedAddresses, icon: <PlaceOutlinedIcon />, color: theme.palette.success.main },
-                        { label: "Reward Points", value: couponData.points, icon: <CardGiftcardOutlinedIcon />, color: theme.palette.warning.main },
+                        {
+                          label: "Orders Placed",
+                          value: ordersPlaced,
+                          icon: <ShoppingBagOutlinedIcon />,
+                          color: theme.palette.primary.main,
+                        },
+                        {
+                          label: "Wishlist Items",
+                          value: wishlistItems,
+                          icon: <FavoriteBorderOutlinedIcon />,
+                          color: theme.palette.error.main,
+                        },
+                        {
+                          label: "Saved Addresses",
+                          value: savedAddresses,
+                          icon: <PlaceOutlinedIcon />,
+                          color: theme.palette.success.main,
+                        },
+                        {
+                          label: "Reward Points",
+                          value: couponData.points,
+                          icon: <CardGiftcardOutlinedIcon />,
+                          color: theme.palette.warning.main,
+                        },
                       ].map((stat, index) => (
                         <Grid item xs={6} sm={6} md={3} key={stat.label}>
                           <Grow in timeout={500 + index * 100}>
                             <Card sx={statCardSx}>
                               <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
-                                <Stack direction="row" alignItems="flex-start" justifyContent="space-between">
+                                <Stack
+                                  direction="row"
+                                  alignItems="flex-start"
+                                  justifyContent="space-between"
+                                >
                                   <Box sx={{ position: "relative", zIndex: 1 }}>
-                                    <Typography sx={{ opacity: 0.7, fontSize: { xs: "0.75rem", sm: "0.813rem" }, mb: { xs: 0.8, sm: 1 }, fontWeight: 500 }}>
+                                    <Typography
+                                      sx={{
+                                        opacity: 0.7,
+                                        fontSize: {
+                                          xs: "0.75rem",
+                                          sm: "0.813rem",
+                                        },
+                                        mb: { xs: 0.8, sm: 1 },
+                                        fontWeight: 500,
+                                      }}
+                                    >
                                       {stat.label}
                                     </Typography>
-                                    <Typography 
-                                      variant="h4" 
-                                      sx={{ 
+                                    <Typography
+                                      variant="h4"
+                                      sx={{
                                         fontWeight: 700,
                                         fontSize: { xs: "1.75rem", sm: "2rem" },
                                         color: stat.color,
@@ -783,47 +950,127 @@ export default function AccountPage() {
                 {activeTab === "orders" && (
                   <Stack spacing={{ xs: 2, sm: 2.5 }}>
                     <Box>
-                      <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontWeight: 700,
+                          mb: 0.5,
+                          fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                        }}
+                      >
                         Your Orders
                       </Typography>
-                      <Typography sx={{ opacity: 0.65, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
+                      <Typography
+                        sx={{
+                          opacity: 0.65,
+                          fontSize: { xs: "0.813rem", sm: "0.875rem" },
+                        }}
+                      >
                         Showing latest {recentOrders.length} order(s)
                       </Typography>
                     </Box>
-                    
+
                     {recentOrders.map((order, index) => {
                       const oid = getOrderId(order);
                       const routeOrderId = getOrderRouteId(order);
                       const isOpen = expandedOrder === oid;
-                      
+
                       return (
                         <Grow in timeout={400 + index * 100} key={oid}>
                           <Card sx={panelCardSx}>
                             <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                              <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" spacing={{ xs: 2, sm: 1 }}>
+                              <Stack
+                                direction={{ xs: "column", sm: "row" }}
+                                justifyContent="space-between"
+                                spacing={{ xs: 2, sm: 1 }}
+                              >
                                 <Box sx={{ flex: 1 }}>
-                                  <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.938rem", sm: "1rem" }, mb: 0.5 }}>
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 700,
+                                      fontSize: { xs: "0.938rem", sm: "1rem" },
+                                      mb: 0.5,
+                                    }}
+                                  >
                                     Order ID: {oid}
                                   </Typography>
-                                  <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
-                                    Date: {new Date(getOrderDate(order)).toLocaleDateString("en-IN")}
+                                  <Typography
+                                    sx={{
+                                      opacity: 0.75,
+                                      fontSize: {
+                                        xs: "0.813rem",
+                                        sm: "0.875rem",
+                                      },
+                                    }}
+                                  >
+                                    Date:{" "}
+                                    {new Date(
+                                      getOrderDate(order)
+                                    ).toLocaleDateString("en-IN")}
                                   </Typography>
-                                  <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.813rem", sm: "0.875rem" }, fontWeight: 600, color: theme.palette.success.main }}>
+                                  <Typography
+                                    sx={{
+                                      opacity: 0.75,
+                                      fontSize: {
+                                        xs: "0.813rem",
+                                        sm: "0.875rem",
+                                      },
+                                      fontWeight: 600,
+                                      color: theme.palette.success.main,
+                                    }}
+                                  >
                                     Total: {currency(getOrderTotal(order))}
                                   </Typography>
                                 </Box>
-                                <Stack direction={{ xs: "row", sm: "row" }} spacing={1} alignItems="flex-start" flexWrap="wrap">
-                                  <Chip 
-                                    label={getOrderStatus(order)} 
-                                    color={getOrderStatus(order) === "Delivered" ? "success" : "warning"}
-                                    sx={{ 
-                                      fontWeight: 600,
-                                      fontSize: { xs: "0.75rem", sm: "0.813rem" },
+                                <Stack
+                                  direction="row"
+                                  spacing={1.5}
+                                  useFlexGap
+                                  flexWrap="wrap"
+                                  alignItems="center"
+                                  justifyContent={{
+                                    xs: "flex-start",
+                                    sm: "flex-end",
+                                  }}
+                                  sx={{
+                                    mt: { xs: 1, sm: 0 },
+                                  }}
+                                >
+                                  <Chip
+                                    label={getOrderStatus(order)}
+                                    color={
+                                      getOrderStatus(order) === "Delivered"
+                                        ? "success"
+                                        : "warning"
+                                    }
+                                    sx={{
+                                      fontWeight: 700,
+                                      height: 38,
+                                      borderRadius: "12px",
+                                      px: 1,
+                                      "& .MuiChip-label": {
+                                        px: 1,
+                                      },
                                     }}
                                   />
-                                  <AppButton variant="outlined" size="small" onClick={() => setExpandedOrder(isOpen ? "" : oid)}>
+
+                                  <AppButton
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() =>
+                                      setExpandedOrder(isOpen ? "" : oid)
+                                    }
+                                    sx={{
+                                      minWidth: 100,
+                                      height: 38,
+                                      borderRadius: "12px",
+                                      px: 2,
+                                      whiteSpace: "nowrap",
+                                    }}
+                                  >
                                     {isOpen ? "Hide" : "Details"}
                                   </AppButton>
+
                                   <AppButton
                                     size="small"
                                     onClick={() => {
@@ -831,42 +1078,127 @@ export default function AccountPage() {
                                         toast.info("Tracking not available.");
                                         return;
                                       }
-                                      router.push(`/track-order/${routeOrderId}`);
+                                      router.push(
+                                        `/track-order/${routeOrderId}`
+                                      );
+                                    }}
+                                    sx={{
+                                      minWidth: 90,
+                                      height: 38,
+                                      borderRadius: "12px",
+                                      px: 2,
+                                      whiteSpace: "nowrap",
                                     }}
                                   >
                                     Track
                                   </AppButton>
                                 </Stack>
                               </Stack>
-                              
+
                               {isOpen && (
                                 <Fade in timeout={300}>
                                   <Box sx={{ mt: 2 }}>
                                     <Divider sx={{ mb: 2 }} />
-                                    <Typography sx={{ mb: 1.5, fontWeight: 700, fontSize: { xs: "0.938rem", sm: "1rem" } }}>
+                                    <Typography
+                                      sx={{
+                                        mb: 1.5,
+                                        fontWeight: 700,
+                                        fontSize: {
+                                          xs: "0.938rem",
+                                          sm: "1rem",
+                                        },
+                                      }}
+                                    >
                                       Products Purchased
                                     </Typography>
                                     {getOrderItems(order).map((item, idx) => (
-                                      <Typography key={`${oid}-${idx}`} sx={{ opacity: 0.8, mb: 0.8, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
-                                        • {item?.name || item?.productName || item?.product?.name || "Item"} | 
-                                        Size: {item?.size || item?.variant?.size || "N/A"} | 
-                                        Color: {item?.color || item?.variant?.color || "N/A"} | 
-                                        Qty: {item?.qty || item?.quantity || 1}
+                                      <Typography
+                                        key={`${oid}-${idx}`}
+                                        sx={{
+                                          opacity: 0.8,
+                                          mb: 0.8,
+                                          fontSize: {
+                                            xs: "0.813rem",
+                                            sm: "0.875rem",
+                                          },
+                                        }}
+                                      >
+                                        •{" "}
+                                        {item?.name ||
+                                          item?.productName ||
+                                          item?.product?.name ||
+                                          "Item"}{" "}
+                                        | Size:{" "}
+                                        {item?.size ||
+                                          item?.variant?.size ||
+                                          "N/A"}{" "}
+                                        | Color:{" "}
+                                        {item?.color ||
+                                          item?.variant?.color ||
+                                          "N/A"}{" "}
+                                        | Qty:{" "}
+                                        {item?.qty || item?.quantity || 1}
                                       </Typography>
                                     ))}
-                                    <Box sx={{ mt: 2, p: 2, borderRadius: 2, bgcolor: theme.palette.action.hover }}>
-                                      <Typography sx={{ opacity: 0.8, fontSize: { xs: "0.813rem", sm: "0.875rem" }, mb: 1 }}>
-                                        <strong>Delivery Address:</strong> {formatOrderAddress(order?.shippingAddress || order?.address)}
+                                    <Box
+                                      sx={{
+                                        mt: 2,
+                                        p: 2,
+                                        borderRadius: 2,
+                                        bgcolor: theme.palette.action.hover,
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          opacity: 0.8,
+                                          fontSize: {
+                                            xs: "0.813rem",
+                                            sm: "0.875rem",
+                                          },
+                                          mb: 1,
+                                        }}
+                                      >
+                                        <strong>Delivery Address:</strong>{" "}
+                                        {formatOrderAddress(
+                                          order?.shippingAddress ||
+                                            order?.address
+                                        )}
                                       </Typography>
-                                      <Typography sx={{ opacity: 0.8, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
-                                        <strong>Payment Method:</strong> {order?.paymentMethod || "Online Payment"}
+                                      <Typography
+                                        sx={{
+                                          opacity: 0.8,
+                                          fontSize: {
+                                            xs: "0.813rem",
+                                            sm: "0.875rem",
+                                          },
+                                        }}
+                                      >
+                                        <strong>Payment Method:</strong>{" "}
+                                        {order?.paymentMethod ||
+                                          "Online Payment"}
                                       </Typography>
                                     </Box>
-                                    <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2 }}>
-                                      <AppButton variant="outlined" size="small" onClick={() => toast.info("Invoice download coming soon.")}>
+                                    <Stack
+                                      direction={{ xs: "column", sm: "row" }}
+                                      spacing={1}
+                                      sx={{ mt: 2 }}
+                                    >
+                                      <AppButton
+                                        variant="outlined"
+                                        size="small"
+                                        onClick={() =>
+                                          toast.info(
+                                            "Invoice download coming soon."
+                                          )
+                                        }
+                                      >
                                         Download Invoice
                                       </AppButton>
-                                      <AppButton variant="outlined" size="small" onClick={() => setActiveTab("returns")}>
+                                      <AppButton
+                                        variant="outlined"
+                                        size="small"
+                                        onClick={() => setActiveTab("returns")}
+                                      >
                                         Request Return
                                       </AppButton>
                                     </Stack>
@@ -885,27 +1217,64 @@ export default function AccountPage() {
                 {activeTab === "wishlist" && (
                   <Grow in timeout={400}>
                     <Card sx={panelCardSx}>
-                      <CardContent sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}>
+                      <CardContent
+                        sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}
+                      >
                         <Box sx={{ mb: 3 }}>
-                          <FavoriteBorderOutlinedIcon sx={{ fontSize: { xs: 48, sm: 64 }, opacity: 0.3, mb: 2, color: theme.palette.error.main }} />
-                          <Typography variant="h5" sx={{ mb: 1.5, fontWeight: 700, fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
+                          <FavoriteBorderOutlinedIcon
+                            sx={{
+                              fontSize: { xs: 48, sm: 64 },
+                              opacity: 0.3,
+                              mb: 2,
+                              color: theme.palette.error.main,
+                            }}
+                          />
+                          <Typography
+                            variant="h5"
+                            sx={{
+                              mb: 1.5,
+                              fontWeight: 700,
+                              fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                            }}
+                          >
                             ❤️ Your Wishlist
                           </Typography>
-                          <Typography sx={{ opacity: 0.7, fontSize: { xs: "0.875rem", sm: "0.938rem" }, mb: 0.5 }}>
-                            You have <strong style={{ color: theme.palette.primary.main }}>{wishlistItems}</strong> saved item(s).
+                          <Typography
+                            sx={{
+                              opacity: 0.7,
+                              fontSize: { xs: "0.875rem", sm: "0.938rem" },
+                              mb: 0.5,
+                            }}
+                          >
+                            You have{" "}
+                            <strong
+                              style={{ color: theme.palette.primary.main }}
+                            >
+                              {wishlistItems}
+                            </strong>{" "}
+                            saved item(s).
                           </Typography>
-                          <Typography sx={{ opacity: 0.65, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
-                            Continue where you left off and complete your purchase.
+                          <Typography
+                            sx={{
+                              opacity: 0.65,
+                              fontSize: { xs: "0.813rem", sm: "0.875rem" },
+                            }}
+                          >
+                            Continue where you left off and complete your
+                            purchase.
                           </Typography>
                         </Box>
-                        <AppButton component={Link} href="/wishlist" size="large">
+                        <AppButton
+                          component={Link}
+                          href="/wishlist"
+                          size="large"
+                        >
                           View Wishlist
                         </AppButton>
                       </CardContent>
                     </Card>
                   </Grow>
                 )}
-                
 
                 {/* Addresses Tab */}
                 {activeTab === "addresses" && (
@@ -917,197 +1286,402 @@ export default function AccountPage() {
                       spacing={1.5}
                     >
                       <Box>
-                        <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            fontWeight: 700,
+                            mb: 0.5,
+                            fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                          }}
+                        >
                           Your Addresses
                         </Typography>
-                        <Typography sx={{ opacity: 0.65, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
+                        <Typography
+                          sx={{
+                            opacity: 0.65,
+                            fontSize: { xs: "0.813rem", sm: "0.875rem" },
+                          }}
+                        >
                           Manage your shipping and delivery addresses
                         </Typography>
                       </Box>
-                      <AppButton onClick={startAddAddress} fullWidth={isSmallMobile}>
+                      <AppButton
+                        onClick={startAddAddress}
+                        fullWidth={isSmallMobile}
+                      >
                         Add Address
                       </AppButton>
                     </Stack>
 
                     {showAddressForm && (
-                        <Card sx={panelCardSx}>
-                          <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, fontSize: { xs: "1rem", sm: "1.125rem" } }}>
-                              {addressForm.id ? "Edit Address" : "Add New Address"}
-                            </Typography>
-                            <Grid container spacing={{ xs: 1.5, sm: 2 }}>
-                              <Grid item xs={12} sm={6}>
-                                <AppInput 
-                                  label="Name" 
-                                  value={addressForm.name} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, name: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                <AppInput 
-                                  label="Phone" 
-                                  value={addressForm.phone} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, phone: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12}>
-                                <AppInput 
-                                  label="Address Line 1" 
-                                  value={addressForm.line1} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, line1: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12}>
-                                <AppInput 
-                                  label="Address Line 2" 
-                                  value={addressForm.line2} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, line2: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12} sm={4}>
-                                <AppInput 
-                                  label="City" 
-                                  value={addressForm.city} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, city: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12} sm={4}>
-                                <AppInput 
-                                  label="State" 
-                                  value={addressForm.state} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, state: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12} sm={4}>
-                                <AppInput 
-                                  label="Pincode" 
-                                  value={addressForm.pincode} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, pincode: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                <AppInput 
-                                  label="Landmark" 
-                                  value={addressForm.landmark} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, landmark: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                <AppInput 
-                                  label="Delivery Instructions" 
-                                  value={addressForm.instructions} 
-                                  onChange={(e) => setAddressForm((p) => ({ ...p, instructions: e.target.value }))}
-                                  fullWidth
-                                />
-                              </Grid>
+                      <Card sx={panelCardSx}>
+                        <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              mb: 2,
+                              fontWeight: 600,
+                              fontSize: { xs: "1rem", sm: "1.125rem" },
+                            }}
+                          >
+                            {addressForm.id
+                              ? "Edit Address"
+                              : "Add New Address"}
+                          </Typography>
+                          <Grid container spacing={{ xs: 1.5, sm: 2 }}>
+                            <Grid item xs={12} sm={6}>
+                              <AppInput
+                                label="Name"
+                                value={addressForm.name}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    name: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
                             </Grid>
-                            <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2.5 }}>
-                              <AppButton onClick={saveAddress} fullWidth={isSmallMobile}>
-                                {addressForm.id ? "Update Address" : "Add Address"}
-                              </AppButton>
-                              <AppButton
-                                variant="outlined"
-                                onClick={cancelAddressForm}
-                                fullWidth={isSmallMobile}
-                              >
-                                {addressForm.id ? "Cancel Edit" : "Cancel"}
-                              </AppButton>
-                            </Stack>
-                          </CardContent>
-                        </Card>
+                            <Grid item xs={12} sm={6}>
+                              <AppInput
+                                label="Phone"
+                                value={addressForm.phone}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    phone: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={12}>
+                              <AppInput
+                                label="Address Line 1"
+                                value={addressForm.line1}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    line1: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={12}>
+                              <AppInput
+                                label="Address Line 2"
+                                value={addressForm.line2}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    line2: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                              <AppInput
+                                label="City"
+                                value={addressForm.city}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    city: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                              <AppInput
+                                label="State"
+                                value={addressForm.state}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    state: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                              <AppInput
+                                label="Pincode"
+                                value={addressForm.pincode}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    pincode: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <AppInput
+                                label="Landmark"
+                                value={addressForm.landmark}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    landmark: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                              <AppInput
+                                label="Delivery Instructions"
+                                value={addressForm.instructions}
+                                onChange={(e) =>
+                                  setAddressForm((p) => ({
+                                    ...p,
+                                    instructions: e.target.value,
+                                  }))
+                                }
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
+                          <Stack
+                            direction={{ xs: "column", sm: "row" }}
+                            spacing={1}
+                            sx={{ mt: 2.5 }}
+                          >
+                            <AppButton
+                              onClick={saveAddress}
+                              fullWidth={isSmallMobile}
+                            >
+                              {addressForm.id
+                                ? "Update Address"
+                                : "Add Address"}
+                            </AppButton>
+                            <AppButton
+                              variant="outlined"
+                              onClick={cancelAddressForm}
+                              fullWidth={isSmallMobile}
+                            >
+                              {addressForm.id ? "Cancel Edit" : "Cancel"}
+                            </AppButton>
+                          </Stack>
+                        </CardContent>
+                      </Card>
                     )}
 
                     <Stack spacing={{ xs: 1.5, sm: 2 }}>
-                      <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.875rem", sm: "0.938rem" }, fontWeight: 600 }}>
+                      <Typography
+                        sx={{
+                          opacity: 0.75,
+                          fontSize: { xs: "0.875rem", sm: "0.938rem" },
+                          fontWeight: 600,
+                        }}
+                      >
                         Saved Addresses ({addresses.length})
                       </Typography>
                       {addresses.length ? (
                         addresses.map((address, index) => (
-                            <Grow in timeout={400 + index * 100} key={address.id}>
-                              <Card sx={panelCardSx}>
-                                <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
-                                  <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" spacing={{ xs: 1.5, sm: 1 }}>
-                                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                                      <Stack direction="row" spacing={1} sx={{ mb: 0.8, flexWrap: "wrap" }}>
-                                        <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.938rem", sm: "1rem" } }}>
-                                          {address.name}
-                                        </Typography>
-                                        {address.isDefault && (
-                                          <Chip size="small" color="secondary" label="Default" sx={{ height: 20 }} />
-                                        )}
-                                      </Stack>
-                                      <Typography sx={{ opacity: 0.8, fontSize: { xs: "0.813rem", sm: "0.875rem" }, mb: 0.3 }}>
-                                        {address.line1} {address.line2}
-                                      </Typography>
-                                      <Typography sx={{ opacity: 0.8, fontSize: { xs: "0.813rem", sm: "0.875rem" }, mb: 0.3 }}>
-                                        {address.city}, {address.state} - {address.pincode}
-                                      </Typography>
-                                      <Typography sx={{ opacity: 0.8, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
-                                        Phone: {address.phone}
-                                      </Typography>
-                                      {address.landmark && (
-                                        <Typography sx={{ opacity: 0.7, fontSize: { xs: "0.75rem", sm: "0.813rem" }, mt: 0.5 }}>
-                                          Landmark: {address.landmark}
-                                        </Typography>
-                                      )}
-                                    </Box>
-                                    <Stack direction="row" spacing={0.5} sx={{ alignSelf: "flex-start" }}>
-                                      <IconButton 
-                                        size="small"
-                                        onClick={() => startEditAddress(address)}
+                          <Grow in timeout={400 + index * 100} key={address.id}>
+                            <Card sx={panelCardSx}>
+                              <CardContent
+                                sx={{
+                                  p: { xs: 2.5, sm: 3 },
+                                  minHeight: 190,
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <Stack
+                                  direction="row"
+                                  justifyContent="space-between"
+                                  alignItems="flex-start"
+                                  spacing={2}
+                                >
+                                  {/* LEFT CONTENT */}
+                                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                                    <Stack
+                                      direction="row"
+                                      alignItems="center"
+                                      spacing={1}
+                                      sx={{ mb: 1.5 }}
+                                    >
+                                      <Typography
                                         sx={{
-                                          transition: "all 0.2s ease",
-                                          "&:hover": {
-                                            color: theme.palette.primary.main,
-                                            transform: "scale(1.1)",
+                                          fontWeight: 700,
+                                          fontSize: {
+                                            xs: "1rem",
+                                            sm: "1.05rem",
                                           },
+                                          textTransform: "uppercase",
                                         }}
                                       >
-                                        <EditOutlinedIcon fontSize="small" />
-                                      </IconButton>
-                                      <IconButton 
-                                        size="small"
-                                        onClick={() => deleteAddress(address.id)}
-                                        sx={{
-                                          transition: "all 0.2s ease",
-                                          "&:hover": {
-                                            color: theme.palette.error.main,
-                                            transform: "scale(1.1)",
-                                          },
-                                        }}
-                                      >
-                                        <DeleteOutlineOutlinedIcon fontSize="small" />
-                                      </IconButton>
-                                      {!address.isDefault && (
-                                        <AppButton size="small" variant="outlined" onClick={() => setDefaultAddress(address.id)}>
-                                          Set Default
-                                        </AppButton>
+                                        {address.name}
+                                      </Typography>
+
+                                      {address.isDefault && (
+                                        <Chip
+                                          label="Default"
+                                          size="small"
+                                          sx={{
+                                            height: 24,
+                                            borderRadius: "8px",
+                                            fontWeight: 600,
+                                            backgroundColor: "#d2a48f",
+                                            color: "#fff",
+                                          }}
+                                        />
                                       )}
                                     </Stack>
+
+                                    <Typography
+                                      sx={{
+                                        fontSize: {
+                                          xs: "0.9rem",
+                                          sm: "0.95rem",
+                                        },
+                                        color: "text.secondary",
+                                        lineHeight: 1.7,
+                                        mb: 0.5,
+                                      }}
+                                    >
+                                      {address.line1}
+                                    </Typography>
+
+                                    {address.line2 && (
+                                      <Typography
+                                        sx={{
+                                          fontSize: {
+                                            xs: "0.9rem",
+                                            sm: "0.95rem",
+                                          },
+                                          color: "text.secondary",
+                                          lineHeight: 1.7,
+                                          mb: 0.5,
+                                        }}
+                                      >
+                                        {address.line2}
+                                      </Typography>
+                                    )}
+
+                                    <Typography
+                                      sx={{
+                                        fontSize: {
+                                          xs: "0.9rem",
+                                          sm: "0.95rem",
+                                        },
+                                        color: "text.secondary",
+                                        lineHeight: 1.7,
+                                      }}
+                                    >
+                                      {address.city}, {address.state} -{" "}
+                                      {address.pincode}
+                                    </Typography>
+
+                                    <Typography
+                                      sx={{
+                                        mt: 1.5,
+                                        fontWeight: 500,
+                                        fontSize: {
+                                          xs: "0.9rem",
+                                          sm: "0.95rem",
+                                        },
+                                      }}
+                                    >
+                                      Phone: {address.phone}
+                                    </Typography>
+                                  </Box>
+
+                                  {/* RIGHT ACTIONS */}
+                                  <Stack
+                                    direction="row"
+                                    spacing={0.5}
+                                    alignItems="center"
+                                  >
+                                    <IconButton
+                                      size="small"
+                                      onClick={() => startEditAddress(address)}
+                                      sx={{
+                                        border: "1px solid #e7d7cf",
+                                        borderRadius: "10px",
+                                        "&:hover": {
+                                          backgroundColor: "#f7f1ed",
+                                        },
+                                      }}
+                                    >
+                                      <EditOutlinedIcon fontSize="small" />
+                                    </IconButton>
+
+                                    <IconButton
+                                      size="small"
+                                      onClick={() => deleteAddress(address.id)}
+                                      sx={{
+                                        border: "1px solid #e7d7cf",
+                                        borderRadius: "10px",
+                                        "&:hover": {
+                                          backgroundColor: "#fff1f1",
+                                        },
+                                      }}
+                                    >
+                                      <DeleteOutlineOutlinedIcon fontSize="small" />
+                                    </IconButton>
                                   </Stack>
-                                </CardContent>
-                              </Card>
-                            </Grow>
-                          ))
+                                </Stack>
+
+                                {/* BOTTOM BUTTON */}
+                                {!address.isDefault && (
+                                  <Box sx={{ mt: 2 }}>
+                                    <AppButton
+                                      size="small"
+                                      variant="outlined"
+                                      onClick={() =>
+                                        setDefaultAddress(address.id)
+                                      }
+                                      sx={{
+                                        borderRadius: "10px",
+                                        minWidth: 140,
+                                        height: 40,
+                                      }}
+                                    >
+                                      Set Default
+                                    </AppButton>
+                                  </Box>
+                                )}
+                              </CardContent>
+                            </Card>
+                          </Grow>
+                        ))
                       ) : (
                         <Card sx={panelCardSx}>
-                          <CardContent sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}>
-                            <PlaceOutlinedIcon sx={{ fontSize: { xs: 48, sm: 60 }, opacity: 0.28, mb: 1.5 }} />
+                          <CardContent
+                            sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}
+                          >
+                            <PlaceOutlinedIcon
+                              sx={{
+                                fontSize: { xs: 48, sm: 60 },
+                                opacity: 0.28,
+                                mb: 1.5,
+                              }}
+                            />
                             <Typography sx={{ fontWeight: 700, mb: 0.75 }}>
                               No saved addresses yet
                             </Typography>
-                            <Typography sx={{ opacity: 0.72, mb: 2, fontSize: { xs: "0.875rem", sm: "0.938rem" } }}>
-                              Add your first delivery address to make checkout faster.
+                            <Typography
+                              sx={{
+                                opacity: 0.72,
+                                mb: 2,
+                                fontSize: { xs: "0.875rem", sm: "0.938rem" },
+                              }}
+                            >
+                              Add your first delivery address to make checkout
+                              faster.
                             </Typography>
-                            <AppButton onClick={startAddAddress}>Add Address</AppButton>
+                            <AppButton onClick={startAddAddress}>
+                              Add Address
+                            </AppButton>
                           </CardContent>
                         </Card>
                       )}
@@ -1119,10 +1693,22 @@ export default function AccountPage() {
                 {activeTab === "payments" && (
                   <Stack spacing={{ xs: 2, sm: 2.5 }}>
                     <Box>
-                      <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontWeight: 700,
+                          mb: 0.5,
+                          fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                        }}
+                      >
                         Payment Methods
                       </Typography>
-                      <Typography sx={{ opacity: 0.65, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
+                      <Typography
+                        sx={{
+                          opacity: 0.65,
+                          fontSize: { xs: "0.813rem", sm: "0.875rem" },
+                        }}
+                      >
                         Manage your saved payment options
                       </Typography>
                     </Box>
@@ -1133,16 +1719,42 @@ export default function AccountPage() {
                             <Grow in timeout={400 + index * 100}>
                               <Card sx={panelCardSx}>
                                 <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
-                                  <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                                  <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="flex-start"
+                                  >
                                     <Box>
-                                      <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.938rem", sm: "1rem" }, mb: 0.5 }}>
+                                      <Typography
+                                        sx={{
+                                          fontWeight: 700,
+                                          fontSize: {
+                                            xs: "0.938rem",
+                                            sm: "1rem",
+                                          },
+                                          mb: 0.5,
+                                        }}
+                                      >
                                         {method.label}
                                       </Typography>
-                                      <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
-                                        {method.type}{method.masked ? ` • ${method.masked}` : ""}
+                                      <Typography
+                                        sx={{
+                                          opacity: 0.75,
+                                          fontSize: {
+                                            xs: "0.813rem",
+                                            sm: "0.875rem",
+                                          },
+                                        }}
+                                      >
+                                        {method.type}
+                                        {method.masked
+                                          ? ` • ${method.masked}`
+                                          : ""}
                                       </Typography>
                                     </Box>
-                                    <CreditCardOutlinedIcon sx={{ opacity: 0.3, fontSize: 32 }} />
+                                    <CreditCardOutlinedIcon
+                                      sx={{ opacity: 0.3, fontSize: 32 }}
+                                    />
                                   </Stack>
                                 </CardContent>
                               </Card>
@@ -1153,9 +1765,22 @@ export default function AccountPage() {
                     ) : (
                       <Grow in timeout={400}>
                         <Card sx={panelCardSx}>
-                          <CardContent sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}>
-                            <CreditCardOutlinedIcon sx={{ fontSize: { xs: 48, sm: 64 }, opacity: 0.3, mb: 2 }} />
-                            <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.875rem", sm: "0.938rem" } }}>
+                          <CardContent
+                            sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}
+                          >
+                            <CreditCardOutlinedIcon
+                              sx={{
+                                fontSize: { xs: 48, sm: 64 },
+                                opacity: 0.3,
+                                mb: 2,
+                              }}
+                            />
+                            <Typography
+                              sx={{
+                                opacity: 0.75,
+                                fontSize: { xs: "0.875rem", sm: "0.938rem" },
+                              }}
+                            >
                               No saved payment methods yet.
                             </Typography>
                           </CardContent>
@@ -1170,7 +1795,14 @@ export default function AccountPage() {
                   <Grow in timeout={400}>
                     <Card sx={panelCardSx}>
                       <CardContent sx={{ p: { xs: 2.5, sm: 3, md: 4 } }}>
-                        <Typography variant="h5" sx={{ mb: 3, fontWeight: 700, fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            mb: 3,
+                            fontWeight: 700,
+                            fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                          }}
+                        >
                           Profile Details
                         </Typography>
                         <Grid container spacing={{ xs: 2, sm: 2.5 }}>
@@ -1178,26 +1810,60 @@ export default function AccountPage() {
                             { label: "Name", value: user?.name || "-" },
                             { label: "Email", value: user?.email || "-" },
                             { label: "Phone", value: user?.phone || "-" },
-                            { label: "Gender", value: user?.gender ? String(user.gender).charAt(0).toUpperCase() + String(user.gender).slice(1) : "-" },
+                            {
+                              label: "Gender",
+                              value: user?.gender
+                                ? String(user.gender).charAt(0).toUpperCase() +
+                                  String(user.gender).slice(1)
+                                : "-",
+                            },
                           ].map((field, index) => (
                             <Grid item xs={12} sm={6} key={field.label}>
                               <Grow in timeout={400 + index * 80}>
-                                <Box 
-                                  sx={{ 
-                                    p: 2,
-                                    borderRadius: 2,
-                                    bgcolor: theme.palette.action.hover,
+                                <Box
+                                  sx={{
+                                    p: 2.2,
+                                    borderRadius: "18px",
+                                    background:
+                                      theme.palette.mode === "dark"
+                                        ? "1A2332"
+                                        : "linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,243,240,0.95))",
+                                    border: "1px solid #f0e2da",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
                                     transition: "all 0.3s ease",
+                                    minHeight: 90,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
+
                                     "&:hover": {
-                                      bgcolor: theme.palette.action.selected,
-                                      transform: "translateY(-2px)",
+                                      transform: "translateY(-3px)",
+                                      boxShadow: "0 8px 18px rgba(0,0,0,0.06)",
+                                      borderColor: "#d7b5a4",
                                     },
                                   }}
                                 >
-                                  <Typography sx={{ opacity: 0.7, fontSize: { xs: "0.75rem", sm: "0.813rem" }, mb: 0.5, fontWeight: 500 }}>
+                                  <Typography
+                                    sx={{
+                                      color: "#8d7b72",
+                                      fontSize: {
+                                        xs: "0.76rem",
+                                        sm: "0.82rem",
+                                      },
+                                      mb: 0.8,
+                                      fontWeight: 500,
+                                      letterSpacing: "0.3px",
+                                      textTransform: "uppercase",
+                                    }}
+                                  >
                                     {field.label}
                                   </Typography>
-                                  <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.938rem", sm: "1rem" } }}>
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 700,
+                                      fontSize: { xs: "0.938rem", sm: "1rem" },
+                                    }}
+                                  >
                                     {field.value}
                                   </Typography>
                                 </Box>
@@ -1214,10 +1880,22 @@ export default function AccountPage() {
                 {activeTab === "returns" && (
                   <Stack spacing={{ xs: 2, sm: 2.5 }}>
                     <Box>
-                      <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          fontWeight: 700,
+                          mb: 0.5,
+                          fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                        }}
+                      >
                         Returns & Exchanges
                       </Typography>
-                      <Typography sx={{ opacity: 0.65, fontSize: { xs: "0.813rem", sm: "0.875rem" } }}>
+                      <Typography
+                        sx={{
+                          opacity: 0.65,
+                          fontSize: { xs: "0.813rem", sm: "0.875rem" },
+                        }}
+                      >
                         Showing latest {recentReturns.length} item(s)
                       </Typography>
                     </Box>
@@ -1225,13 +1903,35 @@ export default function AccountPage() {
                       <Grow in timeout={400 + index * 100} key={entry.id}>
                         <Card sx={panelCardSx}>
                           <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                            <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.938rem", sm: "1rem" }, mb: 0.5 }}>
+                            <Typography
+                              sx={{
+                                fontWeight: 700,
+                                fontSize: { xs: "0.938rem", sm: "1rem" },
+                                mb: 0.5,
+                              }}
+                            >
                               {entry.name}
                             </Typography>
-                            <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.813rem", sm: "0.875rem" }, mb: 1.5 }}>
-                              Order: {entry.orderId} | Size: {entry.size} | Color: {entry.color}
+                            <Typography
+                              sx={{
+                                opacity: 0.75,
+                                fontSize: { xs: "0.813rem", sm: "0.875rem" },
+                                mb: 1.5,
+                              }}
+                            >
+                              Order: {entry.orderId} | Size: {entry.size} |
+                              Color: {entry.color}
                             </Typography>
-                            <Stack direction={{ xs: "column", sm: "row" }} spacing={1} flexWrap="wrap">
+                            <Stack
+                              direction={{ xs: "column", md: "row" }}
+                              spacing={1.5}
+                              useFlexGap
+                              flexWrap="wrap"
+                              alignItems={{ xs: "stretch", md: "center" }}
+                              sx={{
+                                mt: 2,
+                              }}
+                            >
                               <AppInput
                                 select
                                 size="small"
@@ -1240,37 +1940,92 @@ export default function AccountPage() {
                                 onChange={(e) =>
                                   setReturns((prev) =>
                                     prev.map((item) =>
-                                      item.id === entry.id ? { ...item, reason: e.target.value } : item
+                                      item.id === entry.id
+                                        ? { ...item, reason: e.target.value }
+                                        : item
                                     )
                                   )
                                 }
-                                sx={{ minWidth: { xs: "100%", sm: 200 } }}
+                                sx={{
+                                  minWidth: { xs: "100%", sm: 240 },
+                                  flex: 1,
+                                }}
                               >
                                 <MenuItem value="">Select reason</MenuItem>
-                                <MenuItem value="size-issue">Size issue</MenuItem>
-                                <MenuItem value="quality-issue">Quality issue</MenuItem>
-                                <MenuItem value="wrong-item">Wrong item received</MenuItem>
+                                <MenuItem value="size-issue">
+                                  Size issue
+                                </MenuItem>
+                                <MenuItem value="quality-issue">
+                                  Quality issue
+                                </MenuItem>
+                                <MenuItem value="wrong-item">
+                                  Wrong item received
+                                </MenuItem>
                               </AppInput>
-                              <AppButton component="label" variant="outlined" size="small">
+
+                              <AppButton
+                                component="label"
+                                variant="outlined"
+                                size="small"
+                                sx={{
+                                  minWidth: 140,
+                                  height: 42,
+                                  borderRadius: "12px",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
                                 Upload Image
                                 <input
                                   hidden
                                   type="file"
-                                  onChange={(e) => updateReturnImage(entry.id, e.target.files?.[0])}
+                                  onChange={(e) =>
+                                    updateReturnImage(
+                                      entry.id,
+                                      e.target.files?.[0]
+                                    )
+                                  }
                                 />
                               </AppButton>
-                              <AppButton size="small" onClick={() => requestReturn(entry.id, entry.reason)}>
+
+                              <AppButton
+                                size="small"
+                                onClick={() =>
+                                  requestReturn(entry.id, entry.reason)
+                                }
+                                sx={{
+                                  minWidth: 160,
+                                  height: 42,
+                                  borderRadius: "12px",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
                                 Request Return
                               </AppButton>
-                              <Chip 
-                                size="small" 
-                                color={entry.status === "Requested" ? "warning" : "success"} 
+
+                              <Chip
+                                size="small"
+                                color={
+                                  entry.status === "Requested"
+                                    ? "warning"
+                                    : "success"
+                                }
                                 label={entry.status}
-                                sx={{ fontWeight: 600 }}
+                                sx={{
+                                  fontWeight: 600,
+                                  height: 34,
+                                  borderRadius: "10px",
+                                  alignSelf: "center",
+                                }}
                               />
                             </Stack>
                             {entry.image && (
-                              <Typography sx={{ fontSize: { xs: "0.75rem", sm: "0.813rem" }, opacity: 0.7, mt: 1 }}>
+                              <Typography
+                                sx={{
+                                  fontSize: { xs: "0.75rem", sm: "0.813rem" },
+                                  opacity: 0.7,
+                                  mt: 1,
+                                }}
+                              >
                                 Uploaded: {entry.image}
                               </Typography>
                             )}
@@ -1286,30 +2041,28 @@ export default function AccountPage() {
         </Grid>
       </Container>
       <Dialog
-  open={logoutDialogOpen}
-  onClose={handleCancelLogout}
-  maxWidth="xs"
-  fullWidth
->
-  <DialogTitle sx={{ fontWeight: 700 }}>
-    Confirm Logout
-  </DialogTitle>
+        open={logoutDialogOpen}
+        onClose={handleCancelLogout}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle sx={{ fontWeight: 700 }}>Confirm Logout</DialogTitle>
 
-  <DialogContent>
-    <DialogContentText>
-      Are you sure you want to logout from your account?
-    </DialogContentText>
-  </DialogContent>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to logout from your account?
+          </DialogContentText>
+        </DialogContent>
 
-  <DialogActions sx={{ px: 3, pb: 2 }}>
-    <AppButton variant="outlined" onClick={handleCancelLogout}>
-      Cancel
-    </AppButton>
-    <AppButton color="error" onClick={handleConfirmLogout}>
-      Logout
-    </AppButton>
-  </DialogActions>
-</Dialog>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <AppButton variant="outlined" onClick={handleCancelLogout}>
+            Cancel
+          </AppButton>
+          <AppButton color="error" onClick={handleConfirmLogout}>
+            Logout
+          </AppButton>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
