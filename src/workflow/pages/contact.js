@@ -13,7 +13,7 @@ export const contactPageContent = {
     {
       iconKey: "phone",
       title: "Phone",
-      value: "+91 7678294158",
+      value: "+91 8750728485",
     },
     {
       iconKey: "address",

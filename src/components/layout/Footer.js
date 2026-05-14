@@ -102,7 +102,7 @@ export default function Footer() {
     // { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
     // { icon: LinkedIn, href: "https://linkedin.com", label: "LinkedIn" },
     // { icon: YouTube, href: "https://youtube.com", label: "YouTube" },
-    { icon: WhatsApp,href: "https://wa.me/917678294158",label: "WhatsApp"},
+    { icon: WhatsApp,href: "https://wa.me/918750728485",label: "WhatsApp"},
   ];
 
   return (
@@ -260,7 +260,7 @@ export default function Footer() {
             <ContactItem icon={PhoneOutlined}>
               <Box
                 component="a"
-                href="tel:+917678294158"
+                href="tel:+918750728485"
                 sx={{
                   color: "inherit",
                   textDecoration: "none",
@@ -269,7 +269,7 @@ export default function Footer() {
                     },
                 }}
               >
-                +91 7678294158
+                +91 8750728485
               </Box>
             </ContactItem>
             <ContactItem icon={EmailOutlined}>

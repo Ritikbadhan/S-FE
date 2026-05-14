@@ -5,7 +5,8 @@ export default function ShirtsPage() {
     <CategoryListingPage
       title="Shirts"
       subtitle="Sharp tailoring, premium fabric, and clean everyday form."
-      keywords={["shirt", "formal shirt", "casual shirt"]}
+      keywords={["formal shirt", "casual shirt", "dress shirt"]}
+      showComingSoon
     />
   );
 }
