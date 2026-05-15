@@ -1,11 +1,9 @@
-export const getHomePageContent = (isMobile) => ({
+export const homePageContent = {
   image: {
-    src: isMobile
-      ? "/Home_mobile.png"
-      : "/Home.jpg",
+    src: "/Home.jpg",
+    mobileSrc: "/home_mobile.png",
     alt: "SHARQ LABEL Hero Banner",
   },
-
   hero: {
     title: "SHARQ LABEL",
     eyebrow: "BORN TO BE DIFFERENT",
@@ -13,4 +11,4 @@ export const getHomePageContent = (isMobile) => ({
     ctaLabel: "Explore Collection",
     ctaHref: "/collection",
   },
-});
+};
