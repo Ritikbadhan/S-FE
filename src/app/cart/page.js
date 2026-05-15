@@ -237,30 +237,49 @@ export default function CartPage() {
 
   if (!cart.length) {
     return (
-      <Container sx={{ py: 12, textAlign: "center", minHeight: "70vh" }}>
+      <Container
+        sx={{
+          py: { xs: 6, md: 12 },
+          textAlign: "center",
+          minHeight: { xs: "58vh", md: "70vh" },
+        }}
+      >
         <Box
           sx={{
             mx: "auto",
-            width: 120,
-            height: 120,
+            width: { xs: 92, md: 120 },
+            height: { xs: 92, md: 120 },
             borderRadius: "50%",
             display: "grid",
             placeItems: "center",
             bgcolor: (theme) => theme.palette.brand.borderSoft,
-            mb: 3,
+            mb: { xs: 2, md: 3 },
           }}
         >
           <ShoppingBagOutlinedIcon
-            sx={{ fontSize: 56, color: "primary.main" }}
+            sx={{ fontSize: { xs: 42, md: 56 }, color: "primary.main" }}
           />
         </Box>
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 0.75, fontSize: { xs: "1.35rem", md: "2.125rem" } }}
+        >
           Your bag is empty
         </Typography>
-        <Typography sx={{ opacity: 0.75, mb: 3 }}>
+        <Typography
+          sx={{
+            opacity: 0.75,
+            mb: { xs: 2, md: 3 },
+            fontSize: { xs: "0.9rem", md: "1rem" },
+          }}
+        >
           Add pieces to start building your look.
         </Typography>
-        <AppButton component={Link} href="/collection" sx={{ px: 4 }}>
+        <AppButton
+          component={Link}
+          href="/collection"
+          sx={{ px: { xs: 2.25, md: 4 }, fontSize: { xs: "0.8rem", md: "0.875rem" } }}
+        >
           Explore Collection
         </AppButton>
       </Container>
@@ -272,11 +291,11 @@ export default function CartPage() {
       sx={{
         bgcolor: theme.palette.mode === "dark" ? "#1A2332" : "#fff",
         minHeight: "100vh",
-        py: { xs: 3, md: 5 },
+        py: { xs: 2, md: 5 },
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={3}>
+        <Grid container spacing={{ xs: 2, md: 3 }}>
           {/* LEFT SECTION */}
           <Grid item xs={12} lg={8}>
             {/* ADDRESS SECTION */}
@@ -292,16 +311,18 @@ export default function CartPage() {
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "center",
-                  py: 2,
+                  alignItems: { xs: "flex-start", sm: "center" },
+                  gap: { xs: 1, sm: 2 },
+                  py: { xs: 1.25, md: 2 },
+                  flexDirection: { xs: "column", sm: "row" },
                 }}
               >
-                <Box sx={{ pr: 2 }}>
+                <Box sx={{ pr: { xs: 0, sm: 2 } }}>
                   <Typography
                     fontWeight={600}
                     sx={{
-                      mb: 0.8,
-                      fontSize: "15px",
+                      mb: 0.5,
+                      fontSize: { xs: "0.82rem", sm: "15px" },
                       lineHeight: 1.4,
                     }}
                   >
@@ -314,7 +335,8 @@ export default function CartPage() {
                     variant="body2"
                     color="text.secondary"
                     sx={{
-                      lineHeight: 1.6,
+                      lineHeight: { xs: 1.45, sm: 1.6 },
+                      fontSize: { xs: "0.74rem", sm: "0.875rem" },
                       maxWidth: "85%",
                     }}
                   >
@@ -324,7 +346,11 @@ export default function CartPage() {
                   </Typography>
                 </Box>
 
-                <AppButton variant="outlined" onClick={handleOpenAddressPopup}>
+                <AppButton
+                  variant="outlined"
+                  onClick={handleOpenAddressPopup}
+                  sx={{ fontSize: { xs: "0.74rem", sm: "0.875rem" }, py: { xs: 0.5, sm: 0.8 } }}
+                >
                   CHANGE ADDRESS
                 </AppButton>
               </CardContent>
@@ -340,16 +366,24 @@ export default function CartPage() {
               }}
             >
               <CardContent>
-                <Typography fontWeight={600}>Available Offers</Typography>
+                <Typography
+                  fontWeight={600}
+                  sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
+                >
+                  Available Offers
+                </Typography>
 
-                <Typography variant="body2" sx={{ mt: 1 }}>
+                <Typography
+                  variant="body2"
+                  sx={{ mt: 0.75, fontSize: { xs: "0.74rem", sm: "0.875rem" } }}
+                >
                   7.5% Assured Cashback on minimum spend of ₹100
                 </Typography>
               </CardContent>
             </Card>
 
             {/* CART ITEMS */}
-            <Stack spacing={2}>
+            <Stack spacing={{ xs: 1.5, md: 2 }}>
               {cart.map((item) => {
                 const itemPrice = Number(item.price || 0);
                 const originalPrice = getOriginalPrice(item);
@@ -370,8 +404,8 @@ export default function CartPage() {
                       boxShadow: "none",
                     }}
                   >
-                    <CardContent sx={{ p: 2 }}>
-                      <Grid container spacing={2}>
+                    <CardContent sx={{ p: { xs: 1.25, md: 2 } }}>
+                      <Grid container spacing={{ xs: 1.25, sm: 2 }}>
                         {/* IMAGE */}
                         <Grid item xs={12} sm={3}>
                           <Box
@@ -380,7 +414,7 @@ export default function CartPage() {
                             alt={item.name}
                             sx={{
                               width: "100%",
-                              height: 180,
+                              height: { xs: 150, sm: 180 },
                               objectFit: "cover",
                               borderRadius: 1,
                             }}
@@ -394,7 +428,7 @@ export default function CartPage() {
                               <Typography
                                 sx={{
                                   fontWeight: 700,
-                                  fontSize: 18,
+                                  fontSize: { xs: "0.95rem", sm: 18 },
                                 }}
                               >
                                 {item.brand || item.name}
@@ -403,13 +437,17 @@ export default function CartPage() {
                               <Typography
                                 sx={{
                                   color: "text.secondary",
-                                  mb: 1,
+                                  mb: 0.75,
+                                  fontSize: { xs: "0.8rem", sm: "0.95rem" },
                                 }}
                               >
                                 {item.name}
                               </Typography>
 
-                              <Typography variant="body2" sx={{ mb: 1 }}>
+                              <Typography
+                                variant="body2"
+                                sx={{ mb: 0.75, fontSize: { xs: "0.74rem", sm: "0.875rem" } }}
+                              >
                                 Size: {getItemSize(item)} | Qty: {item.quantity}
                               </Typography>
 
@@ -418,9 +456,12 @@ export default function CartPage() {
                                 direction="row"
                                 spacing={1}
                                 alignItems="center"
-                                sx={{ mb: 1 }}
+                                sx={{ mb: 0.75 }}
                               >
-                                <Typography fontWeight={700}>
+                                <Typography
+                                  fontWeight={700}
+                                  sx={{ fontSize: { xs: "0.88rem", sm: "1rem" } }}
+                                >
                                   {currency(itemPrice)}
                                 </Typography>
 
@@ -428,6 +469,7 @@ export default function CartPage() {
                                   sx={{
                                     textDecoration: "line-through",
                                     color: "gray",
+                                    fontSize: { xs: "0.78rem", sm: "0.95rem" },
                                   }}
                                 >
                                   {currency(originalPrice)}
@@ -438,6 +480,7 @@ export default function CartPage() {
                                     sx={{
                                       color: "#ff3f6c",
                                       fontWeight: 600,
+                                      fontSize: { xs: "0.74rem", sm: "0.875rem" },
                                     }}
                                   >
                                     {discountPercent}% OFF
@@ -450,25 +493,29 @@ export default function CartPage() {
                                 direction="row"
                                 spacing={1}
                                 alignItems="center"
-                                sx={{ mb: 2 }}
+                                sx={{ mb: 1.25 }}
                               >
                                 <IconButton
                                   onClick={() => changeQuantity(item, -1)}
                                   sx={{
                                     border: "1px solid #ddd",
                                     borderRadius: 1,
+                                    p: { xs: 0.6, sm: 1 },
                                   }}
                                 >
                                   <RemoveIcon fontSize="small" />
                                 </IconButton>
 
-                                <Typography>{item.quantity}</Typography>
+                                <Typography sx={{ fontSize: { xs: "0.85rem", sm: "1rem" } }}>
+                                  {item.quantity}
+                                </Typography>
 
                                 <IconButton
                                   onClick={() => changeQuantity(item, 1)}
                                   sx={{
                                     border: "1px solid #ddd",
                                     borderRadius: 1,
+                                    p: { xs: 0.6, sm: 1 },
                                   }}
                                 >
                                   <AddIcon fontSize="small" />
@@ -479,18 +526,24 @@ export default function CartPage() {
                                 variant="body2"
                                 sx={{
                                   color: "text.secondary",
-                                  mb: 1,
+                                  mb: 0.75,
+                                  fontSize: { xs: "0.74rem", sm: "0.875rem" },
                                 }}
                               >
                                 Delivery by {estimatedDeliveryDate()}
                               </Typography>
 
                               {/* ACTION BUTTONS */}
-                              <Stack direction="row" spacing={1} mt={1}>
+                              <Stack
+                                direction={{ xs: "column", sm: "row" }}
+                                spacing={0.8}
+                                mt={0.8}
+                              >
                                 <AppButton
                                   variant="outlined"
                                   size="small"
                                   onClick={() => handleMoveToWishlist(item)}
+                                  sx={{ fontSize: { xs: "0.68rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
                                 >
                                   MOVE TO WISHLIST
                                 </AppButton>
@@ -502,6 +555,7 @@ export default function CartPage() {
                                   onClick={() =>
                                     handleRemove(getProductId(item))
                                   }
+                                  sx={{ fontSize: { xs: "0.68rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
                                 >
                                   REMOVE
                                 </AppButton>
@@ -510,8 +564,9 @@ export default function CartPage() {
 
                             <IconButton
                               onClick={() => handleRemove(getProductId(item))}
+                              sx={{ p: { xs: 0.6, sm: 1 } }}
                             >
-                              <DeleteOutlineIcon />
+                              <DeleteOutlineIcon sx={{ fontSize: { xs: 19, sm: 24 } }} />
                             </IconButton>
                           </Box>
                         </Grid>
@@ -535,53 +590,75 @@ export default function CartPage() {
               }}
             >
               <CardContent>
-                <Typography fontWeight={700} mb={2}>
+                <Typography
+                  fontWeight={700}
+                  mb={1.5}
+                  sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
+                >
                   PRICE DETAILS ({itemCount} Items)
                 </Typography>
 
-                <Stack spacing={1.5}>
+                <Stack spacing={{ xs: 1, sm: 1.5 }}>
                   <Box display="flex" justifyContent="space-between">
-                    <Typography>Total MRP</Typography>
-                    <Typography>{currency(compareSubtotal)}</Typography>
+                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+                      Total MRP
+                    </Typography>
+                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+                      {currency(compareSubtotal)}
+                    </Typography>
                   </Box>
 
                   <Box display="flex" justifyContent="space-between">
-                    <Typography>Discount on MRP</Typography>
-                    <Typography color="success.main">
+                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+                      Discount on MRP
+                    </Typography>
+                    <Typography color="success.main" sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
                       -{currency(productDiscount)}
                     </Typography>
                   </Box>
 
                   {couponValue > 0 && (
                     <Box display="flex" justifyContent="space-between">
-                      <Typography>Coupon Discount</Typography>
-                      <Typography color="success.main">
+                      <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+                        Coupon Discount
+                      </Typography>
+                      <Typography color="success.main" sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
                         -{currency(couponValue)}
                       </Typography>
                     </Box>
                   )}
 
                   <Box display="flex" justifyContent="space-between">
-                    <Typography>Shipping</Typography>
-                    <Typography>
+                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+                      Shipping
+                    </Typography>
+                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
                       {shipping === 0 ? "Free" : currency(shipping)}
                     </Typography>
                   </Box>
 
                   <Box display="flex" justifyContent="space-between">
-                    <Typography>GST</Typography>
-                    <Typography>{currency(gst)}</Typography>
+                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+                      GST
+                    </Typography>
+                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+                      {currency(gst)}
+                    </Typography>
                   </Box>
 
                   <Divider />
 
                   <Box display="flex" justifyContent="space-between">
-                    <Typography fontWeight={700}>Total Amount</Typography>
-                    <Typography fontWeight={700}>{currency(total)}</Typography>
+                    <Typography fontWeight={700} sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+                      Total Amount
+                    </Typography>
+                    <Typography fontWeight={700} sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+                      {currency(total)}
+                    </Typography>
                   </Box>
                 </Stack>
 
-                <Stack direction="row" spacing={1} sx={{ mt: 3 }}>
+                <Stack direction="row" spacing={1} sx={{ mt: { xs: 2, sm: 3 } }}>
                   <AppInput
                     size="small"
                     placeholder="Enter Code"
@@ -596,7 +673,7 @@ export default function CartPage() {
                     sx={{
                       color: "success.main",
                       mt: 1,
-                      fontSize: 14,
+                      fontSize: { xs: 12, sm: 14 },
                     }}
                   >
                     Applied: {couponLabel}
@@ -606,8 +683,9 @@ export default function CartPage() {
                 <AppButton
                   fullWidth
                   sx={{
-                    mt: 3,
-                    py: 1.5,
+                    mt: { xs: 2, sm: 3 },
+                    py: { xs: 1, sm: 1.5 },
+                    fontSize: { xs: "0.82rem", sm: "0.875rem" },
                   }}
                   component={Link}
                   href="/checkout"
@@ -628,7 +706,7 @@ export default function CartPage() {
         <DialogTitle
           sx={{
             fontWeight: 700,
-            fontSize: "24px",
+            fontSize: { xs: "1rem", sm: "24px" },
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -644,7 +722,7 @@ export default function CartPage() {
             sx={{
               display: "flex",
               gap: 1,
-              mb: 3,
+              mb: { xs: 2, sm: 3 },
               mt: 1,
             }}
           >
@@ -658,16 +736,19 @@ export default function CartPage() {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              mb: 2,
+              mb: { xs: 1.5, sm: 2 },
             }}
           >
-            <Typography fontWeight={700}>SAVED ADDRESS</Typography>
+            <Typography fontWeight={700} sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+              SAVED ADDRESS
+            </Typography>
 
             <Typography
               sx={{
                 color: "#ff3f6c",
                 fontWeight: 600,
                 cursor: "pointer",
+                fontSize: { xs: "0.74rem", sm: "0.875rem" },
               }}
               onClick={handleOpenEditPopup}
             >
@@ -686,25 +767,31 @@ export default function CartPage() {
               }}
             >
               <CardContent>
-                <Stack direction="row" spacing={2} alignItems="flex-start">
+                <Stack direction="row" spacing={{ xs: 1, sm: 2 }} alignItems="flex-start">
                   <Radio
                     checked={selectedAddress?.id === addr.id}
                     onChange={() => setSelectedAddress(addr)}
                   />
 
                   <Box sx={{ flex: 1 }}>
-                    <Typography fontWeight={700}>{addr.name}</Typography>
+                    <Typography fontWeight={700} sx={{ fontSize: { xs: "0.82rem", sm: "1rem" } }}>
+                      {addr.name}
+                    </Typography>
 
-                    <Typography variant="body2">
+                    <Typography variant="body2" sx={{ fontSize: { xs: "0.72rem", sm: "0.875rem" } }}>
                       {addr.houseNumber}, {addr.address}, {addr.city},{" "}
                       {addr.state} - {addr.pinCode}
                     </Typography>
 
-                    <Typography sx={{ mt: 1 }}>
+                    <Typography sx={{ mt: 0.75, fontSize: { xs: "0.72rem", sm: "1rem" } }}>
                       Mobile: <b>{addr.mobile}</b>
                     </Typography>
 
-                    <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={0.7}
+                      sx={{ mt: 1.25 }}
+                    >
                       <AppButton
                         size="small"
                         onClick={() => {
@@ -712,6 +799,7 @@ export default function CartPage() {
                           handleCloseAddressPopup();
                           toast.success("Address selected.");
                         }}
+                        sx={{ fontSize: { xs: "0.66rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
                       >
                         DELIVER HERE
                       </AppButton>
@@ -720,6 +808,7 @@ export default function CartPage() {
                         variant="outlined"
                         size="small"
                         onClick={handleOpenEditPopup}
+                        sx={{ fontSize: { xs: "0.66rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
                       >
                         EDIT
                       </AppButton>
@@ -742,6 +831,7 @@ export default function CartPage() {
                           }
                           toast.info("Address deleted.");
                         }}
+                        sx={{ fontSize: { xs: "0.66rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
                       >
                         DELETE
                       </AppButton>
@@ -765,7 +855,7 @@ export default function CartPage() {
             justifyContent: "space-between",
             alignItems: "center",
             fontWeight: 700,
-            fontSize: "22px",
+            fontSize: { xs: "0.98rem", sm: "22px" },
           }}
         >
           ADD NEW ADDRESS
@@ -773,9 +863,11 @@ export default function CartPage() {
         </DialogTitle>
 
         <DialogContent>
-          <Stack spacing={3} sx={{ mt: 2 }}>
+          <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mt: { xs: 1.25, sm: 2 } }}>
             {/* CONTACT DETAILS */}
-            <Typography fontWeight={700}>CONTACT DETAILS</Typography>
+            <Typography fontWeight={700} sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+              CONTACT DETAILS
+            </Typography>
 
             <AppInput
               fullWidth
@@ -796,7 +888,9 @@ export default function CartPage() {
             />
 
             {/* ADDRESS */}
-            <Typography fontWeight={700}>ADDRESS</Typography>
+            <Typography fontWeight={700} sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
+              ADDRESS
+            </Typography>
 
             <AppInput
               fullWidth
@@ -819,7 +913,7 @@ export default function CartPage() {
             <Typography
               sx={{
                 color: "#f5a623",
-                fontSize: 14,
+                fontSize: { xs: 12, sm: 14 },
                 mt: -2,
               }}
             >
@@ -854,11 +948,12 @@ export default function CartPage() {
             />
 
             {/* BUTTONS */}
-            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+            <Stack direction="row" spacing={1.2} sx={{ mt: { xs: 1.25, sm: 2 } }}>
               <AppButton
                 fullWidth
                 variant="outlined"
                 onClick={handleCloseEditPopup}
+                sx={{ fontSize: { xs: "0.78rem", sm: "0.875rem" }, py: { xs: 0.55, sm: 0.8 } }}
               >
                 Cancel
               </AppButton>
@@ -868,6 +963,8 @@ export default function CartPage() {
                 onClick={handleSaveAddress}
                 sx={{
                   bgcolor: "#ff3f6c",
+                  fontSize: { xs: "0.78rem", sm: "0.875rem" },
+                  py: { xs: 0.55, sm: 0.8 },
                   "&:hover": {
                     bgcolor: "#ff3f6c",
                   },

@@ -156,28 +156,50 @@ export default function WishlistPage() {
 
   if (!wishlist.length) {
     return (
-      <Container sx={{ py: 12, textAlign: "center", minHeight: "70vh" }}>
+      <Container
+        sx={{
+          py: { xs: 6, md: 12 },
+          textAlign: "center",
+          minHeight: { xs: "58vh", md: "70vh" },
+        }}
+      >
         <Box
           sx={{
             mx: "auto",
-            width: 120,
-            height: 120,
+            width: { xs: 92, md: 120 },
+            height: { xs: 92, md: 120 },
             borderRadius: "50%",
             display: "grid",
             placeItems: "center",
             bgcolor: (theme) => theme.palette.brand.borderSoft,
-            mb: 3,
+            mb: { xs: 2, md: 3 },
           }}
         >
-          <FavoriteBorderIcon sx={{ fontSize: 56, color: "primary.main" }} />
+          <FavoriteBorderIcon
+            sx={{ fontSize: { xs: 42, md: 56 }, color: "primary.main" }}
+          />
         </Box>
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 0.75, fontSize: { xs: "1.35rem", md: "2.125rem" } }}
+        >
           Your wishlist is empty
         </Typography>
-        <Typography sx={{ opacity: 0.75, mb: 3 }}>
+        <Typography
+          sx={{
+            opacity: 0.75,
+            mb: { xs: 2, md: 3 },
+            fontSize: { xs: "0.9rem", md: "1rem" },
+            lineHeight: { xs: 1.55, md: 1.75 },
+          }}
+        >
           Save pieces you love and revisit them anytime.
         </Typography>
-        <AppButton component={Link} href="/collection">
+        <AppButton
+          component={Link}
+          href="/collection"
+          sx={{ px: { xs: 2.25, md: 3 }, fontSize: { xs: "0.8rem", md: "0.875rem" } }}
+        >
           Explore Collection
         </AppButton>
       </Container>
@@ -185,34 +207,57 @@ export default function WishlistPage() {
   }
 
   return (
-    <Box sx={{ py: { xs: 5, md: 8 }, bgcolor: "background.default", color: "text.primary" }}>
+    <Box
+      sx={{
+        py: { xs: 3.5, md: 8 },
+        bgcolor: "background.default",
+        color: "text.primary",
+      }}
+    >
       <Container maxWidth="xl">
         <Stack
           direction={{ xs: "column", md: "row" }}
           justifyContent="space-between"
           alignItems={{ xs: "start", md: "center" }}
-          spacing={1.5}
-          sx={{ mb: 4 }}
+          spacing={{ xs: 1, md: 1.5 }}
+          sx={{ mb: { xs: 2.5, md: 4 } }}
         >
           <Box>
-            <Typography variant="h4" sx={{ letterSpacing: 2, fontWeight: 700 }}>
+            <Typography
+              variant="h4"
+              sx={{
+                letterSpacing: { xs: 1, md: 2 },
+                fontWeight: 700,
+                fontSize: { xs: "1.3rem", md: "2.125rem" },
+              }}
+            >
               YOUR WISHLIST
             </Typography>
-            <Typography sx={{ opacity: 0.75 }}>
+            <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.82rem", md: "1rem" } }}>
               {savedCount} Saved {savedCount > 1 ? "Pieces" : "Piece"}
             </Typography>
           </Box>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.2}>
-            <AppButton component={Link} href="/shop" variant="outlined">
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 0.8, sm: 1.2 }}>
+            <AppButton
+              component={Link}
+              href="/shop"
+              variant="outlined"
+              sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.6, md: 0.8 } }}
+            >
               Continue Shopping
             </AppButton>
-            <AppButton variant="outlined" color="error" onClick={handleClearAll}>
+            <AppButton
+              variant="outlined"
+              color="error"
+              onClick={handleClearAll}
+              sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.6, md: 0.8 } }}
+            >
               Clear All
             </AppButton>
           </Stack>
         </Stack>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={{ xs: 1.5, sm: 2.5, md: 3 }}>
           {wishlist.map((product) => {
             const id = getProductId(product);
             const sizes = getSizes(product);
@@ -241,18 +286,18 @@ export default function WishlistPage() {
                   <Box sx={{ position: "relative" }}>
                     <CardMedia
                       component="img"
-                      height="320"
+                      height={"320"}
                       image={getImage(product, hoveredId === id)}
                       alt={getName(product)}
-                      sx={{ objectFit: "cover" }}
+                      sx={{ objectFit: "cover", height: { xs: 240, md: 320 } }}
                     />
 
                     <IconButton
                       onClick={() => handleRemove(product)}
                       sx={(theme) => ({
                         position: "absolute",
-                        top: 10,
-                        right: 10,
+                        top: 8,
+                        right: 8,
                         bgcolor: theme.palette.brand.navGlass,
                         "&:hover": { bgcolor: theme.palette.background.paper },
                       })}
@@ -265,8 +310,8 @@ export default function WishlistPage() {
                       spacing={0.8}
                       sx={{
                         position: "absolute",
-                        top: 10,
-                        left: 10,
+                        top: 8,
+                        left: 8,
                         flexWrap: "wrap",
                       }}
                     >
@@ -277,26 +322,59 @@ export default function WishlistPage() {
                     </Stack>
                   </Box>
 
-                  <CardContent>
-                    <Typography sx={{ fontWeight: 600, minHeight: 44 }}>{getName(product)}</Typography>
+                  <CardContent sx={{ p: { xs: 1.25, md: 2 } }}>
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        minHeight: { xs: 36, md: 44 },
+                        fontSize: { xs: "0.9rem", md: "1rem" },
+                        lineHeight: { xs: 1.35, md: 1.5 },
+                      }}
+                    >
+                      {getName(product)}
+                    </Typography>
 
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 0.8, mb: 0.8 }}>
-                      <Typography sx={{ fontWeight: 700 }}>{currency(price)}</Typography>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      sx={{ mt: 0.6, mb: 0.6 }}
+                    >
+                      <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.9rem", md: "1rem" } }}>
+                        {currency(price)}
+                      </Typography>
                       {originalPrice > price ? (
-                        <Typography sx={{ textDecoration: "line-through", opacity: 0.6 }}>
+                        <Typography
+                          sx={{
+                            textDecoration: "line-through",
+                            opacity: 0.6,
+                            fontSize: { xs: "0.8rem", md: "0.95rem" },
+                          }}
+                        >
                           {currency(originalPrice)}
                         </Typography>
                       ) : null}
                     </Stack>
 
-                    <Chip size="small" color={stock.color} label={stock.label} sx={{ mb: 1.2 }} />
+                    <Chip
+                      size="small"
+                      color={stock.color}
+                      label={stock.label}
+                      sx={{ mb: 1, fontSize: { xs: "0.66rem", md: "0.75rem" } }}
+                    />
 
                     {sizes.length > 0 ? (
-                      <Box sx={{ mb: 1.5 }}>
-                        <Typography sx={{ fontSize: 13, opacity: 0.75, mb: 0.6 }}>
+                      <Box sx={{ mb: 1.1 }}>
+                        <Typography
+                          sx={{
+                            fontSize: { xs: 11.5, md: 13 },
+                            opacity: 0.75,
+                            mb: 0.5,
+                          }}
+                        >
                           Available sizes
                         </Typography>
-                        <Stack direction="row" spacing={0.7} flexWrap="wrap" useFlexGap>
+                        <Stack direction="row" spacing={0.6} flexWrap="wrap" useFlexGap>
                           {sizes.slice(0, 6).map((size) => (
                             <Chip
                               key={size}
@@ -307,11 +385,14 @@ export default function WishlistPage() {
                               onClick={() =>
                                 setSelectedSizes((prev) => ({ ...prev, [id]: size }))
                               }
+                              sx={{ fontSize: { xs: "0.66rem", md: "0.75rem" } }}
                             />
                           ))}
                         </Stack>
                         {selectedSize ? (
-                          <Typography sx={{ fontSize: 12, opacity: 0.75, mt: 0.6 }}>
+                          <Typography
+                            sx={{ fontSize: { xs: 11, md: 12 }, opacity: 0.75, mt: 0.5 }}
+                          >
                             Selected size: {selectedSize}
                           </Typography>
                         ) : null}
@@ -324,6 +405,7 @@ export default function WishlistPage() {
                         startIcon={<ShoppingBagOutlinedIcon />}
                         onClick={() => handleAddToBag(product)}
                         disabled={getStock(product) <= 0}
+                        sx={{ py: { xs: 0.6, md: 0.875 }, fontSize: { xs: "0.8rem", md: "0.875rem" } }}
                       >
                         Add to Bag
                       </AppButton>
@@ -367,9 +449,9 @@ export default function WishlistPage() {
       </Container>
 
       <Dialog open={sizeModal.open} onClose={closeSizeModal} fullWidth maxWidth="xs">
-        <DialogTitle>Select Size</DialogTitle>
+        <DialogTitle sx={{ fontSize: { xs: "1rem", md: "1.25rem" } }}>Select Size</DialogTitle>
         <DialogContent>
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ pt: 1 }}>
+          <Stack direction="row" spacing={0.8} flexWrap="wrap" useFlexGap sx={{ pt: 0.75 }}>
             {getSizes(sizeModal.product || {}).map((size) => {
               const productId = getProductId(sizeModal.product || {});
               const active = selectedSizes[productId] === size;
@@ -383,16 +465,26 @@ export default function WishlistPage() {
                   onClick={() =>
                     setSelectedSizes((prev) => ({ ...prev, [productId]: size }))
                   }
+                  sx={{ fontSize: { xs: "0.7rem", md: "0.75rem" } }}
                 />
               );
             })}
           </Stack>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <AppButton variant="outlined" onClick={closeSizeModal}>
+        <DialogActions sx={{ p: { xs: 1.25, md: 2 }, gap: 0.8 }}>
+          <AppButton
+            variant="outlined"
+            onClick={closeSizeModal}
+            sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.55, md: 0.8 } }}
+          >
             Cancel
           </AppButton>
-          <AppButton onClick={confirmSizeSelection}>Add to Bag</AppButton>
+          <AppButton
+            onClick={confirmSizeSelection}
+            sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.55, md: 0.8 } }}
+          >
+            Add to Bag
+          </AppButton>
         </DialogActions>
       </Dialog>
     </Box>

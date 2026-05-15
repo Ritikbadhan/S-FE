@@ -173,17 +173,17 @@ export default function CollectionPage() {
                 maxWidth: "900px",
                 mx: "auto",
                 textAlign: "center",
-                px: { xs: 2, sm: 3, md: 4 },
+                px: { xs: 1.5, sm: 3, md: 4 },
               }}
             >
               <Typography
                 variant="h2"
                 sx={{
-                  letterSpacing: { xs: 2, sm: 3, md: 4 },
+                  letterSpacing: { xs: 1, sm: 3, md: 4 },
                   fontWeight: 700,
-                  mb: { xs: 1.5, sm: 2 },
+                  mb: { xs: 0.75, sm: 2 },
                     fontSize: {
-                      xs: "2rem",
+                      xs: "1.45rem",
                       sm: "2.8rem",
                       md: "3.8rem",
                       lg: "4rem",
@@ -197,16 +197,16 @@ export default function CollectionPage() {
 
               <Typography
                 sx={{
-                  letterSpacing: { xs: 3, sm: 4, md: 6 },
+                  letterSpacing: { xs: 2, sm: 4, md: 6 },
                   color: brand.accent,
                   fontWeight: 300,
               fontSize: {
-                xs: "0.6rem",
+                xs: "0.72rem",
                 sm: "1rem",
                 md: "1.4rem",
                 lg: "1.6rem",
               },
-                  mb: { xs: 2, sm: 3 },
+                  mb: { xs: 1.25, sm: 3 },
                 }}
               >
                 {collectionPageContent.hero.eyebrow}
@@ -215,13 +215,13 @@ export default function CollectionPage() {
               <Typography
                 sx={{
                  fontSize: {
-                  xs: "1rem",
+                  xs: "0.82rem",
                   sm: "1.2rem",
                   md: "1.5rem",
                   lg: "1.75rem",
               },
                   color: "rgba(255, 255, 255, 0.9)",
-                  lineHeight: 1.8,
+                  lineHeight: { xs: 1.5, sm: 1.8 },
                   fontStyle: "italic",
                 }}
               >
@@ -234,7 +234,7 @@ export default function CollectionPage() {
 
       <Box
         sx={{
-          py: { xs: 4, sm: 5, md: 6 },
+          py: { xs: 3, sm: 5, md: 6 },
           background: `linear-gradient(135deg, ${brand.primary}08, ${brand.hover}08)`,
           borderBottom: `1px solid ${brand.borderSoft}`,
         }}
@@ -249,7 +249,7 @@ export default function CollectionPage() {
               fontStyle: "italic",
               color: brand.text,
               lineHeight: 1.8,
-              fontSize: { xs: "1.125rem", sm: "1.25rem", md: "1.5rem" },
+              fontSize: { xs: "0.95rem", sm: "1.25rem", md: "1.5rem" },
               fontWeight: 300,
             }}
           >
@@ -260,20 +260,20 @@ export default function CollectionPage() {
 
       <Box
         sx={{
-          py: { xs: 6, md: 10 },
+          py: { xs: 4, md: 10 },
           background: `linear-gradient(to bottom, ${brand.bg}, ${brand.surface})`,
         }}
       >
         <Container maxWidth="xl">
-          <Box sx={{ textAlign: "center", mb: { xs: 5, md: 6 } }}>
+          <Box sx={{ textAlign: "center", mb: { xs: 3, md: 6 } }}>
             <Typography
               variant="h4"
               sx={{
-                mb: 2,
-                letterSpacing: { xs: 2, md: 3 },
+                mb: 1.25,
+                letterSpacing: { xs: 1, md: 3 },
                 fontWeight: 600,
                 color: brand.text,
-                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+                fontSize: { xs: "1.35rem", sm: "2rem", md: "2.5rem" },
               }}
             >
               {collectionPageContent.hero.storyTitle}
@@ -283,7 +283,7 @@ export default function CollectionPage() {
                 width: { xs: "60px", sm: "80px" },
                 height: "3px",
                 mx: "auto",
-                mb: 3,
+                mb: { xs: 2, sm: 3 },
                 background: `linear-gradient(90deg, ${brand.gradientStart}, ${brand.gradientEnd})`,
                 borderRadius: "3px",
               }}
@@ -293,15 +293,15 @@ export default function CollectionPage() {
                 color: brand.textMuted,
                 maxWidth: 780,
                 mx: "auto",
-                fontSize: { xs: "1rem", sm: "1.0625rem", md: "1.125rem" },
-                lineHeight: 1.8,
+                fontSize: { xs: "0.9rem", sm: "1.0625rem", md: "1.125rem" },
+                lineHeight: { xs: 1.6, sm: 1.8 },
               }}
             >
               {collectionPageContent.hero.storyDescription}
             </Typography>
           </Box>
 
-          <Grid container spacing={{ xs: 2, sm: 2.5 }}>
+          <Grid container spacing={{ xs: 1.25, sm: 2.5 }}>
             {collectionPageContent.features.map((feature, idx) => (
               <Grid item xs={12} sm={6} key={idx}>
                 <Paper
@@ -309,8 +309,8 @@ export default function CollectionPage() {
                   sx={{
                     display: "flex",
                     alignItems: "flex-start",
-                    gap: 2,
-                    p: { xs: 2, sm: 2.5 },
+                    gap: { xs: 1.25, sm: 2 },
+                    p: { xs: 1.5, sm: 2.5 },
                     borderRadius: 3,
                     bgcolor: brand.surface,
                     border: `1px solid ${brand.borderSoft}`,
@@ -325,8 +325,8 @@ export default function CollectionPage() {
                   {/* Icon */}
                   <Box
                     sx={{
-                      width: 44,
-                      height: 44,
+                      width: { xs: 38, sm: 44 },
+                      height: { xs: 38, sm: 44 },
                       borderRadius: "14px",
                       display: "flex",
                       alignItems: "center",
@@ -345,7 +345,7 @@ export default function CollectionPage() {
                       sx={{
                         fontWeight: 600,
                         color: brand.text,
-                        fontSize: "1rem",
+                        fontSize: { xs: "0.9rem", sm: "1rem" },
                         mb: 0.5,
                       }}
                     >
@@ -355,8 +355,8 @@ export default function CollectionPage() {
                     <Typography
                       sx={{
                         color: brand.textMuted,
-                        fontSize: "0.9rem",
-                        lineHeight: 1.6,
+                        fontSize: { xs: "0.82rem", sm: "0.9rem" },
+                        lineHeight: { xs: 1.5, sm: 1.6 },
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
@@ -376,19 +376,19 @@ export default function CollectionPage() {
       <Box
         sx={{
           bgcolor: brand.bg,
-          py: { xs: 4, md: 6 },
+          py: { xs: 3, md: 6 },
           minHeight: "60vh",
         }}
       >
         <Container maxWidth="xl">
-          <Box sx={{ textAlign: "center", mb: { xs: 4, md: 5 } }}>
+          <Box sx={{ textAlign: "center", mb: { xs: 2.5, md: 5 } }}>
             <Typography
               variant="h4"
               sx={{
-                mb: 2,
-                letterSpacing: { xs: 2, md: 3 },
+                mb: 1.25,
+                letterSpacing: { xs: 1, md: 3 },
                 fontWeight: 600,
-                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+                fontSize: { xs: "1.35rem", sm: "2rem", md: "2.5rem" },
                 color: brand.text,
               }}
             >
@@ -408,8 +408,8 @@ export default function CollectionPage() {
           <Paper
             elevation={0}
             sx={{
-              mb: 4,
-              p: { xs: 2, sm: 3 },
+              mb: 2.5,
+              p: { xs: 1.25, sm: 3 },
               border: `1px solid ${brand.borderSoft}`,
               bgcolor: brand.surface,
               borderRadius: 3,
@@ -421,8 +421,8 @@ export default function CollectionPage() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                mb: 3,
-                gap: 2,
+                mb: { xs: 1.5, sm: 3 },
+                gap: { xs: 1, sm: 2 },
               }}
             >
               <Stack direction="row" spacing={1} alignItems="center">
@@ -432,7 +432,7 @@ export default function CollectionPage() {
                   sx={{
                     fontWeight: 600,
                     color: brand.text,
-                    fontSize: { xs: "1rem", sm: "1.25rem" },
+                    fontSize: { xs: "0.9rem", sm: "1.25rem" },
                   }}
                 >
                   {collectionPageContent.filters.title}
@@ -453,7 +453,7 @@ export default function CollectionPage() {
                   variant="outlined"
                   onClick={() => setShowFilters(!showFilters)}
                   startIcon={<FilterListOutlined />}
-                  sx={{ fontSize: "0.875rem" }}
+                  sx={{ fontSize: "0.75rem", px: 1.25 }}
                 >
                   {showFilters
                     ? collectionPageContent.filters.toggleLabels.hide
@@ -466,7 +466,7 @@ export default function CollectionPage() {
               <Box
                 sx={{
                   display: "grid",
-                  gap: { xs: 2, sm: 2.5 },
+                  gap: { xs: 1.25, sm: 2.5 },
                   gridTemplateColumns: {
                     xs: "1fr",
                     sm: "repeat(2, 1fr)",
@@ -569,6 +569,8 @@ export default function CollectionPage() {
                     borderRadius: 2,
                     borderColor: brand.primary,
                     color: brand.primary,
+                    py: { xs: 0.625, sm: 0.875 },
+                    fontSize: { xs: "0.8rem", sm: "0.875rem" },
                     "&:hover": {
                       borderColor: brand.hover,
                       backgroundColor: brand.borderSoft,
@@ -585,7 +587,14 @@ export default function CollectionPage() {
             )}
 
             {hasActiveFilters && (
-              <Box sx={{ mt: 2, display: "flex", gap: 1, flexWrap: "wrap" }}>
+              <Box
+                sx={{
+                  mt: { xs: 1.25, sm: 2 },
+                  display: "flex",
+                  gap: { xs: 0.75, sm: 1 },
+                  flexWrap: "wrap",
+                }}
+              >
                 {searchQuery.trim() && (
                   <Chip
                     label={`Search: ${searchQuery.trim()}`}
@@ -625,13 +634,13 @@ export default function CollectionPage() {
 
           <Box
             sx={{
-              mb: 3,
+              mb: 2,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               flexWrap: "wrap",
-              gap: 2,
-              px: 1,
+              gap: { xs: 1, sm: 2 },
+              px: { xs: 0.25, sm: 1 },
             }}
           >
             <Stack direction="row" spacing={1} alignItems="center">
@@ -639,7 +648,7 @@ export default function CollectionPage() {
               <Typography
                 sx={{
                   color: brand.textMuted,
-                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  fontSize: { xs: "0.8rem", sm: "1rem" },
                   fontWeight: 500,
                 }}
               >
@@ -665,7 +674,7 @@ export default function CollectionPage() {
                 borderColor: brand.primary,
                 color: brand.primary,
                 fontWeight: 600,
-                fontSize: "0.875rem",
+                fontSize: { xs: "0.75rem", sm: "0.875rem" },
               }}
             />
           </Box>
@@ -676,12 +685,17 @@ export default function CollectionPage() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                py: 10,
-                gap: 2,
+                py: { xs: 6, sm: 10 },
+                gap: { xs: 1.25, sm: 2 },
               }}
             >
               <CircularProgress size={50} sx={{ color: brand.primary }} />
-              <Typography sx={{ color: brand.textMuted, fontSize: "1rem" }}>
+              <Typography
+                sx={{
+                  color: brand.textMuted,
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
+                }}
+              >
                 {collectionPageContent.states.loading}
               </Typography>
             </Box>
@@ -705,7 +719,7 @@ export default function CollectionPage() {
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 4, sm: 6 },
+                p: { xs: 2.5, sm: 6 },
                 textAlign: "center",
                 bgcolor: brand.surface,
                 border: `1px solid ${brand.borderSoft}`,
@@ -715,10 +729,10 @@ export default function CollectionPage() {
             >
               <SearchOutlined
                 sx={{
-                  fontSize: 64,
+                  fontSize: { xs: 46, sm: 64 },
                   color: brand.primary,
                   opacity: 0.3,
-                  mb: 2,
+                  mb: { xs: 1.25, sm: 2 },
                 }}
               />
               <Typography
@@ -727,15 +741,16 @@ export default function CollectionPage() {
                   mb: 1,
                   color: brand.text,
                   fontWeight: 600,
+                  fontSize: { xs: "1rem", sm: "1.25rem" },
                 }}
               >
                 {collectionPageContent.states.emptyTitle}
               </Typography>
               <Typography
                 sx={{
-                  mb: 3,
+                  mb: { xs: 2, sm: 3 },
                   color: brand.textMuted,
-                  fontSize: "1rem",
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
                 }}
               >
                 {collectionPageContent.states.emptyDescription}
@@ -746,7 +761,9 @@ export default function CollectionPage() {
                 sx={{
                   background: `linear-gradient(135deg, ${brand.gradientStart}, ${brand.gradientEnd})`,
                   borderRadius: "24px",
-                  px: 4,
+                  px: { xs: 2.5, sm: 4 },
+                  py: { xs: 0.625, sm: 0.875 },
+                  fontSize: { xs: "0.8rem", sm: "0.875rem" },
                 }}
               >
                 {collectionPageContent.states.clearFiltersLabel}
