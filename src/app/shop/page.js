@@ -196,7 +196,11 @@ export default function ShopPage() {
       >
         <Box
           component="img"
-          src={shopPageContent.hero.imageSrc}
+          src={
+            isMobile
+              ? shopPageContent.hero.imageSrcMobile
+              : shopPageContent.hero.imageSrc
+          }
           alt="Shop Banner"
           sx={{
             position: "absolute",

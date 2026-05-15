@@ -8,6 +8,7 @@ export const newArrivalsPageContent = {
   ],
   hero: {
     imageSrc: "/new.png",
+    imageSrcMobile: "/arrival_mobile.png",
     // dropDateLabel: "Drop Date: 28 February 2026",
     title: "NEW ARRIVALS",
     subtitle: "The Latest Expressions of SHARQ",

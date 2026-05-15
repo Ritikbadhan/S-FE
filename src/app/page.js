@@ -2,10 +2,12 @@
 import Link from "next/link";
 import { Box, Typography, Container } from "@mui/material";
 import { AppButton } from "@/components/common";
-import { homePageContent } from "@/workflow/pages/home";
-
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { getHomePageContent } from "@/workflow/pages/home";
 export default function HomePage() {
-  const { image, hero } = homePageContent;
+  const isMobile = useIsMobile();
+
+  const { image, hero } = getHomePageContent(isMobile);
 
   return (
     <Box
@@ -19,19 +21,19 @@ export default function HomePage() {
       }}
     >
       {/* 🎥 Background Video */}
-    <img
-  src={image.src}
-  alt={image.alt}
-  style={{
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    zIndex: 0,
-  }}
-/>
+      <img
+        src={image.src}
+        alt={image.alt}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 0,
+        }}
+      />
 
       {/* 🌑 Dark Overlay */}
       <Box

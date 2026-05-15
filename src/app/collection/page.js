@@ -154,7 +154,7 @@ export default function CollectionPage() {
           sx={{
             position: "absolute",
             inset: 0,
-            backgroundImage: `url('${collectionPageContent.hero.imageSrc}')`,
+            backgroundImage: `url('${isMobile ? collectionPageContent.hero.imageSrcMobile :  collectionPageContent.hero.imageSrc}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             "&::after": {

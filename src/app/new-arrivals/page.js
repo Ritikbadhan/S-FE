@@ -25,6 +25,7 @@ import ProductCard from "@/components/product/ProductCard";
 import { AppButton } from "@/components/common";
 import { useProducts } from "@/hooks/useProducts";
 import { newArrivalsPageContent } from "@/workflow/pages/newArrivals";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const getProductId = (product) => product?._id || product?.id || product?.productId;
 const getName = (product) => product?.name || "New Arrival";
@@ -63,6 +64,7 @@ const formatReleaseDate = (product) => {
 
 export default function NewArrivalsPage() {
   const theme = useTheme();
+  const isMobile = useIsMobile();
   const { products, loading, error } = useProducts();
   const [sortBy, setSortBy] = useState("newest");
 
@@ -147,7 +149,7 @@ export default function NewArrivalsPage() {
         sx={{
           minHeight: { xs: "60vh", md: "70vh" },
           backgroundImage: (theme) =>
-            `linear-gradient(${theme.palette.brand.overlaySoft}, ${theme.palette.brand.overlayStrong}), url('${newArrivalsPageContent.hero.imageSrc}')`,
+            `linear-gradient(${theme.palette.brand.overlaySoft}, ${theme.palette.brand.overlayStrong}), url('${isMobile ? newArrivalsPageContent.hero.imageSrcMobile : newArrivalsPageContent.hero.imageSrc}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           display: "flex",

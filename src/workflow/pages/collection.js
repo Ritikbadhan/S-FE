@@ -43,6 +43,7 @@ export const collectionPageContent = {
   ],
   hero: {
     imageSrc: "/collection.png",
+    imageSrcMobile: "/collection_mobile.png",
     title: "THE COLLECTION",
     eyebrow: "STRUCTURED. MODERN. DELIBERATE.",
     subtitle:

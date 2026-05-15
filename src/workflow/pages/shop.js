@@ -9,6 +9,7 @@ export const shopPageContent = {
   ],
   hero: {
     imageSrc: "/Shop.jpg",
+    imageSrcMobile: "/Shop_mobile.png",
     title: "SHARQ LABEL",
     eyebrow: "REFINED. FEARLESS. DISTINCT.",
     subtitle: "Luxury is not what you wear. It is how you carry it.",
