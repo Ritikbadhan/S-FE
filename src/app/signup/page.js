@@ -654,7 +654,7 @@ export default function SignupPage() {
             px: 2,
           }}
         >
-          © 2024 Your Company. All rights reserved.
+          {`© ${new Date().getFullYear()} Your Company. All rights reserved.`}
         </Typography>
       </Container>
     </Box>

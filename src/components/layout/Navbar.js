@@ -719,7 +719,7 @@ export default function Navbar() {
                 letterSpacing: 0.3,
               }}
             >
-              © 2024 Sharq Label. All rights reserved.
+              {`© ${new Date().getFullYear()} Sharq Label. All rights reserved.`}
             </Typography>
           </Box>
         </Box>

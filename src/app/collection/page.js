@@ -21,7 +21,7 @@ import {
   useTheme,
   Fade,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AutoAwesomeOutlined,
   CheckCircleOutline,
@@ -93,6 +93,9 @@ export default function CollectionPage() {
   const [sizeFilter, setSizeFilter] = useState("all");
   const [priceFilter, setPriceFilter] = useState("all");
   const [showFilters, setShowFilters] = useState(true);
+    useEffect(() => {
+      setShowFilters(!isMobile);
+    }, [isMobile]);
 
   const sizeOptions = useMemo(() => {
     const allSizes = products.flatMap(extractSizes);
@@ -154,7 +157,7 @@ export default function CollectionPage() {
           sx={{
             position: "absolute",
             inset: 0,
-            backgroundImage: `url('${isMobile ? collectionPageContent.hero.imageSrcMobile :  collectionPageContent.hero.imageSrc}')`,
+            backgroundImage: `url('${isMobile ? collectionPageContent.hero.imageSrcMobile : collectionPageContent.hero.imageSrc}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             "&::after": {
@@ -182,12 +185,12 @@ export default function CollectionPage() {
                   letterSpacing: { xs: 1, sm: 3, md: 4 },
                   fontWeight: 700,
                   mb: { xs: 0.75, sm: 2 },
-                    fontSize: {
-                      xs: "1.45rem",
-                      sm: "2.8rem",
-                      md: "3.8rem",
-                      lg: "4rem",
-                    },
+                  fontSize: {
+                    xs: "1.45rem",
+                    sm: "2.8rem",
+                    md: "3.8rem",
+                    lg: "4rem",
+                  },
                   color: "#FFFFFF",
                   textShadow: brand.heroTextShadow,
                 }}
@@ -200,12 +203,12 @@ export default function CollectionPage() {
                   letterSpacing: { xs: 2, sm: 4, md: 6 },
                   color: brand.accent,
                   fontWeight: 300,
-              fontSize: {
-                xs: "0.72rem",
-                sm: "1rem",
-                md: "1.4rem",
-                lg: "1.6rem",
-              },
+                  fontSize: {
+                    xs: "0.72rem",
+                    sm: "1rem",
+                    md: "1.4rem",
+                    lg: "1.6rem",
+                  },
                   mb: { xs: 1.25, sm: 3 },
                 }}
               >
@@ -214,12 +217,12 @@ export default function CollectionPage() {
 
               <Typography
                 sx={{
-                 fontSize: {
-                  xs: "0.82rem",
-                  sm: "1.2rem",
-                  md: "1.5rem",
-                  lg: "1.75rem",
-              },
+                  fontSize: {
+                    xs: "0.82rem",
+                    sm: "1.2rem",
+                    md: "1.5rem",
+                    lg: "1.75rem",
+                  },
                   color: "rgba(255, 255, 255, 0.9)",
                   lineHeight: { xs: 1.5, sm: 1.8 },
                   fontStyle: "italic",
@@ -231,148 +234,6 @@ export default function CollectionPage() {
           </Fade>
         </Container>
       </Box>
-
-      <Box
-        sx={{
-          py: { xs: 3, sm: 5, md: 6 },
-          background: `linear-gradient(135deg, ${brand.primary}08, ${brand.hover}08)`,
-          borderBottom: `1px solid ${brand.borderSoft}`,
-        }}
-      >
-        <Container>
-          <Typography
-            variant="h5"
-            sx={{
-              textAlign: "center",
-              maxWidth: "850px",
-              mx: "auto",
-              fontStyle: "italic",
-              color: brand.text,
-              lineHeight: 1.8,
-              fontSize: { xs: "0.95rem", sm: "1.25rem", md: "1.5rem" },
-              fontWeight: 300,
-            }}
-          >
-            {collectionPageContent.hero.quote}
-          </Typography>
-        </Container>
-      </Box>
-
-      <Box
-        sx={{
-          py: { xs: 4, md: 10 },
-          background: `linear-gradient(to bottom, ${brand.bg}, ${brand.surface})`,
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ textAlign: "center", mb: { xs: 3, md: 6 } }}>
-            <Typography
-              variant="h4"
-              sx={{
-                mb: 1.25,
-                letterSpacing: { xs: 1, md: 3 },
-                fontWeight: 600,
-                color: brand.text,
-                fontSize: { xs: "1.35rem", sm: "2rem", md: "2.5rem" },
-              }}
-            >
-              {collectionPageContent.hero.storyTitle}
-            </Typography>
-            <Divider
-              sx={{
-                width: { xs: "60px", sm: "80px" },
-                height: "3px",
-                mx: "auto",
-                mb: { xs: 2, sm: 3 },
-                background: `linear-gradient(90deg, ${brand.gradientStart}, ${brand.gradientEnd})`,
-                borderRadius: "3px",
-              }}
-            />
-            <Typography
-              sx={{
-                color: brand.textMuted,
-                maxWidth: 780,
-                mx: "auto",
-                fontSize: { xs: "0.9rem", sm: "1.0625rem", md: "1.125rem" },
-                lineHeight: { xs: 1.6, sm: 1.8 },
-              }}
-            >
-              {collectionPageContent.hero.storyDescription}
-            </Typography>
-          </Box>
-
-          <Grid container spacing={{ xs: 1.25, sm: 2.5 }}>
-            {collectionPageContent.features.map((feature, idx) => (
-              <Grid item xs={12} sm={6} key={idx}>
-                <Paper
-                  elevation={0}
-                  sx={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: { xs: 1.25, sm: 2 },
-                    p: { xs: 1.5, sm: 2.5 },
-                    borderRadius: 3,
-                    bgcolor: brand.surface,
-                    border: `1px solid ${brand.borderSoft}`,
-                    boxShadow: brand.shadowCard,
-                    transition: "all 0.25s ease",
-                    "&:hover": {
-                      borderColor: brand.primary,
-                      boxShadow: brand.shadowCardStrong,
-                    },
-                  }}
-                >
-                  {/* Icon */}
-                  <Box
-                    sx={{
-                      width: { xs: 38, sm: 44 },
-                      height: { xs: 38, sm: 44 },
-                      borderRadius: "14px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                      color: brand.primary,
-                      background: `${brand.primary}12`,
-                    }}
-                  >
-                    {featureIconMap[feature.iconKey]}
-                  </Box>
-
-                  {/* Content */}
-                  <Box sx={{ flex: 1 }}>
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        color: brand.text,
-                        fontSize: { xs: "0.9rem", sm: "1rem" },
-                        mb: 0.5,
-                      }}
-                    >
-                      {feature.title}
-                    </Typography>
-
-                    <Typography
-                      sx={{
-                        color: brand.textMuted,
-                        fontSize: { xs: "0.82rem", sm: "0.9rem" },
-                        lineHeight: { xs: 1.5, sm: 1.6 },
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {feature.description}
-                    </Typography>
-                  </Box>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
       <Box
         sx={{
           bgcolor: brand.bg,
@@ -811,115 +672,146 @@ export default function CollectionPage() {
           )}
         </Container>
       </Box>
-
-      {/* <Box
+      <Box
         sx={{
-          bgcolor: brand.surface,
-          py: { xs: 6, md: 9 },
-          borderTop: `1px solid ${brand.borderSoft}`,
+          py: { xs: 3, sm: 5, md: 6 },
+          background: `linear-gradient(135deg, ${brand.primary}08, ${brand.hover}08)`,
+          borderBottom: `1px solid ${brand.borderSoft}`,
         }}
       >
         <Container>
-          <Box sx={{ mb: { xs: 4, md: 5 } }}>
+          <Typography
+            variant="h5"
+            sx={{
+              textAlign: "center",
+              maxWidth: "850px",
+              mx: "auto",
+              fontStyle: "italic",
+              color: brand.text,
+              lineHeight: 1.8,
+              fontSize: { xs: "0.95rem", sm: "1.25rem", md: "1.5rem" },
+              fontWeight: 300,
+            }}
+          >
+            {collectionPageContent.hero.quote}
+          </Typography>
+        </Container>
+      </Box>
+
+      <Box
+        sx={{
+          py: { xs: 4, md: 10 },
+          background: `linear-gradient(to bottom, ${brand.bg}, ${brand.surface})`,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Box sx={{ textAlign: "center", mb: { xs: 3, md: 6 } }}>
             <Typography
               variant="h4"
               sx={{
-                mb: 2,
+                mb: 1.25,
+                letterSpacing: { xs: 1, md: 3 },
                 fontWeight: 600,
                 color: brand.text,
-                fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+                fontSize: { xs: "1.35rem", sm: "2rem", md: "2.5rem" },
               }}
             >
-              {collectionPageContent.craftSection.title}
+              {collectionPageContent.hero.storyTitle}
             </Typography>
+            <Divider
+              sx={{
+                width: { xs: "60px", sm: "80px" },
+                height: "3px",
+                mx: "auto",
+                mb: { xs: 2, sm: 3 },
+                background: `linear-gradient(90deg, ${brand.gradientStart}, ${brand.gradientEnd})`,
+                borderRadius: "3px",
+              }}
+            />
             <Typography
               sx={{
                 color: brand.textMuted,
-                fontSize: { xs: "1rem", sm: "1.0625rem" },
-                maxWidth: 700,
+                maxWidth: 780,
+                mx: "auto",
+                fontSize: { xs: "0.9rem", sm: "1.0625rem", md: "1.125rem" },
+                lineHeight: { xs: 1.6, sm: 1.8 },
               }}
             >
-              {collectionPageContent.craftSection.description}
+              {collectionPageContent.hero.storyDescription}
             </Typography>
           </Box>
 
-          <Grid container spacing={{ xs: 2, sm: 3 }}>
-            {collectionPageContent.craftImages.map((craft, index) => (
-              <Grid item xs={12} md={4} key={index}>
+          <Grid container spacing={{ xs: 1.25, sm: 2.5 }}>
+            {collectionPageContent.features.map((feature, idx) => (
+              <Grid item xs={12} sm={6} key={idx}>
                 <Paper
                   elevation={0}
                   sx={{
-                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: { xs: 1.25, sm: 2 },
+                    p: { xs: 1.5, sm: 2.5 },
                     borderRadius: 3,
+                    bgcolor: brand.surface,
                     border: `1px solid ${brand.borderSoft}`,
-                    bgcolor: brand.bg,
-                    transition: "all 0.3s ease",
+                    boxShadow: brand.shadowCard,
+                    transition: "all 0.25s ease",
                     "&:hover": {
-                      transform: "translateY(-8px)",
+                      borderColor: brand.primary,
                       boxShadow: brand.shadowCardStrong,
-                      borderColor: brand.border,
                     },
                   }}
                 >
+                  {/* Icon */}
                   <Box
                     sx={{
-                      position: "relative",
-                      overflow: "hidden",
-                      height: { xs: 220, sm: 260 },
+                      width: { xs: 38, sm: 44 },
+                      height: { xs: 38, sm: 44 },
+                      borderRadius: "14px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      color: brand.primary,
+                      background: `${brand.primary}12`,
                     }}
                   >
-                    <Box
-                      component="img"
-                      src={craft.url}
-                      alt={craft.title}
-                      sx={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        transition: "transform 0.5s ease",
-                        "&:hover": {
-                          transform: "scale(1.1)",
-                        },
-                      }}
-                    />
+                    {featureIconMap[feature.iconKey]}
                   </Box>
-                  <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
-                      mb={1}
+
+                  {/* Content */}
+                  <Box sx={{ flex: 1 }}>
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        color: brand.text,
+                        fontSize: { xs: "0.9rem", sm: "1rem" },
+                        mb: 0.5,
+                      }}
                     >
-                      <CheckCircleOutline
-                        sx={{ color: brand.primary, fontSize: 20 }}
-                      />
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: 600,
-                          color: brand.text,
-                          fontSize: { xs: "1.0625rem", sm: "1.125rem" },
-                        }}
-                      >
-                        {craft.title}
-                      </Typography>
-                    </Stack>
+                      {feature.title}
+                    </Typography>
+
                     <Typography
                       sx={{
                         color: brand.textMuted,
-                        fontSize: { xs: "0.9375rem", sm: "1rem" },
-                        lineHeight: 1.7,
+                        fontSize: { xs: "0.82rem", sm: "0.9rem" },
+                        lineHeight: { xs: 1.5, sm: 1.6 },
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
                       }}
                     >
-                      {craft.description}
+                      {feature.description}
                     </Typography>
-                  </CardContent>
+                  </Box>
                 </Paper>
               </Grid>
             ))}
           </Grid>
         </Container>
-      </Box> */}
+      </Box>
 
       <Box
         sx={{

@@ -308,7 +308,7 @@ export default function Footer() {
               </Typography>
 
               <ContactItem icon={LocationOnOutlined}>
-                D-102, Ace Platinum, ZETA-1,
+                ZETA-1,
                 <br />
                 Greater Noida, India
               </ContactItem>

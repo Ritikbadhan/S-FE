@@ -49,7 +49,23 @@ export default function HomePage() {
       />
 
       {/* ✨ Content */}
-      <Container sx={{ position: "relative", zIndex: 2 }}>
+      <Container
+        sx={{
+          position: "relative",
+          zIndex: 2,
+          textAlign: {
+            xs: "center",
+            md: "left",
+          },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: {
+            xs: "center",
+            md: "flex-start",
+          },
+          justifyContent: "center",
+        }}
+      >
         <Typography
           variant="h3"
           sx={{
@@ -57,6 +73,11 @@ export default function HomePage() {
             letterSpacing: 3,
             mb: 0.2,
             lineHeight: 1.1,
+            fontSize: {
+              xs: "2rem", // mobile
+              sm: "3rem",
+              md: "3.75rem",
+            },
           }}
         >
           {hero.title}

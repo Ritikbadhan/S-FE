@@ -60,6 +60,9 @@ export default function ShopPage() {
   const [stockFilter, setStockFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
+  useEffect(() => {
+    setShowFilters(!isMobile);
+  }, [isMobile]);
 
   const categories = useMemo(() => {
     const unique = Array.from(new Set(products.map(getProductCategory)));

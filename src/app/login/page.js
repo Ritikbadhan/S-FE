@@ -394,7 +394,7 @@ export default function LoginPage() {
             px: 2, // Padding for mobile
           }}
         >
-          © 2024 Your Company. All rights reserved.
+          {`© ${new Date().getFullYear()} Your Company. All rights reserved.`}
         </Typography>
       </Container>
     </Box>

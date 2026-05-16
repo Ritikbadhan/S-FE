@@ -18,7 +18,7 @@ export const contactPageContent = {
     {
       iconKey: "address",
       title: "Address",
-      value: "D-102, Ace Platinum, ZETA-1, Greater Noida",
+      value: "ZETA-1, Greater Noida",
     },
     {
       iconKey: "hours",
