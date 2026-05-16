@@ -365,7 +365,7 @@ export default function Navbar() {
         onClose={handleMobileMenuClose}
         PaperProps={{
           sx: {
-            width: { xs: "85%", sm: 340 },
+            width: { xs: "60%", sm: 300 },
             maxWidth: "100%",
             background: brand.surface,
             borderLeft: `1px solid ${brand.borderSoft}`,
