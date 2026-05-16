@@ -309,7 +309,7 @@ export default function Footer() {
 
               <ContactItem icon={LocationOnOutlined}>
                 ZETA-1,
-                <br />
+                {/* <br /> */}
                 Greater Noida, India
               </ContactItem>
 
