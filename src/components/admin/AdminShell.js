@@ -25,6 +25,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
@@ -56,6 +57,7 @@ const navSections = [
       { href: "/admin/inventory", label: "Inventory", icon: Inventory2Icon },
       { href: "/admin/users", label: "Customers", icon: PeopleAltIcon },
       { href: "/admin/reviews", label: "Reviews", icon: ReviewsIcon },
+      { href: "/admin/returns", label: "Returns", icon: AssignmentReturnIcon },
     ],
   },
 ];
@@ -70,6 +72,7 @@ const subtitles = {
   "Inventory Management": "Monitor stock risk and keep variants ready to sell.",
   "Manage Users": "Review customer health, loyalty, and account status.",
   "Manage Reviews": "Moderate product feedback and surface useful social proof.",
+  "Manage Returns": "Review return requests, approve eligible items, and reject invalid claims.",
 };
 
 function SidebarContent({ collapsed = false, onClose, onToggleCollapse }) {

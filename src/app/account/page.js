@@ -168,6 +168,21 @@ const normalizeReturns = (data) => {
   }));
 };
 
+const getReturnKey = (entry) =>
+  `${entry?.orderId || ""}::${entry?.productId || ""}`;
+
+const hasReturnRequest = (entry) => entry?.status && entry.status !== "Eligible";
+
+const findOrderItemForReturn = (orders, orderId, productId) => {
+  const order = orders.find((item) => getOrderId(item) === orderId);
+  const items = getOrderItems(order);
+  return (
+    items.find(
+      (item) => String(item?.productId || item?.id || "") === String(productId || "")
+    ) || (items.length === 1 ? items[0] : null)
+  );
+};
+
 const createEmptyAddressForm = () => ({
   id: "",
   name: "",
@@ -238,6 +253,9 @@ export default function AccountPage() {
         const localAddresses = JSON.parse(
           localStorage.getItem("addresses") || "[]"
         );
+        const returnList = normalizeReturns(
+          account?.returns?.length ? account.returns : returnsData
+        );
 
         const fallbackAddresses = localAddresses.map((address, index) => ({
           id: address?.id || `addr-${index + 1}`,
@@ -255,7 +273,7 @@ export default function AccountPage() {
 
         setUser(profile);
         setOrders(Array.isArray(orderList) ? orderList : []);
-        setAddresses(fallbackAddresses);
+        setAddresses(addressList.length ? addressList : fallbackAddresses);
         setPaymentMethods(
           normalizePaymentMethods(account?.paymentMethods || [])
         );
@@ -276,29 +294,74 @@ export default function AccountPage() {
   }, [isAuthenticated, toast]);
 
   useEffect(() => {
-    if (returns.length) return;
-    const returnCandidates = orders
-      .filter((order) =>
-        ["Delivered", "Shipped", "Processing", "On the Way"].includes(
-          getOrderStatus(order)
-        )
-      )
-      .flatMap((order) =>
-        getOrderItems(order).map((item, index) => ({
-          id: `${getOrderId(order)}-${index + 1}`,
-          orderId: getOrderId(order),
-          productId: item?.productId || item?.id || "",
+    if (!orders.length) return;
+
+    setReturns((prev) => {
+      const existingKeys = new Set(prev.map(getReturnKey).filter(Boolean));
+      let changed = false;
+
+      const enrichedReturns = prev.map((entry) => {
+        const orderItem = findOrderItemForReturn(
+          orders,
+          entry.orderId,
+          entry.productId
+        );
+        if (!orderItem) return entry;
+
+        const next = {
+          ...entry,
           name:
-            item?.name || item?.productName || item?.product?.name || "Item",
-          size: item?.size || item?.variant?.size || "N/A",
-          color: item?.color || item?.variant?.color || "N/A",
-          status: "Eligible",
-          reason: "",
-          image: "",
-        }))
-      );
-    setReturns(returnCandidates);
-  }, [orders, returns.length]);
+            entry.name && entry.name !== "Item"
+              ? entry.name
+              : orderItem?.name ||
+                orderItem?.productName ||
+                orderItem?.product?.name ||
+                entry.name,
+          size:
+            entry.size && entry.size !== "N/A"
+              ? entry.size
+              : orderItem?.size || orderItem?.variant?.size || entry.size,
+          color:
+            entry.color && entry.color !== "N/A"
+              ? entry.color
+              : orderItem?.color || orderItem?.variant?.color || entry.color,
+          image: entry.image || orderItem?.image || "",
+        };
+        changed =
+          changed ||
+          next.name !== entry.name ||
+          next.size !== entry.size ||
+          next.color !== entry.color ||
+          next.image !== entry.image;
+        return next;
+      });
+
+      const returnCandidates = orders
+        .filter((order) =>
+          ["Delivered", "Shipped", "Processing", "On the Way"].includes(
+            getOrderStatus(order)
+          )
+        )
+        .flatMap((order) =>
+          getOrderItems(order).map((item, index) => ({
+            id: `${getOrderId(order)}-${index + 1}`,
+            orderId: getOrderId(order),
+            productId: item?.productId || item?.id || "",
+            name:
+              item?.name || item?.productName || item?.product?.name || "Item",
+            size: item?.size || item?.variant?.size || "N/A",
+            color: item?.color || item?.variant?.color || "N/A",
+            status: "Eligible",
+            reason: "",
+            image: item?.image || "",
+          }))
+        )
+        .filter((entry) => !existingKeys.has(getReturnKey(entry)));
+
+      if (!changed && !returnCandidates.length) return prev;
+      return [...enrichedReturns, ...returnCandidates];
+    });
+  }, [orders]);
 
   const ordersPlaced = orders.length;
   const wishlistItems = wishlist.length;
@@ -459,6 +522,10 @@ export default function AccountPage() {
     }
     const target = returns.find((entry) => entry.id === returnId);
     if (!target) return;
+    if (hasReturnRequest(target)) {
+      toast.info("A return request already exists for this item.");
+      return;
+    }
 
     createReturnApi({
       orderId: target.orderId || undefined,
@@ -1899,7 +1966,9 @@ export default function AccountPage() {
                         Showing latest {recentReturns.length} item(s)
                       </Typography>
                     </Box>
-                    {recentReturns.map((entry, index) => (
+                    {recentReturns.map((entry, index) => {
+                      const returnAlreadyCreated = hasReturnRequest(entry);
+                      return (
                       <Grow in timeout={400 + index * 100} key={entry.id}>
                         <Card sx={panelCardSx}>
                           <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
@@ -1937,6 +2006,7 @@ export default function AccountPage() {
                                 size="small"
                                 label="Reason"
                                 value={entry.reason || ""}
+                                disabled={returnAlreadyCreated}
                                 onChange={(e) =>
                                   setReturns((prev) =>
                                     prev.map((item) =>
@@ -1967,6 +2037,7 @@ export default function AccountPage() {
                                 component="label"
                                 variant="outlined"
                                 size="small"
+                                disabled={returnAlreadyCreated}
                                 sx={{
                                   minWidth: 140,
                                   height: 42,
@@ -1989,6 +2060,7 @@ export default function AccountPage() {
 
                               <AppButton
                                 size="small"
+                                disabled={returnAlreadyCreated}
                                 onClick={() =>
                                   requestReturn(entry.id, entry.reason)
                                 }
@@ -1999,14 +2071,16 @@ export default function AccountPage() {
                                   whiteSpace: "nowrap",
                                 }}
                               >
-                                Request Return
+                                {returnAlreadyCreated ? "Request Created" : "Request Return"}
                               </AppButton>
 
                               <Chip
                                 size="small"
                                 color={
-                                  entry.status === "Requested"
+                                  ["Requested", "Pending"].includes(entry.status)
                                     ? "warning"
+                                    : ["Rejected", "Declined"].includes(entry.status)
+                                      ? "error"
                                     : "success"
                                 }
                                 label={entry.status}
@@ -2032,7 +2106,8 @@ export default function AccountPage() {
                           </CardContent>
                         </Card>
                       </Grow>
-                    ))}
+                      );
+                    })}
                   </Stack>
                 )}
               </Box>

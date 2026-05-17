@@ -267,6 +267,11 @@ export const adminApi = {
     request("put", `/api/admin/reviews/${id}`, payload, null, "Failed to update review"),
   deleteReview: (id) =>
     request("delete", `/api/admin/reviews/${id}`, null, null, "Failed to delete review"),
+  returns: () => request("get", "/api/admin/returns", null, null, "Failed to load returns"),
+  acceptReturn: (id) =>
+    request("post", `/api/admin/returns/${id}/accept`, null, null, "Failed to accept return"),
+  rejectReturn: (id) =>
+    request("post", `/api/admin/returns/${id}/reject`, null, null, "Failed to reject return"),
   inventory: () =>
     request("get", "/api/admin/inventory", null, null, "Failed to load inventory"),
   updateInventory: (payload) =>
