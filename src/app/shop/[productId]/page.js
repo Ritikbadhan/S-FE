@@ -411,7 +411,7 @@ export default function ProductDetailsPage() {
   })();
 
   return (
-    <Box sx={{ bgcolor: brand.bg, minHeight: "100vh", py: { xs: 3, md: 5 } }}>
+    <Box sx={{ bgcolor: brand.bg, minHeight: "100vh", py: { xs: 1.5, md: 5 } }}>
       <Container maxWidth="xl">
         {/* Breadcrumbs */}
         <Breadcrumbs
@@ -447,7 +447,7 @@ export default function ProductDetailsPage() {
         </Breadcrumbs>
 
         {/* Main Product Section */}
-      <Grid container spacing={{ xs: 3, md: 4 }} alignItems="flex-start">
+      <Grid container spacing={{ xs: 1.75, md: 4 }} alignItems="flex-start">
   {/* Image Gallery */}
   <Grid item xs={12} md={5}>
             <Box
@@ -461,12 +461,12 @@ export default function ProductDetailsPage() {
                 <Grid item xs={12} md={3.5}>
                   <Stack
                     direction={{ xs: "row", md: "column" }}
-                    spacing={1.5}
+                    spacing={{ xs: 0.75, md: 1.5 }}
                     sx={{
                       overflowX: { xs: "auto", md: "visible" },
                       overflowY: { md: "auto" },
                       maxHeight: { md: "850px" },
-                      pb: { xs: 1, md: 0 },
+                      pb: { xs: 0.5, md: 0 },
                     }}
                   >
                     {images.map((image, idx) => (
@@ -477,8 +477,8 @@ export default function ProductDetailsPage() {
                           flexShrink: 0,
                           cursor: "pointer",
                           overflow: "hidden",
-                          borderRadius: 2,
-                          minWidth: { xs: 110, md: 160 },
+                          borderRadius: { xs: 1.5, md: 2 },
+                          minWidth: { xs: 72, sm: 92, md: 160 },
                           border:
                             selectedImageIndex === idx
                               ? `2px solid ${brand.primary}`
@@ -496,8 +496,8 @@ export default function ProductDetailsPage() {
                           src={image}
                           alt={`${getName(product)}-${idx + 1}`}
                           sx={{
-                             width: { xs: 110, md: 160 },
-height: { xs: 110, md: 190 },
+	                             width: { xs: 72, sm: 92, md: 160 },
+	height: { xs: 84, sm: 108, md: 190 },
                             objectFit: "cover",
                             display: "block",
                           }}
@@ -524,13 +524,13 @@ height: { xs: 110, md: 190 },
   src={activeImage}
   alt={getName(product)}
   sx={{
- width: "96%",
+	 width: { xs: "100%", sm: "96%" },
 maxWidth: "660px",
     margin: "0 auto",
     display: "block",
     aspectRatio: "3.7 / 5",
     objectFit: "cover",
-    borderRadius: 2,
+	    borderRadius: { xs: 1.5, sm: 2 },
     transition: "transform 0.5s ease",
     "&:hover": { transform: "scale(1.03)" },
   }}
@@ -539,16 +539,16 @@ maxWidth: "660px",
                     {/* Discount Badge */}
                     {off > 0 && (
                       <Chip
-                        icon={<LocalOfferOutlinedIcon sx={{ fontSize: 16 }} />}
+	                        icon={<LocalOfferOutlinedIcon sx={{ fontSize: { xs: 12, sm: 16 } }} />}
                         label={`${off}% OFF`}
                         color="success"
                         sx={{
                           position: "absolute",
-                          top: 16,
-                          left: 16,
+	                          top: { xs: 8, sm: 16 },
+	                          left: { xs: 8, sm: 16 },
                           fontWeight: 700,
-                          fontSize: { xs: 12, sm: 14 },
-                          height: { xs: 28, sm: 32 },
+	                          fontSize: { xs: 10, sm: 14 },
+	                          height: { xs: 22, sm: 32 },
                           boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                         }}
                       />
@@ -564,17 +564,17 @@ maxWidth: "660px",
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 3, sm: 4 },
+	                p: { xs: 1.5, sm: 4 },
                 bgcolor: brand.surface,
                 border: `1px solid ${brand.borderSoft}`,
-                borderRadius: 3,
+	                borderRadius: { xs: 2, sm: 3 },
                 position: { md: "sticky" },
                 top: { md: 80 },
               }}
             >
-              <Stack spacing={2.5}>
+	              <Stack spacing={{ xs: 1.25, sm: 2.5 }}>
                 {/* Collection & Category */}
-                <Stack direction="row" spacing={1}>
+	                <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
                   <Chip
                     label={getCollection(product)}
                     size="small"
@@ -582,7 +582,9 @@ maxWidth: "660px",
                       bgcolor: `${brand.primary}15`,
                       color: brand.primary,
                       fontWeight: 600,
-                      fontSize: { xs: 11, sm: 12 },
+	                      fontSize: { xs: 9, sm: 12 },
+	                      height: { xs: 22, sm: 24 },
+	                      "& .MuiChip-label": { px: { xs: 0.9, sm: 1.5 } },
                     }}
                   />
                   <Chip
@@ -591,7 +593,9 @@ maxWidth: "660px",
                     variant="outlined"
                     sx={{
                       borderColor: brand.border,
-                      fontSize: { xs: 11, sm: 12 },
+	                      fontSize: { xs: 9, sm: 12 },
+	                      height: { xs: 22, sm: 24 },
+	                      "& .MuiChip-label": { px: { xs: 0.9, sm: 1.5 } },
                     }}
                   />
                 </Stack>
@@ -603,14 +607,14 @@ maxWidth: "660px",
                     fontWeight: 700,
                     lineHeight: 1.2,
                     color: brand.text,
-                    fontSize: { xs: "1.75rem", sm: "2rem", md: "2.25rem" },
+	                    fontSize: { xs: "1.25rem", sm: "2rem", md: "2.25rem" },
                   }}
                 >
                   {getName(product)}
                 </Typography>
 
                 {/* Rating */}
-                <Stack direction="row" spacing={1.5} alignItems="center">
+	                <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center">
                   <Rating
                     value={averageRating}
                     precision={0.1}
@@ -625,7 +629,7 @@ maxWidth: "660px",
                   <Typography
                     sx={{
                       color: brand.textMuted,
-                      fontSize: { xs: "0.875rem", sm: "1rem" },
+	                      fontSize: { xs: "0.75rem", sm: "1rem" },
                       fontWeight: 500,
                     }}
                   >
@@ -635,10 +639,10 @@ maxWidth: "660px",
 
                 {/* Price */}
                 <Box>
-                  <Stack direction="row" spacing={2} alignItems="baseline">
+	                  <Stack direction="row" spacing={{ xs: 1, sm: 2 }} alignItems="baseline">
                     <Typography
                       sx={{
-                        fontSize: { xs: "1.75rem", sm: "2rem", md: "2.25rem" },
+	                        fontSize: { xs: "1.25rem", sm: "2rem", md: "2.25rem" },
                         fontWeight: 700,
                         color: brand.text,
                       }}
@@ -650,7 +654,7 @@ maxWidth: "660px",
                         sx={{
                           textDecoration: "line-through",
                           color: brand.textMuted,
-                          fontSize: { xs: "1.125rem", sm: "1.25rem" },
+	                          fontSize: { xs: "0.85rem", sm: "1.25rem" },
                         }}
                       >
                         {currency(original)}
@@ -669,9 +673,9 @@ maxWidth: "660px",
                   </Typography> */}
                   <Typography
                     sx={{
-                      fontSize: { xs: "0.875rem", sm: "0.9375rem" },
-                      color: brand.textMuted,
-                      mt: 1,
+	                      fontSize: { xs: "0.75rem", sm: "0.9375rem" },
+	                      color: brand.textMuted,
+	                      mt: { xs: 0.5, sm: 1 },
                     }}
                   >
                     {specs?.fit || "Regular fit"} • {specs?.material || "Premium fabric"}
@@ -685,14 +689,14 @@ maxWidth: "660px",
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      mb: 1.5,
-                      fontSize: { xs: "0.9375rem", sm: "1rem" },
+	                      mb: { xs: 0.75, sm: 1.5 },
+	                      fontSize: { xs: "0.82rem", sm: "1rem" },
                       color: brand.text,
                     }}
                   >
                     Select Size
                   </Typography>
-                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+	                  <Stack direction="row" spacing={{ xs: 0.5, sm: 1 }} flexWrap="wrap" useFlexGap>
                     {getSizes(product).map((size) => (
                       <Chip
                         key={size.label}
@@ -713,10 +717,10 @@ maxWidth: "660px",
                           ) : undefined
                         }
                         sx={{
-                          height: { xs: 36, sm: 40 },
-                          fontSize: { xs: "0.875rem", sm: "0.9375rem" },
+	                          height: { xs: 28, sm: 40 },
+	                          fontSize: { xs: "0.72rem", sm: "0.9375rem" },
                           fontWeight: 600,
-                          px: 2,
+	                          px: { xs: 0.75, sm: 2 },
                           opacity: size.available ? 1 : 0.4,
                           textDecoration: size.available
                             ? "none"
@@ -734,9 +738,9 @@ maxWidth: "660px",
                   </Stack>
                   <Typography
                     sx={{
-                      fontSize: { xs: "0.75rem", sm: "0.8125rem" },
+	                      fontSize: { xs: "0.68rem", sm: "0.8125rem" },
                       color: brand.textMuted,
-                      mt: 1.5,
+	                      mt: { xs: 0.75, sm: 1.5 },
                     }}
                   >
                     📏 Size guide available • {modelInfo}
@@ -746,7 +750,7 @@ maxWidth: "660px",
                 {/* Stock Status */}
                 <Chip
                   icon={stock > 0 ? <CheckCircleIcon /> : undefined}
-                  size="medium"
+	                  size="small"
                   color={
                     stock <= 0 ? "default" : stock <= 3 ? "error" : "success"
                   }
@@ -754,7 +758,9 @@ maxWidth: "660px",
                   sx={{
                     alignSelf: "start",
                     fontWeight: 600,
-                    fontSize: { xs: "0.8125rem", sm: "0.875rem" },
+	                    fontSize: { xs: "0.72rem", sm: "0.875rem" },
+	                    height: { xs: 24, sm: 32 },
+	                    "& .MuiChip-label": { px: { xs: 1, sm: 1.5 } },
                   }}
                 />
 
@@ -765,20 +771,22 @@ maxWidth: "660px",
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      mb: 1.5,
-                      fontSize: { xs: "0.9375rem", sm: "1rem" },
+	                      mb: { xs: 0.75, sm: 1.5 },
+	                      fontSize: { xs: "0.82rem", sm: "1rem" },
                       color: brand.text,
                     }}
                   >
                     Quantity
                   </Typography>
-                  <Stack direction="row" spacing={2} alignItems="center">
+	                  <Stack direction="row" spacing={{ xs: 1, sm: 2 }} alignItems="center">
                     <IconButton
                       onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                       disabled={quantity <= 1}
                       sx={{
                         border: `1px solid ${brand.border}`,
-                        borderRadius: 2,
+	                        width: { xs: 32, sm: 40 },
+	                        height: { xs: 32, sm: 40 },
+	                        borderRadius: 2,
                         "&:hover": {
                           borderColor: brand.primary,
                           bgcolor: brand.borderSoft,
@@ -789,10 +797,10 @@ maxWidth: "660px",
                     </IconButton>
                     <Typography
                       sx={{
-                        minWidth: 40,
+	                        minWidth: { xs: 28, sm: 40 },
                         textAlign: "center",
                         fontWeight: 600,
-                        fontSize: { xs: "1.125rem", sm: "1.25rem" },
+	                        fontSize: { xs: "0.95rem", sm: "1.25rem" },
                       }}
                     >
                       {quantity}
@@ -802,7 +810,9 @@ maxWidth: "660px",
                       disabled={quantity >= stock}
                       sx={{
                         border: `1px solid ${brand.border}`,
-                        borderRadius: 2,
+	                        width: { xs: 32, sm: 40 },
+	                        height: { xs: 32, sm: 40 },
+	                        borderRadius: 2,
                         "&:hover": {
                           borderColor: brand.primary,
                           bgcolor: brand.borderSoft,
@@ -815,16 +825,16 @@ maxWidth: "660px",
                 </Box>
 
                 {/* Action Buttons */}
-                <Stack direction="row" spacing={1.5}>
+	                <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }}>
                   <AppButton
                     fullWidth
                     size="large"
                     onClick={() => addToBag(false)}
                     disabled={stock <= 0}
                     sx={{
-                      py: 1.75,
+	                      py: { xs: 0.85, sm: 1.75 },
                       borderRadius: "24px",
-                      fontSize: { xs: "0.9375rem", sm: "1rem" },
+	                      fontSize: { xs: "0.78rem", sm: "1rem" },
                       fontWeight: 600,
                       background: `linear-gradient(135deg, ${brand.gradientStart}, ${brand.gradientEnd})`,
                       color: "#FFFFFF",
@@ -844,9 +854,9 @@ maxWidth: "660px",
                     onClick={() => addToBag(true)}
                     disabled={stock <= 0}
                     sx={{
-                      py: 1.75,
+	                      py: { xs: 0.85, sm: 1.75 },
                       borderRadius: "24px",
-                      fontSize: { xs: "0.9375rem", sm: "1rem" },
+	                      fontSize: { xs: "0.78rem", sm: "1rem" },
                       fontWeight: 600,
                       borderColor: brand.primary,
                       color: brand.primary,
@@ -864,7 +874,9 @@ maxWidth: "660px",
                     size="large"
                     sx={{
                       border: `2px solid ${brand.border}`,
-                      borderRadius: 3,
+	                      width: { xs: 38, sm: 48 },
+	                      height: { xs: 38, sm: 48 },
+	                      borderRadius: { xs: 2, sm: 3 },
                       transition: "all 0.3s ease",
                       "&:hover": {
                         borderColor: brand.primary,
@@ -874,9 +886,9 @@ maxWidth: "660px",
                     }}
                   >
                     {isWishlisted ? (
-                      <FavoriteIcon sx={{ color: brand.primary, fontSize: 24 }} />
+	                      <FavoriteIcon sx={{ color: brand.primary, fontSize: { xs: 18, sm: 24 } }} />
                     ) : (
-                      <FavoriteBorderIcon sx={{ fontSize: 24 }} />
+	                      <FavoriteBorderIcon sx={{ fontSize: { xs: 18, sm: 24 } }} />
                     )}
                   </IconButton>
                 </Stack>
@@ -885,20 +897,20 @@ maxWidth: "660px",
                 <Paper
                   elevation={0}
                   sx={{
-                    p: 2.5,
+	                    p: { xs: 1.25, sm: 2.5 },
                     bgcolor: `${brand.primary}08`,
                     border: `1px solid ${brand.borderSoft}`,
                     borderRadius: 2,
                   }}
                 >
-                  <Stack spacing={1.5}>
-                    <Stack direction="row" spacing={1.5} alignItems="center">
+	                  <Stack spacing={{ xs: 0.75, sm: 1.5 }}>
+	                    <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center">
                       <LocalShippingOutlinedIcon
-                        sx={{ color: brand.primary, fontSize: 22 }}
+	                        sx={{ color: brand.primary, fontSize: { xs: 17, sm: 22 } }}
                       />
                       <Typography
                         sx={{
-                          fontSize: { xs: "0.875rem", sm: "0.9375rem" },
+	                          fontSize: { xs: "0.74rem", sm: "0.9375rem" },
                           color: brand.text,
                           fontWeight: 500,
                         }}
@@ -906,13 +918,13 @@ maxWidth: "660px",
                         Free shipping over ₹1999
                       </Typography>
                     </Stack>
-                    <Stack direction="row" spacing={1.5} alignItems="center">
+	                    <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center">
                       <AutorenewOutlinedIcon
-                        sx={{ color: brand.primary, fontSize: 22 }}
+	                        sx={{ color: brand.primary, fontSize: { xs: 17, sm: 22 } }}
                       />
                       <Typography
                         sx={{
-                          fontSize: { xs: "0.875rem", sm: "0.9375rem" },
+	                          fontSize: { xs: "0.74rem", sm: "0.9375rem" },
                           color: brand.text,
                           fontWeight: 500,
                         }}
@@ -920,13 +932,13 @@ maxWidth: "660px",
                         7-day easy returns & exchange
                       </Typography>
                     </Stack>
-                    <Stack direction="row" spacing={1.5} alignItems="center">
+	                    <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center">
                       <PaymentsOutlinedIcon
-                        sx={{ color: brand.primary, fontSize: 22 }}
+	                        sx={{ color: brand.primary, fontSize: { xs: 17, sm: 22 } }}
                       />
                       <Typography
                         sx={{
-                          fontSize: { xs: "0.875rem", sm: "0.9375rem" },
+	                          fontSize: { xs: "0.74rem", sm: "0.9375rem" },
                           color: brand.text,
                           fontWeight: 500,
                         }}
@@ -942,14 +954,14 @@ maxWidth: "660px",
         </Grid>
 
         {/* Product Description */}
-        <Box sx={{ mt: { xs: 5, md: 7 } }}>
+        <Box sx={{ mt: { xs: 3, md: 7 } }}>
           <Typography
             variant="h5"
             sx={{
-              mb: 3,
+              mb: { xs: 1.5, sm: 3 },
               fontWeight: 600,
               color: brand.text,
-              fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+              fontSize: { xs: "1.15rem", sm: "1.75rem", md: "2rem" },
             }}
           >
             Product Description
@@ -957,31 +969,31 @@ maxWidth: "660px",
           <Paper
             elevation={0}
             sx={{
-              p: { xs: 3, sm: 4 },
+              p: { xs: 1.5, sm: 4 },
               bgcolor: brand.surface,
               border: `1px solid ${brand.borderSoft}`,
-              borderRadius: 3,
-              mb: 3,
+              borderRadius: { xs: 2, sm: 3 },
+              mb: { xs: 1.5, sm: 3 },
             }}
           >
             <Typography
               sx={{
                 color: brand.text,
-                fontSize: { xs: "1rem", sm: "1.0625rem" },
-                lineHeight: 1.8,
-                mb: 3,
+                fontSize: { xs: "0.82rem", sm: "1.0625rem" },
+                lineHeight: { xs: 1.55, sm: 1.8 },
+                mb: { xs: 1.5, sm: 3 },
               }}
             >
               {product?.description ||
                 "Crafted with deliberate structure and a clean silhouette, this piece is designed for elevated everyday dressing with long-term wardrobe value. Experience luxury that speaks through quality craftsmanship and timeless design."}
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={{ xs: 1, sm: 2 }}>
               {[
                 {
                   title: "Fabric",
                   value:
                     specs?.material || "Premium blended weave with soft finish.",
-                  icon: "🧵",
+                  // icon: "🧵",
                 },
                 {
                   title: "Care",
@@ -989,28 +1001,28 @@ maxWidth: "660px",
                     specs.careInstructions.length
                     ? specs.careInstructions[0]
                     : "Dry clean preferred. Cool iron if needed.",
-                  icon: "🧼",
+                  // icon: "🧼",
                 },
                 {
                   title: "Fit",
                   value:
                     specs?.fit ||
                     "Structured regular fit with clean shoulder line.",
-                  icon: "👔",
+                  // icon: "👔",
                 },
                 {
                   title: "Occasion",
                   value: Array.isArray(specs?.occasion) && specs.occasion.length
                     ? specs.occasion.join(", ")
                     : "Evening, smart casual, and formal styling.",
-                  icon: "🎩",
+                  // icon: "🎩",
                 },
               ].map((item, idx) => (
                 <Grid item xs={12} sm={6} md={3} key={idx}>
                   <Paper
                     elevation={0}
                     sx={{
-                      p: 2.5,
+                      p: { xs: 1.25, sm: 2.5 },
                       height: "100%",
                       bgcolor: `${brand.primary}05`,
                       border: `1px solid ${brand.borderSoft}`,
@@ -1023,15 +1035,15 @@ maxWidth: "660px",
                       },
                     }}
                   >
-                    <Typography sx={{ fontSize: "2rem", mb: 1 }}>
+                    <Typography sx={{ fontSize: { xs: "1.25rem", sm: "2rem" }, mb: { xs: 0.5, sm: 1 } }}>
                       {item.icon}
                     </Typography>
                     <Typography
                       sx={{
                         fontWeight: 600,
-                        mb: 0.75,
+                        mb: { xs: 0.35, sm: 0.75 },
                         color: brand.text,
-                        fontSize: { xs: "0.9375rem", sm: "1rem" },
+                        fontSize: { xs: "0.78rem", sm: "1rem" },
                       }}
                     >
                       {item.title}
@@ -1039,8 +1051,8 @@ maxWidth: "660px",
                     <Typography
                       sx={{
                         color: brand.textMuted,
-                        fontSize: { xs: "0.875rem", sm: "0.9375rem" },
-                        lineHeight: 1.6,
+                        fontSize: { xs: "0.72rem", sm: "0.9375rem" },
+                        lineHeight: { xs: 1.45, sm: 1.6 },
                       }}
                     >
                       {item.value}
@@ -1053,25 +1065,25 @@ maxWidth: "660px",
         </Box>
 
         {/* Product Specifications */}
-        <Box sx={{ mt: { xs: 5, md: 7 } }}>
+        <Box sx={{ mt: { xs: 3, md: 7 } }}>
           <Typography
             variant="h5"
             sx={{
-              mb: 3,
+              mb: { xs: 1.5, sm: 3 },
               fontWeight: 600,
               color: brand.text,
-              fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+              fontSize: { xs: "1.15rem", sm: "1.75rem", md: "2rem" },
             }}
           >
             Product Specifications
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={{ xs: 1, sm: 2 }}>
             {specPairs.map((spec, idx) => (
               <Grid item xs={12} sm={6} md={3} key={idx}>
                 <Paper
                   elevation={0}
                   sx={{
-                    p: 2.5,
+                    p: { xs: 1.25, sm: 2.5 },
                     bgcolor: brand.surface,
                     border: `1px solid ${brand.borderSoft}`,
                     borderRadius: 2,
@@ -1083,13 +1095,13 @@ maxWidth: "660px",
                     },
                   }}
                 >
-                  <Stack direction="row" spacing={1.5} alignItems="center" mb={0.5}>
-                    <Typography sx={{ fontSize: "1.5rem" }}>
+                  <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center" mb={{ xs: 0.25, sm: 0.5 }}>
+                    {/* <Typography sx={{ fontSize: "1.5rem" }}>
                       {spec.icon}
-                    </Typography>
+                    </Typography> */}
                     <Typography
                       sx={{
-                        fontSize: { xs: "0.75rem", sm: "0.8125rem" },
+                        fontSize: { xs: "0.64rem", sm: "0.8125rem" },
                         color: brand.textMuted,
                         textTransform: "uppercase",
                         letterSpacing: 0.5,
@@ -1103,7 +1115,7 @@ maxWidth: "660px",
                     sx={{
                       fontWeight: 600,
                       color: brand.text,
-                      fontSize: { xs: "0.9375rem", sm: "1rem" },
+                      fontSize: { xs: "0.78rem", sm: "1rem" },
                     }}
                   >
                     {spec.value || "-"}
@@ -1118,7 +1130,7 @@ maxWidth: "660px",
             <Accordion
               elevation={0}
               sx={{
-                mt: 3,
+                mt: { xs: 1.5, sm: 3 },
                 bgcolor: brand.surface,
                 border: `1px solid ${brand.borderSoft}`,
                 borderRadius: "12px !important",
@@ -1129,27 +1141,27 @@ maxWidth: "660px",
                 expandIcon={<ExpandMoreIcon />}
                 sx={{
                   "& .MuiAccordionSummary-content": {
-                    my: 1.5,
+                    my: { xs: 0.75, sm: 1.5 },
                   },
                 }}
               >
                 <Typography
                   sx={{
                     fontWeight: 600,
-                    fontSize: { xs: "1rem", sm: "1.125rem" },
+                    fontSize: { xs: "0.82rem", sm: "1.125rem" },
                     color: brand.text,
                   }}
                 >
                   📐 Size & Fit Guide
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails sx={{ pt: 0 }}>
-                <Stack spacing={1.5}>
-                  <Typography sx={{ color: brand.textMuted }}>
+              <AccordionDetails sx={{ pt: 0, px: { xs: 1.5, sm: 2 } }}>
+                <Stack spacing={{ xs: 0.75, sm: 1.5 }}>
+                  <Typography sx={{ color: brand.textMuted, fontSize: { xs: "0.76rem", sm: "1rem" } }}>
                     Model Height: {specs.sizeAndFit.modelHeight || "-"} |
                     Wearing: {specs.sizeAndFit.modelWearing || "-"}
                   </Typography>
-                  <Typography sx={{ color: brand.textMuted }}>
+                  <Typography sx={{ color: brand.textMuted, fontSize: { xs: "0.76rem", sm: "1rem" } }}>
                     {specs.sizeAndFit.fitNote || "-"}
                   </Typography>
                 </Stack>
@@ -1162,7 +1174,7 @@ maxWidth: "660px",
             <Accordion
               elevation={0}
               sx={{
-                mt: 2,
+                mt: { xs: 1, sm: 2 },
                 bgcolor: brand.surface,
                 border: `1px solid ${brand.borderSoft}`,
                 borderRadius: "12px !important",
@@ -1173,28 +1185,28 @@ maxWidth: "660px",
                 expandIcon={<ExpandMoreIcon />}
                 sx={{
                   "& .MuiAccordionSummary-content": {
-                    my: 1.5,
+                    my: { xs: 0.75, sm: 1.5 },
                   },
                 }}
               >
                 <Typography
                   sx={{
                     fontWeight: 600,
-                    fontSize: { xs: "1rem", sm: "1.125rem" },
+                    fontSize: { xs: "0.82rem", sm: "1.125rem" },
                     color: brand.text,
                   }}
                 >
                   📏 Size Chart (cm)
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails sx={{ pt: 0 }}>
-                <Grid container spacing={2}>
+              <AccordionDetails sx={{ pt: 0, px: { xs: 1.5, sm: 2 } }}>
+                <Grid container spacing={{ xs: 1, sm: 2 }}>
                   {Object.entries(specs.measurementsCm).map(([sizeKey, values]) => (
                     <Grid item xs={12} md={6} key={sizeKey}>
                       <Paper
                         elevation={0}
                         sx={{
-                          p: 2,
+                          p: { xs: 1.25, sm: 2 },
                           bgcolor: `${brand.primary}05`,
                           border: `1px solid ${brand.borderSoft}`,
                           borderRadius: 2,
@@ -1203,16 +1215,16 @@ maxWidth: "660px",
                         <Typography
                           sx={{
                             fontWeight: 600,
-                            mb: 1,
+                            mb: { xs: 0.5, sm: 1 },
                             color: brand.primary,
-                            fontSize: { xs: "0.9375rem", sm: "1rem" },
+                            fontSize: { xs: "0.78rem", sm: "1rem" },
                           }}
                         >
                           Size {sizeKey}
                         </Typography>
                         <Typography
                           sx={{
-                            fontSize: { xs: "0.8125rem", sm: "0.875rem" },
+                            fontSize: { xs: "0.7rem", sm: "0.875rem" },
                             color: brand.textMuted,
                             lineHeight: 1.8,
                           }}
@@ -1292,14 +1304,14 @@ maxWidth: "660px",
         </Box> */}
 
         {/* Reviews Section */}
-        <Box sx={{ mt: { xs: 5, md: 7 } }}>
+        <Box sx={{ mt: { xs: 3, md: 7 } }}>
           <Typography
             variant="h5"
             sx={{
-              mb: 3,
+              mb: { xs: 1.5, sm: 3 },
               fontWeight: 600,
               color: brand.text,
-              fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+              fontSize: { xs: "1.15rem", sm: "1.75rem", md: "2rem" },
             }}
           >
             Customer Reviews
@@ -1309,18 +1321,18 @@ maxWidth: "660px",
           <Paper
             elevation={0}
             sx={{
-              p: { xs: 3, sm: 4 },
-              mb: 3,
+              p: { xs: 1.5, sm: 4 },
+              mb: { xs: 1.5, sm: 3 },
               bgcolor: `${brand.primary}08`,
               border: `1px solid ${brand.borderSoft}`,
-              borderRadius: 3,
+              borderRadius: { xs: 2, sm: 3 },
             }}
           >
-            <Grid container spacing={3} alignItems="center">
+            <Grid container spacing={{ xs: 1.5, sm: 3 }} alignItems="center">
               <Grid item xs={12} md={4} textAlign={{ xs: "center", md: "left" }}>
                 <Typography
                   sx={{
-                    fontSize: { xs: "3rem", sm: "3.5rem" },
+                    fontSize: { xs: "2rem", sm: "3.5rem" },
                     fontWeight: 700,
                     color: brand.text,
                     lineHeight: 1,
@@ -1332,7 +1344,7 @@ maxWidth: "660px",
                   value={averageRating}
                   precision={0.1}
                   readOnly
-                  size="large"
+                  size={isMobile ? "medium" : "large"}
                   sx={{
                     my: 1,
                     "& .MuiRating-iconFilled": {
@@ -1340,7 +1352,7 @@ maxWidth: "660px",
                     },
                   }}
                 />
-                <Typography sx={{ color: brand.textMuted, fontWeight: 500 }}>
+                <Typography sx={{ color: brand.textMuted, fontWeight: 500, fontSize: { xs: "0.76rem", sm: "1rem" } }}>
                   Based on {reviewCount} reviews
                 </Typography>
               </Grid>
@@ -1349,7 +1361,7 @@ maxWidth: "660px",
                 <Paper
                   elevation={0}
                   sx={{
-                    p: 3,
+                    p: { xs: 1.25, sm: 3 },
                     bgcolor: brand.surface,
                     border: `1px solid ${brand.borderSoft}`,
                     borderRadius: 2,
@@ -1358,14 +1370,14 @@ maxWidth: "660px",
                   <Typography
                     sx={{
                       fontWeight: 600,
-                      mb: 2,
+                      mb: { xs: 1, sm: 2 },
                       color: brand.text,
-                      fontSize: { xs: "1rem", sm: "1.125rem" },
+                      fontSize: { xs: "0.86rem", sm: "1.125rem" },
                     }}
                   >
                     Write a Review
                   </Typography>
-                  <Grid container spacing={2}>
+                  <Grid container spacing={{ xs: 1, sm: 2 }}>
                     <Grid item xs={12} sm={6}>
                       <AppInput
                         fullWidth
@@ -1406,7 +1418,7 @@ maxWidth: "660px",
                       <AppInput
                         fullWidth
                         multiline
-                        rows={3}
+                      rows={isMobile ? 2 : 3}
                         label="Your Review"
                         placeholder="Share your experience with this product..."
                         value={reviewForm.text}
@@ -1418,9 +1430,11 @@ maxWidth: "660px",
                   </Grid>
                   <AppButton
                     sx={{
-                      mt: 2,
+                      mt: { xs: 1.25, sm: 2 },
                       borderRadius: "24px",
-                      px: 4,
+                      px: { xs: 2.5, sm: 4 },
+                      py: { xs: 0.75, sm: 1 },
+                      fontSize: { xs: "0.78rem", sm: "0.875rem" },
                       background: `linear-gradient(135deg, ${brand.gradientStart}, ${brand.gradientEnd})`,
                     }}
                     onClick={submitReview}
@@ -1433,13 +1447,13 @@ maxWidth: "660px",
           </Paper>
 
           {/* Reviews List */}
-          <Stack spacing={2}>
+          <Stack spacing={{ xs: 1, sm: 2 }}>
             {reviews.slice(0, 5).map((review, idx) => (
               <Paper
                 key={review.id || review._id || idx}
                 elevation={0}
                 sx={{
-                  p: { xs: 2.5, sm: 3 },
+                  p: { xs: 1.25, sm: 3 },
                   bgcolor: brand.surface,
                   border: `1px solid ${brand.borderSoft}`,
                   borderRadius: 2,
@@ -1453,14 +1467,14 @@ maxWidth: "660px",
                 <Stack
                   direction={{ xs: "column", sm: "row" }}
                   justifyContent="space-between"
-                  spacing={1}
-                  mb={1.5}
+                  spacing={{ xs: 0.5, sm: 1 }}
+                  mb={{ xs: 0.75, sm: 1.5 }}
                 >
                   <Typography
                     sx={{
                       fontWeight: 600,
                       color: brand.text,
-                      fontSize: { xs: "0.9375rem", sm: "1rem" },
+                      fontSize: { xs: "0.8rem", sm: "1rem" },
                     }}
                   >
                     {review.name || review.userName || "Anonymous User"}
@@ -1468,7 +1482,7 @@ maxWidth: "660px",
                   <Typography
                     sx={{
                       color: brand.textMuted,
-                      fontSize: { xs: "0.8125rem", sm: "0.875rem" },
+                      fontSize: { xs: "0.68rem", sm: "0.875rem" },
                     }}
                   >
                     {new Date(review.createdAt || Date.now()).toLocaleDateString(
@@ -1486,7 +1500,7 @@ maxWidth: "660px",
                   readOnly
                   size="small"
                   sx={{
-                    mb: 1,
+                    mb: { xs: 0.5, sm: 1 },
                     "& .MuiRating-iconFilled": {
                       color: brand.warning,
                     },
@@ -1495,8 +1509,8 @@ maxWidth: "660px",
                 <Typography
                   sx={{
                     color: brand.textMuted,
-                    fontSize: { xs: "0.9375rem", sm: "1rem" },
-                    lineHeight: 1.7,
+                    fontSize: { xs: "0.76rem", sm: "1rem" },
+                    lineHeight: { xs: 1.5, sm: 1.7 },
                   }}
                 >
                   {review.comment || review.text || "No comment provided."}
@@ -1509,7 +1523,7 @@ maxWidth: "660px",
             <Paper
               elevation={0}
               sx={{
-                p: 5,
+                p: { xs: 2.5, sm: 5 },
                 textAlign: "center",
                 bgcolor: brand.surface,
                 border: `1px solid ${brand.borderSoft}`,
@@ -1564,13 +1578,24 @@ maxWidth: "660px",
                 View All
               </AppButton>
             </Box>
-            <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gap: { xs: 1.5, sm: 2.5, md: 4 },
+                gridTemplateColumns: {
+                  xs: "repeat(2, minmax(0, 1fr))",
+                  sm: "repeat(2, minmax(0, 1fr))",
+                  md: "repeat(3, minmax(0, 1fr))",
+                  lg: "repeat(4, minmax(0, 1fr))",
+                },
+              }}
+            >
               {relatedProducts.map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={getProductId(item)}>
+                <Box key={getProductId(item)} sx={{ minWidth: 0 }}>
                   <ProductCard product={item} />
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           </Box>
         )}
 
@@ -1588,19 +1613,24 @@ maxWidth: "660px",
             >
               Recently Viewed
             </Typography>
-            <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gap: { xs: 1.5, sm: 2.5, md: 4 },
+                gridTemplateColumns: {
+                  xs: "repeat(2, minmax(0, 1fr))",
+                  sm: "repeat(2, minmax(0, 1fr))",
+                  md: "repeat(3, minmax(0, 1fr))",
+                  lg: "repeat(4, minmax(0, 1fr))",
+                },
+              }}
+            >
               {recentlyViewedProducts.map((item) => (
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={3}
-                  key={`recent-${getProductId(item)}`}
-                >
+                <Box key={`recent-${getProductId(item)}`} sx={{ minWidth: 0 }}>
                   <ProductCard product={item} />
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           </Box>
         )}
       </Container>

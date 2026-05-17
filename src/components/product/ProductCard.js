@@ -195,7 +195,7 @@ export default function ProductCard({
           position: "relative",
           maxWidth: { xs: "100%", sm: 320 },
           mx: "auto",
-          borderRadius: 3,
+          borderRadius: { xs: 2, sm: 3 },
           overflow: "hidden",
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           border: `1px solid ${brand.borderSoft}`,
@@ -255,8 +255,8 @@ export default function ProductCard({
               spacing={0.75}
               sx={{
                 position: "absolute",
-                top: 12,
-                left: 12,
+                top: { xs: 6, sm: 12 },
+                left: { xs: 6, sm: 12 },
                 zIndex: 2,
                 flexWrap: "wrap",
                 gap: 0.75,
@@ -269,8 +269,8 @@ export default function ProductCard({
                     label={badge.label}
                     color={badge.color}
                     sx={{
-                      fontSize: { xs: 10, sm: 11 },
-                      height: { xs: 22, sm: 24 },
+                      fontSize: { xs: 8, sm: 11 },
+                      height: { xs: 18, sm: 24 },
                       fontWeight: 600,
                       backdropFilter: "blur(8px)",
                       background:
@@ -279,7 +279,7 @@ export default function ProductCard({
                           : undefined,
                       boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                       "& .MuiChip-label": {
-                        px: 1.5,
+                        px: { xs: 0.75, sm: 1.5 },
                       },
                     }}
                   />
@@ -294,8 +294,8 @@ export default function ProductCard({
               <Box
                 sx={{
                   position: "absolute",
-                  top: 12,
-                  right: 12,
+                  top: { xs: 6, sm: 12 },
+                  right: { xs: 6, sm: 12 },
                   zIndex: 3,
                 }}
               >
@@ -308,6 +308,8 @@ export default function ProductCard({
                     onClick={handleWishlistToggle}
                     size={isMobile ? "small" : "medium"}
                     sx={{
+                      width: { xs: 30, sm: 40 },
+                      height: { xs: 30, sm: 40 },
                       bgcolor: "rgba(255, 255, 255, 0.9)",
                       backdropFilter: "blur(8px)",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
@@ -323,14 +325,14 @@ export default function ProductCard({
                       <FavoriteIcon
                         sx={{
                           color: brand.primary,
-                          fontSize: { xs: 18, sm: 20 },
+                          fontSize: { xs: 16, sm: 20 },
                         }}
                       />
                     ) : (
                       <FavoriteBorderIcon
                         sx={{
                           color: brand.text,
-                          fontSize: { xs: 18, sm: 20 },
+                          fontSize: { xs: 16, sm: 20 },
                         }}
                       />
                     )}
@@ -345,9 +347,9 @@ export default function ProductCard({
             <Box
               sx={{
                 position: "absolute",
-                left: 12,
-                right: 12,
-                bottom: 12,
+                left: { xs: 6, sm: 12 },
+                right: { xs: 6, sm: 12 },
+                bottom: { xs: 6, sm: 12 },
                 opacity: hovered ? 1 : 0,
                 transform: hovered ? "translateY(0)" : "translateY(12px)",
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -362,8 +364,9 @@ export default function ProductCard({
                 disabled={stock <= 0}
                 sx={{
                   borderRadius: "24px",
-                  py: 1.25,
-                  fontSize: { xs: "0.875rem", sm: "0.9375rem" },
+                  py: { xs: 0.625, sm: 1.25 },
+                  minHeight: { xs: 32, sm: 42 },
+                  fontSize: { xs: "0.7rem", sm: "0.9375rem" },
                   fontWeight: 600,
                   background: `linear-gradient(135deg, ${brand.gradientStart}, ${brand.gradientEnd})`,
                   color: "#FFFFFF",
@@ -393,23 +396,23 @@ export default function ProductCard({
             <Box
               sx={{
                 position: "absolute",
-                bottom: 12,
-                left: 12,
+                bottom: { xs: 6, sm: 12 },
+                left: { xs: 6, sm: 12 },
                 display: hovered ? "none" : "flex",
                 alignItems: "center",
                 gap: 0.5,
                 bgcolor: brand.success,
                 color: "#FFFFFF",
-                px: 1.5,
-                py: 0.5,
+                px: { xs: 0.75, sm: 1.5 },
+                py: { xs: 0.25, sm: 0.5 },
                 borderRadius: "20px",
-                fontSize: { xs: 11, sm: 12 },
+                fontSize: { xs: 9, sm: 12 },
                 fontWeight: 700,
                 boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                 backdropFilter: "blur(8px)",
               }}
             >
-              <LocalOfferOutlinedIcon sx={{ fontSize: 14 }} />
+              <LocalOfferOutlinedIcon sx={{ fontSize: { xs: 11, sm: 14 } }} />
               {discount}% OFF
             </Box>
           )}
@@ -418,20 +421,20 @@ export default function ProductCard({
         {/* Content Section */}
         <CardContent
           sx={{
-            p: { xs: 1.75, sm: 2 },
-            "&:last-child": { pb: { xs: 1.75, sm: 2 } },
+            p: { xs: 0.75, sm: 2 },
+            "&:last-child": { pb: { xs: 0.75, sm: 2 } },
           }}
         >
           {/* Category/Collection */}
           {(getCollection(product) || getCategory(product)) && (
             <Typography
               sx={{
-                fontSize: { xs: 11, sm: 12 },
+                fontSize: { xs: 8, sm: 12 },
                 color: brand.primary,
                 fontWeight: 600,
                 textTransform: "uppercase",
-                letterSpacing: 0.8,
-                mb: 0.5,
+                letterSpacing: { xs: 0.4, sm: 0.8 },
+                mb: { xs: 0.15, sm: 0.5 },
               }}
             >
               {getCollection(product) || getCategory(product)}
@@ -442,10 +445,10 @@ export default function ProductCard({
           {specPreview && (
             <Typography
               sx={{
-                fontSize: { xs: 10, sm: 11 },
+                fontSize: { xs: 8, sm: 11 },
                 color: brand.textMuted,
-                mb: 0.75,
-                letterSpacing: 0.3,
+                mb: { xs: 0.25, sm: 0.75 },
+                letterSpacing: { xs: 0.15, sm: 0.3 },
               }}
             >
               {specPreview}
@@ -462,13 +465,13 @@ export default function ProductCard({
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
-              minHeight: { xs: 36, sm: 40 },
+              minHeight: { xs: 24, sm: 40 },
               textDecoration: "none",
               color: brand.text,
               fontWeight: 600,
-              mb: 1,
-              fontSize: { xs: "0.9375rem", sm: "1rem" },
-              lineHeight: 1.4,
+              mb: { xs: 0.35, sm: 1 },
+              fontSize: { xs: "0.7rem", sm: "1rem" },
+              lineHeight: { xs: 1.18, sm: 1.4 },
               transition: "color 0.2s ease",
               "&:hover": {
                 color: brand.primary,
@@ -481,14 +484,14 @@ export default function ProductCard({
           {/* Price Section */}
           <Stack
             direction="row"
-            spacing={1}
+            spacing={{ xs: 0.5, sm: 1 }}
             alignItems="center"
-            sx={{ mb: 1.5 }}
+            sx={{ mb: { xs: 0.5, sm: 1.5 }, flexWrap: "wrap" }}
           >
             <Typography
               sx={{
                 fontWeight: 700,
-                fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                fontSize: { xs: "0.8rem", sm: "1.25rem" },
                 color: brand.text,
               }}
             >
@@ -500,7 +503,7 @@ export default function ProductCard({
                   sx={{
                     textDecoration: "line-through",
                     color: brand.textMuted,
-                    fontSize: { xs: "0.875rem", sm: "0.9375rem" },
+                    fontSize: { xs: "0.62rem", sm: "0.9375rem" },
                   }}
                 >
                   {currency(originalPrice)}
@@ -510,10 +513,10 @@ export default function ProductCard({
                   size="small"
                   color="success"
                   sx={{
-                    height: 20,
-                    fontSize: 10,
+                    height: { xs: 16, sm: 20 },
+                    fontSize: { xs: 7, sm: 10 },
                     fontWeight: 700,
-                    "& .MuiChip-label": { px: 1 },
+                    "& .MuiChip-label": { px: { xs: 0.55, sm: 1 } },
                   }}
                 />
               </>
@@ -522,22 +525,22 @@ export default function ProductCard({
 
           {/* Size Selector */}
           {sizes.length > 0 && (
-            <Box sx={{ mb: 1.5 }}>
+            <Box sx={{ mb: { xs: 0.45, sm: 1.5 } }}>
               <Typography
                 sx={{
-                  fontSize: { xs: 10, sm: 11 },
+                  fontSize: { xs: 8, sm: 11 },
                   color: brand.textMuted,
                   fontWeight: 600,
-                  mb: 0.75,
+                  mb: { xs: 0.3, sm: 0.75 },
                   textTransform: "uppercase",
-                  letterSpacing: 0.5,
+                  letterSpacing: { xs: 0.35, sm: 0.5 },
                 }}
               >
                 Available Sizes
               </Typography>
               <Stack
                 direction="row"
-                spacing={0.75}
+                spacing={{ xs: 0.3, sm: 0.75 }}
                 flexWrap="wrap"
                 useFlexGap
               >
@@ -562,8 +565,8 @@ export default function ProductCard({
                       ) : undefined
                     }
                     sx={{
-                      height: { xs: 24, sm: 26 },
-                      fontSize: { xs: 11, sm: 12 },
+                      height: { xs: 18, sm: 26 },
+                      fontSize: { xs: 8, sm: 12 },
                       fontWeight: 600,
                       opacity: size.available ? 1 : 0.4,
                       textDecoration: size.available ? "none" : "line-through",
@@ -575,7 +578,7 @@ export default function ProductCard({
                           }
                         : {},
                       "& .MuiChip-label": {
-                        px: 1.5,
+                        px: { xs: 0.55, sm: 1.5 },
                       },
                     }}
                   />
@@ -590,11 +593,11 @@ export default function ProductCard({
             color={stockChip.color}
             label={stockChip.label}
             sx={{
-              fontSize: { xs: 10, sm: 11 },
-              height: { xs: 22, sm: 24 },
+              fontSize: { xs: 8, sm: 11 },
+              height: { xs: 18, sm: 24 },
               fontWeight: 600,
               borderRadius: "12px",
-              "& .MuiChip-label": { px: 1.5 },
+              "& .MuiChip-label": { px: { xs: 0.7, sm: 1.5 } },
             }}
           />
         </CardContent>

@@ -13,7 +13,6 @@ import {
   Container,
   Divider,
   FormControl,
-  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -322,23 +321,45 @@ export default function NewArrivalsPage() {
             <Typography sx={{ textAlign: "center", opacity: 0.8 }}>{error}</Typography>
           ) : (
             <>
-              <Grid container spacing={{ xs: 1.5, sm: 2.5, md: 3 }}>
+              <Box
+                sx={{
+                  display: "grid",
+                  gap: { xs: 1.5, sm: 2.5, md: 4 },
+                  gridTemplateColumns: {
+                    xs: "repeat(2, minmax(0, 1fr))",
+                    sm: "repeat(2, minmax(0, 1fr))",
+                    md: "repeat(3, minmax(0, 1fr))",
+                    lg: "repeat(4, minmax(0, 1fr))",
+                  },
+                }}
+              >
                 {primaryGrid.map((product) => (
-                  <Grid item xs={12} sm={6} md={3} key={getProductId(product)}>
+                  <Box key={getProductId(product)} sx={{ minWidth: 0 }}>
                     <Box sx={{ position: "relative" }}>
                       <ProductCard product={product} />
                     </Box>
                     <Typography sx={{ mt: 0.75, opacity: 0.75, fontSize: { xs: 11, md: 13 } }}>
                       {newArrivalsPageContent.sections.releasePrefix} {formatReleaseDate(product)}
                     </Typography>
-                  </Grid>
+                  </Box>
                 ))}
-              </Grid>
+              </Box>
 
               {secondaryGrid.length > 0 ? (
-                <Grid container spacing={{ xs: 1.5, sm: 2.5, md: 3 }}>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gap: { xs: 1.5, sm: 2.5, md: 4 },
+                    gridTemplateColumns: {
+                      xs: "repeat(2, minmax(0, 1fr))",
+                      sm: "repeat(2, minmax(0, 1fr))",
+                      md: "repeat(3, minmax(0, 1fr))",
+                      lg: "repeat(4, minmax(0, 1fr))",
+                    },
+                  }}
+                >
                   {secondaryGrid.map((product) => (
-                    <Grid item xs={12} sm={6} md={3} key={getProductId(product)}>
+                    <Box key={getProductId(product)} sx={{ minWidth: 0 }}>
                       <Box sx={{ position: "relative" }}>
                         <Box
                           sx={{
@@ -361,9 +382,9 @@ export default function NewArrivalsPage() {
                       <Typography sx={{ mt: 0.75, opacity: 0.75, fontSize: { xs: 11, md: 13 } }}>
                         {newArrivalsPageContent.sections.releasePrefix} {formatReleaseDate(product)}
                       </Typography>
-                    </Grid>
+                    </Box>
                   ))}
-                </Grid>
+                </Box>
               ) : null}
             </>
           )}

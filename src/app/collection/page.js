@@ -631,19 +631,23 @@ export default function CollectionPage() {
               </AppButton>
             </Paper>
           ) : (
-            <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gap: { xs: 1.5, sm: 2.5, md: 4 },
+                gridTemplateColumns: {
+                  xs: "repeat(2, minmax(0, 1fr))",
+                  sm: "repeat(2, minmax(0, 1fr))",
+                  md: "repeat(3, minmax(0, 1fr))",
+                  lg: "repeat(4, minmax(0, 1fr))",
+                },
+              }}
+            >
               {filteredCollection.map((product, index) => {
                 const badge = getBadgeForIndex(index);
                 return (
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={3}
-                    key={getProductId(product)}
-                  >
-                    <Box>
+                  <Box key={getProductId(product)} sx={{ minWidth: 0 }}>
+                    <Box sx={{ minWidth: 0 }}>
                       {badge && (
                         <Chip
                           icon={badge.icon}
@@ -665,10 +669,10 @@ export default function CollectionPage() {
                         soldOutLabel={collectionPageContent.states.soldOutLabel}
                       />
                     </Box>
-                  </Grid>
+                  </Box>
                 );
               })}
-            </Grid>
+            </Box>
           )}
         </Container>
       </Box>

@@ -8,7 +8,6 @@ import {
   CircularProgress,
   Container,
   Divider,
-  Grid,
   Paper,
   Stack,
   Typography,
@@ -320,20 +319,24 @@ export default function CategoryListingPage({
               </AppButton>
             </Paper>
           ) : (
-            <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gap: { xs: 1.5, sm: 2.5, md: 4 },
+                gridTemplateColumns: {
+                  xs: "repeat(2, minmax(0, 1fr))",
+                  sm: "repeat(2, minmax(0, 1fr))",
+                  md: "repeat(3, minmax(0, 1fr))",
+                  lg: "repeat(4, minmax(0, 1fr))",
+                },
+              }}
+            >
               {filteredProducts.map((product) => (
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  lg={3}
-                  key={getProductId(product)}
-                >
+                <Box key={getProductId(product)} sx={{ minWidth: 0 }}>
                   <ProductCard product={product} />
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           )}
         </Container>
       </Box>
