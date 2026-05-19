@@ -159,7 +159,7 @@ export default function CollectionPage() {
             inset: 0,
             backgroundImage: `url('${isMobile ? collectionPageContent.hero.imageSrcMobile : collectionPageContent.hero.imageSrc}')`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: isMobile ? "top" : "center",
             "&::after": {
               content: '""',
               position: "absolute",

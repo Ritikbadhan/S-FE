@@ -149,7 +149,7 @@ export default function NewArrivalsPage() {
           minHeight: { xs: "60vh", md: "70vh" },
           backgroundImage: (theme) =>
             `linear-gradient(${theme.palette.brand.overlaySoft}, ${theme.palette.brand.overlayStrong}), url('${isMobile ? newArrivalsPageContent.hero.imageSrcMobile : newArrivalsPageContent.hero.imageSrc}')`,
-          backgroundSize: "cover",
+          backgroundSize: isMobile ? "contain" : "cover",
           backgroundPosition: "center",
           display: "flex",
           alignItems: "center",
