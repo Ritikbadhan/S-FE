@@ -113,12 +113,9 @@ export default function ProductEditorScreen({ productId = "" }) {
   /* ---------------- Field Updates ---------------- */
 
   const updateField = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-
-    setFormErrors((prev) => {
-      if (!prev[key]) return prev;
-      const next = { ...prev };
-      delete next[key];
+    setForm((prev) => {
+      const next = { ...prev, [key]: value };
+      setFormErrors(validateForm(next));
       return next;
     });
   };
@@ -128,7 +125,9 @@ export default function ProductEditorScreen({ productId = "" }) {
       const nextVariants = prev.variants.map((variant, variantIndex) =>
         variantIndex === index ? { ...variant, [key]: value } : variant
       );
-      return { ...prev, variants: nextVariants };
+      const next = { ...prev, variants: nextVariants };
+      setFormErrors(validateForm(next));
+      return next;
     });
   };
 
@@ -139,15 +138,13 @@ export default function ProductEditorScreen({ productId = "" }) {
       (category) => String(category._id || category.id) === String(value)
     );
 
-    setForm((prev) => ({
-      ...prev,
-      categoryId: value,
-      category: selected?.slug || "",
-    }));
-
-    setFormErrors((prev) => {
-      const next = { ...prev };
-      delete next.category;
+    setForm((prev) => {
+      const next = {
+        ...prev,
+        categoryId: value,
+        category: selected?.slug || "",
+      };
+      setFormErrors(validateForm(next));
       return next;
     });
   };
@@ -172,14 +169,9 @@ export default function ProductEditorScreen({ productId = "" }) {
         }))
       );
 
-      setForm((prev) => ({
-        ...prev,
-        images: [...prev.images, ...uploaded],
-      }));
-
-      setFormErrors((prev) => {
-        const next = { ...prev };
-        delete next.images;
+      setForm((prev) => {
+        const next = { ...prev, images: [...prev.images, ...uploaded] };
+        setFormErrors(validateForm(next));
         return next;
       });
     } catch (err) {

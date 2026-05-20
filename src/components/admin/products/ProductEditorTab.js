@@ -6,6 +6,7 @@ import {
   Button,
   Chip,
   FormControl,
+  FormHelperText,
   FormControlLabel,
   Grid,
   InputLabel,
@@ -45,6 +46,7 @@ const inputStyle = {
 
 export default function ProductEditorTab({
   form,
+  formErrors = {},
   categories,
   selectedCategoryValue,
   totalStock,
@@ -133,6 +135,8 @@ export default function ProductEditorTab({
                   value={form.name}
                   sx={inputStyle}
                   onChange={(e) => onFieldChange("name", e.target.value)}
+                  error={Boolean(formErrors.name)}
+                  helperText={formErrors.name}
                 />
               </Grid>
 
@@ -147,6 +151,8 @@ export default function ProductEditorTab({
                   onChange={(e) =>
                     onFieldChange("description", e.target.value)
                   }
+                  error={Boolean(formErrors.description)}
+                  helperText={formErrors.description}
                 />
               </Grid>
 
@@ -158,6 +164,7 @@ export default function ProductEditorTab({
                     label="Category"
                     value={selectedCategoryValue}
                     onChange={(e) => onCategoryChange(e.target.value)}
+                    error={Boolean(formErrors.category)}
                   >
                     {categories.map((c) => (
                       <MenuItem key={c._id || c.id} value={c._id || c.id}>
@@ -165,6 +172,9 @@ export default function ProductEditorTab({
                       </MenuItem>
                     ))}
                   </Select>
+                  {formErrors.category ? (
+                    <FormHelperText error>{formErrors.category}</FormHelperText>
+                  ) : null}
                 </FormControl>
               </Grid>
 
@@ -178,6 +188,7 @@ export default function ProductEditorTab({
                     onChange={(e) =>
                       onFieldChange("collection", e.target.value)
                     }
+                    error={Boolean(formErrors.collection)}
                   >
                     {COLLECTION_OPTIONS.map((c) => (
                       <MenuItem key={c} value={c}>
@@ -185,6 +196,9 @@ export default function ProductEditorTab({
                       </MenuItem>
                     ))}
                   </Select>
+                  {formErrors.collection ? (
+                    <FormHelperText error>{formErrors.collection}</FormHelperText>
+                  ) : null}
                 </FormControl>
               </Grid>
             </Grid>
@@ -202,6 +216,8 @@ export default function ProductEditorTab({
                   sx={inputStyle}
                   value={form.price}
                   onChange={(e) => onFieldChange("price", e.target.value)}
+                  error={Boolean(formErrors.price)}
+                  helperText={formErrors.price}
                 />
               </Grid>
 
@@ -213,6 +229,8 @@ export default function ProductEditorTab({
                   sx={inputStyle}
                   value={form.mrp}
                   onChange={(e) => onFieldChange("mrp", e.target.value)}
+                  error={Boolean(formErrors.mrp)}
+                  helperText={formErrors.mrp}
                 />
               </Grid>
 
@@ -226,6 +244,8 @@ export default function ProductEditorTab({
                   onChange={(e) =>
                     onFieldChange("originalPrice", e.target.value)
                   }
+                  error={Boolean(formErrors.originalPrice)}
+                  helperText={formErrors.originalPrice}
                 />
               </Grid>
             </Grid>
@@ -290,6 +310,11 @@ export default function ProductEditorTab({
                   </Grid>
                 ))}
               </Grid>
+              {formErrors.images ? (
+                <FormHelperText error sx={{ mt: 1 }}>
+                  {formErrors.images}
+                </FormHelperText>
+              ) : null}
             </Stack>
           )}
 
@@ -310,6 +335,7 @@ export default function ProductEditorTab({
                           onChange={(e) =>
                             onVariantChange(index, "size", e.target.value)
                           }
+                            error={Boolean(formErrors[`variant_size_${index}`])}
                         >
                           {SIZE_OPTIONS.map((s) => (
                             <MenuItem key={s} value={s}>
@@ -317,6 +343,11 @@ export default function ProductEditorTab({
                             </MenuItem>
                           ))}
                         </Select>
+                        {formErrors[`variant_size_${index}`] ? (
+                          <FormHelperText error>
+                            {formErrors[`variant_size_${index}`]}
+                          </FormHelperText>
+                        ) : null}
                       </FormControl>
                     </Grid>
 
@@ -326,8 +357,10 @@ export default function ProductEditorTab({
                         label="Color"
                         value={variant.color}
                         onChange={(e) =>
-                          onVariantChange(index, "color", e.target.value)
-                        }
+                              onVariantChange(index, "color", e.target.value)
+                            }
+                        error={Boolean(formErrors[`variant_color_${index}`] || formErrors[`variant_duplicate_${index}`])}
+                        helperText={formErrors[`variant_color_${index}`] || formErrors[`variant_duplicate_${index}`]}
                       />
                     </Grid>
 
@@ -338,8 +371,10 @@ export default function ProductEditorTab({
                         type="number"
                         value={variant.stock}
                         onChange={(e) =>
-                          onVariantChange(index, "stock", e.target.value)
-                        }
+                              onVariantChange(index, "stock", e.target.value)
+                            }
+                        error={Boolean(formErrors[`variant_stock_${index}`])}
+                        helperText={formErrors[`variant_stock_${index}`]}
                       />
                     </Grid>
                   </Grid>
@@ -479,13 +514,13 @@ export default function ProductEditorTab({
             Back
           </Button>
 
-          {activeStep === steps.length - 1 ? (
+          {activeStep === steps.length ? (
             <Button type="submit" variant="contained" size="large">
               {isEditing ? "Update Product" : "Create Product"}
             </Button>
           ) : (
             <Button variant="contained" onClick={next}>
-              Next
+              {activeStep  ==5 ? "Create Product" : "Next"}
             </Button>
           )}
         </Stack>
