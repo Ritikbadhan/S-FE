@@ -217,15 +217,12 @@ export default function ProductEditorScreen({ productId = "" }) {
     }));
   };
 
-  const removeVariant = (index) => {
-    setForm((prev) => ({
-      ...prev,
-      variants:
-        prev.variants.length > 1
-          ? prev.variants.filter((_, i) => i !== index)
-          : prev.variants,
-    }));
-  };
+const removeVariant = (index) => {
+  setForm((prev) => ({
+    ...prev,
+    variants: prev.variants.filter((_, i) => i !== index),
+  }));
+};
 
   /* ---------------- Reset ---------------- */
 

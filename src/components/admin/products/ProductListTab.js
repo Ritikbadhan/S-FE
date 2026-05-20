@@ -412,46 +412,70 @@ export default function ProductListTab({
           </Typography>
         </Box>
 
-        <Stack 
-          direction={{ xs: "column", sm: "row" }} 
-          spacing={{ xs: 1.5, sm: 1 }}
-          sx={{ width: { xs: "100%", sm: "auto" } }}
-        >
+        <Stack
+  direction={{ xs: "column", sm: "row" }}
+  spacing={2}
+  alignItems="center"
+  sx={{
+    width: { xs: "100%", sm: "auto" },
+  }}
+>
           <Button 
             variant="contained" 
             onClick={onAddProduct}
             startIcon={<AddIcon />}
             sx={{
-              borderRadius: { xs: 2, sm: 2.5 },
-              py: { xs: 1, sm: 1.2 },
-              px: { xs: 2, sm: 2.5 },
-              fontWeight: 600,
-              fontSize: { xs: "0.875rem", sm: "0.938rem" },
-              textTransform: "none",
-              boxShadow: theme.palette.brand?.shadowButton || "0 4px 12px rgba(0,0,0,0.15)",
-              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-              transition: "all 0.3s ease",
-              "&:hover": {
-                transform: "translateY(-2px)",
-                boxShadow: theme.palette.brand?.shadowCardStrong || "0 6px 16px rgba(0,0,0,0.2)",
-              },
-            }}
+            height: 48,
+            minWidth: 170,
+            borderRadius: "24px",
+            px: 3,
+            fontWeight: 600,
+            textTransform: "none",
+            background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+            boxShadow: theme.palette.brand?.shadowButton || "0 4px 12px rgba(0,0,0,0.15)",
+
+            "&:hover": {
+              transform: "translateY(-2px)",
+              boxShadow:
+                theme.palette.brand?.shadowCardStrong ||
+                "0 6px 16px rgba(0,0,0,0.2)",
+            },
+          }}
           >
             Add Product
           </Button>
 
           <FormControl 
             size="small" 
-            sx={{ 
-              minWidth: { xs: "100%", sm: 160 },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: { xs: 2, sm: 2.5 },
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  borderColor: theme.palette.primary.main,
-                },
-              },
-            }}
+          sx={{
+            minWidth: 180,
+
+            "& .MuiOutlinedInput-root": {
+              height: 48,
+              borderRadius: "24px",
+              backgroundColor: "#fff",
+              display: "flex",
+              alignItems: "center",
+            },
+
+            "& .MuiSelect-select": {
+              display: "flex",
+              alignItems: "center",
+              height: "48px",
+              paddingTop: "0 !important",
+              paddingBottom: "0 !important",
+            },
+
+            "& .MuiInputLabel-root": {
+              top: "50%",
+              transform: "translate(14px, -50%) scale(1)",
+            },
+
+            "& .MuiInputLabel-shrink": {
+              top: 0,
+              transform: "translate(14px, -9px) scale(0.75)",
+            },
+          }}
           >
             <InputLabel>Category</InputLabel>
             <Select
@@ -471,16 +495,35 @@ export default function ProductListTab({
 
           <FormControl 
             size="small" 
-            sx={{ 
-              minWidth: { xs: "100%", sm: 160 },
-              "& .MuiOutlinedInput-root": {
-                borderRadius: { xs: 2, sm: 2.5 },
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  borderColor: theme.palette.primary.main,
-                },
-              },
-            }}
+            sx={{
+            minWidth: 180,
+
+            "& .MuiOutlinedInput-root": {
+              height: 48,
+              borderRadius: "24px",
+              backgroundColor: "#fff",
+              display: "flex",
+              alignItems: "center",
+            },
+
+            "& .MuiSelect-select": {
+              display: "flex",
+              alignItems: "center",
+              height: "48px",
+              paddingTop: "0 !important",
+              paddingBottom: "0 !important",
+            },
+
+            "& .MuiInputLabel-root": {
+              top: "50%",
+              transform: "translate(14px, -50%) scale(1)",
+            },
+
+            "& .MuiInputLabel-shrink": {
+              top: 0,
+              transform: "translate(14px, -9px) scale(0.75)",
+            },
+          }}
           >
             <InputLabel>Collection</InputLabel>
             <Select

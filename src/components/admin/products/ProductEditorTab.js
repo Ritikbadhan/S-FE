@@ -35,12 +35,24 @@ const steps = [
   "Specifications",
   "SEO & Flags",
 ];
-
-const inputStyle = {
-  width: "100%",
+const fieldStyle = {
   "& .MuiOutlinedInput-root": {
-    borderRadius: 2,
-    background: "#fff",
+    height: 56,
+    borderRadius: "16px",
+    backgroundColor: "#fff",
+  },
+
+  "& .MuiInputLabel-root": {
+    fontWeight: 500,
+  },
+};
+
+const textareaStyle = {
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "16px",
+    backgroundColor: "#fff",
+    alignItems: "flex-start",
+    paddingTop: "8px",
   },
 };
 
@@ -126,14 +138,14 @@ export default function ProductEditorTab({
         >
           {/* STEP 1 PRODUCT INFO */}
 
-          {activeStep === 0 && (
+          {/* {activeStep === 0 && (
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
                   label="Product Name"
                   value={form.name}
-                  sx={inputStyle}
+                  sx={fieldStyle}
                   onChange={(e) => onFieldChange("name", e.target.value)}
                   error={Boolean(formErrors.name)}
                   helperText={formErrors.name}
@@ -146,7 +158,7 @@ export default function ProductEditorTab({
                   multiline
                   minRows={4}
                   label="Description"
-                  sx={inputStyle}
+                  sx={fieldStyle}
                   value={form.description}
                   onChange={(e) =>
                     onFieldChange("description", e.target.value)
@@ -157,7 +169,7 @@ export default function ProductEditorTab({
               </Grid>
 
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth sx={inputStyle}>
+                <FormControl fullWidth sx={fieldStyle}>
                   <InputLabel>Category</InputLabel>
 
                   <Select
@@ -179,7 +191,7 @@ export default function ProductEditorTab({
               </Grid>
 
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth sx={inputStyle}>
+                <FormControl fullWidth sx={fieldStyle}>
                   <InputLabel>Collection</InputLabel>
 
                   <Select
@@ -202,7 +214,89 @@ export default function ProductEditorTab({
                 </FormControl>
               </Grid>
             </Grid>
-          )}
+          )} */}
+        {activeStep === 0 && (
+  <Grid container spacing={3}>
+    
+    {/* FIRST ROW */}
+    <Grid item xs={12} md={6}>
+      <TextField
+        fullWidth
+        label="Product Name"
+        value={form.name}
+        onChange={(e) => onFieldChange("name", e.target.value)}
+        sx={fieldStyle}
+      />
+    </Grid>
+
+    <Grid item xs={12} md={8}>
+      <FormControl
+  fullWidth
+  sx={{
+    minWidth: 320,
+    ...fieldStyle,
+  }}
+>
+        <InputLabel>Category</InputLabel>
+
+        <Select
+          label="Category"
+          value={selectedCategoryValue}
+          onChange={(e) => onCategoryChange(e.target.value)}
+        >
+          {categories.map((c) => (
+            <MenuItem key={c._id || c.id} value={c._id || c.id}>
+              {c.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* DESCRIPTION */}
+    <Grid item xs={12} md={8}>
+      <TextField
+        fullWidth
+        multiline
+        minRows={3}
+        label="Description"
+        value={form.description}
+        onChange={(e) =>
+          onFieldChange("description", e.target.value)
+        }
+        sx={textareaStyle}
+      />
+    </Grid>
+
+    {/* COLLECTION */}
+    <Grid item xs={12} md={4}>
+      <FormControl
+  fullWidth
+  sx={{
+    minWidth: 260,
+    ...fieldStyle,
+  }}
+>
+        <InputLabel>Collection</InputLabel>
+
+        <Select
+          label="Collection"
+          value={form.collection}
+          onChange={(e) =>
+            onFieldChange("collection", e.target.value)
+          }
+        >
+          {COLLECTION_OPTIONS.map((c) => (
+            <MenuItem key={c} value={c}>
+              {c}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+
+  </Grid>
+)}
 
           {/* STEP 2 PRICING */}
 
@@ -213,7 +307,7 @@ export default function ProductEditorTab({
                   fullWidth
                   label="Price"
                   type="number"
-                  sx={inputStyle}
+                  sx={fieldStyle}
                   value={form.price}
                   onChange={(e) => onFieldChange("price", e.target.value)}
                   error={Boolean(formErrors.price)}
@@ -226,7 +320,7 @@ export default function ProductEditorTab({
                   fullWidth
                   label="MRP"
                   type="number"
-                  sx={inputStyle}
+                  sx={fieldStyle}
                   value={form.mrp}
                   onChange={(e) => onFieldChange("mrp", e.target.value)}
                   error={Boolean(formErrors.mrp)}
@@ -239,7 +333,7 @@ export default function ProductEditorTab({
                   fullWidth
                   label="Original Price"
                   type="number"
-                  sx={inputStyle}
+                  sx={fieldStyle}
                   value={form.originalPrice}
                   onChange={(e) =>
                     onFieldChange("originalPrice", e.target.value)
@@ -268,44 +362,64 @@ export default function ProductEditorTab({
 
               <Grid container spacing={2}>
                 {form.images.map((image, index) => (
-                  <Grid item xs={6} md={3} key={image.id}>
+                  <Grid item xs={6} sm={4} md={2.4} key={image.id}>
                     <Paper
                       draggable
                       onDragStart={() => onImageDragStart(image.id)}
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={() => onImageDrop(dragImageId, image.id)}
-                      sx={{ p: 1.5 }}
+                      sx={{
+  p: 1.5,
+  borderRadius: 3,
+  overflow: "hidden",
+  border: "1px solid rgba(0,0,0,0.08)",
+  boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
+}}
                     >
                       <Box
                         component="img"
                         src={image.src}
-                        sx={{
-                          width: "100%",
-                          aspectRatio: "1/1",
-                          objectFit: "cover",
-                        }}
+                         sx={{
+    width: "100%",
+    height: 180,
+    objectFit: "cover",
+    borderRadius: 2,
+  }}
                       />
 
                       <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        sx={{ mt: 1 }}
-                      >
-                        <Chip
-                          size="small"
-                          label={
-                            index === 0 ? "Thumbnail" : `#${index + 1}`
-                          }
-                        />
+  direction="row"
+  alignItems="center"
+  justifyContent="space-between"
+  sx={{
+    mt: 1.5,
+    minHeight: 36,
+  }}
+>
+  <Chip
+    size="small"
+    label={
+      index === 0 ? "Thumbnail" : `#${index + 1}`
+    }
+    sx={{
+      minWidth: 90,
+      justifyContent: "center",
+      fontWeight: 600,
+    }}
+  />
 
-                        <Button
-                          size="small"
-                          color="error"
-                          onClick={() => onImageRemove(image.id)}
-                        >
-                          Remove
-                        </Button>
-                      </Stack>
+  <Button
+    size="small"
+    color="error"
+    onClick={() => onImageRemove(image.id)}
+    sx={{
+      minWidth: 70,
+      fontWeight: 600,
+    }}
+  >
+    Remove
+  </Button>
+</Stack>
                     </Paper>
                   </Grid>
                 ))}
