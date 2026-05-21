@@ -33,7 +33,6 @@ import { WishlistContext } from "@/context/WishlistContext";
 import { AppButton, AppInput, useToast } from "@/components/common";
 
 const FREE_SHIPPING_THRESHOLD = 1999;
-const GST_RATE = 0.12;
 const STANDARD_SHIPPING = 120;
 
 const getProductId = (item) => item?.id || item?._id || item?.productId;
@@ -54,7 +53,7 @@ const getItemDescription = (item) =>
 
 const estimatedDeliveryDate = () => {
   const date = new Date();
-  date.setDate(date.getDate() + 4);
+  date.setDate(date.getDate() + 5);
   return date.toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
@@ -168,8 +167,7 @@ export default function CartPage() {
     subtotal >= FREE_SHIPPING_THRESHOLD || subtotal === 0
       ? 0
       : STANDARD_SHIPPING;
-  const gst = Math.max(0, Math.round((subtotal - couponValue) * GST_RATE));
-  const total = Math.max(0, subtotal - couponValue + shipping + gst);
+  const total = Math.max(0, subtotal - couponValue + shipping);
 
   const handleApplyCoupon = () => {
     const code = couponCode.trim().toUpperCase();
@@ -634,15 +632,6 @@ export default function CartPage() {
                     </Typography>
                     <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
                       {shipping === 0 ? "Free" : currency(shipping)}
-                    </Typography>
-                  </Box>
-
-                  <Box display="flex" justifyContent="space-between">
-                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-                      GST
-                    </Typography>
-                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-                      {currency(gst)}
                     </Typography>
                   </Box>
 

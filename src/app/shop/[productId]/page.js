@@ -402,7 +402,7 @@ export default function ProductDetailsPage() {
   const modelInfo = "Model is 6'1\" wearing size M";
   const estimatedDate = (() => {
     const d = new Date();
-    d.setDate(d.getDate() + 4);
+    d.setDate(d.getDate() + 5);
     return d.toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",

@@ -327,21 +327,6 @@ export default function ProductEditorTab({
                   helperText={formErrors.mrp}
                 />
               </Grid>
-
-              <Grid item xs={12} md={4}>
-                <TextField
-                  fullWidth
-                  label="Original Price"
-                  type="number"
-                  sx={fieldStyle}
-                  value={form.originalPrice}
-                  onChange={(e) =>
-                    onFieldChange("originalPrice", e.target.value)
-                  }
-                  error={Boolean(formErrors.originalPrice)}
-                  helperText={formErrors.originalPrice}
-                />
-              </Grid>
             </Grid>
           )}
 

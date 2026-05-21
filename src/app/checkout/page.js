@@ -780,14 +780,6 @@ export default function CheckoutPage() {
                   <Typography sx={{ opacity: 0.8 }}>Shipping</Typography>
                   <Typography>{currency(shippingAmount)}</Typography>
                 </Stack>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  sx={{ mb: 1 }}
-                >
-                  <Typography sx={{ opacity: 0.8 }}>Tax (GST)</Typography>
-                  <Typography>{currency(taxAmount)}</Typography>
-                </Stack>
                 <Divider sx={{ my: 1.5 }} />
                 <Stack
                   direction="row"
