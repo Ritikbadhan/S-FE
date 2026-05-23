@@ -72,8 +72,8 @@ export default function CartPage() {
   const [couponValue, setCouponValue] = useState(0);
   const [couponLabel, setCouponLabel] = useState("");
   const [openAddressPopup, setOpenAddressPopup] = useState(false);
-  const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  // const [addresses, setAddresses] = useState([]);
+  // const [selectedAddress, setSelectedAddress] = useState(null);
 
   // Form states for add/edit address
   const [addressForm, setAddressForm] = useState({
@@ -86,16 +86,16 @@ export default function CartPage() {
     state: "",
   });
 
-  useEffect(() => {
-    const savedAddresses = localStorage.getItem("addresses");
-    if (savedAddresses) {
-      const parsed = JSON.parse(savedAddresses);
-      setAddresses(parsed);
-      if (parsed.length > 0 && !selectedAddress) {
-        setSelectedAddress(parsed[0]);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedAddresses = localStorage.getItem("addresses");
+  //   if (savedAddresses) {
+  //     const parsed = JSON.parse(savedAddresses);
+  //     setAddresses(parsed);
+  //     if (parsed.length > 0 && !selectedAddress) {
+  //       setSelectedAddress(parsed[0]);
+  //     }
+  //   }
+  // }, []);
 
   const handleOpenAddressPopup = () => {
     setOpenAddressPopup(true);
@@ -163,11 +163,7 @@ export default function CartPage() {
   );
 
   const productDiscount = Math.max(0, compareSubtotal - subtotal);
-  const shipping =
-    subtotal >= FREE_SHIPPING_THRESHOLD || subtotal === 0
-      ? 0
-      : STANDARD_SHIPPING;
-  const total = Math.max(0, subtotal - couponValue + shipping);
+  const total = Math.max(0, subtotal - couponValue);
 
   const handleApplyCoupon = () => {
     const code = couponCode.trim().toUpperCase();
@@ -297,6 +293,7 @@ export default function CartPage() {
           {/* LEFT SECTION */}
           <Grid item xs={12} lg={8}>
             {/* ADDRESS SECTION */}
+            {/* {selectedAddress ?
             <Card
               sx={{
                 border: "1px solid #e5e5e5",
@@ -325,8 +322,8 @@ export default function CartPage() {
                     }}
                   >
                     Deliver to:{" "}
-                    {selectedAddress ? selectedAddress.name : "BHARTI PAWAR"},{" "}
-                    {selectedAddress ? selectedAddress.pinCode : "121004"}
+                    {selectedAddress?.name},{" "}
+                    {selectedAddress?.pinCode}
                   </Typography>
 
                   <Typography
@@ -338,9 +335,7 @@ export default function CartPage() {
                       maxWidth: "85%",
                     }}
                   >
-                    {selectedAddress
-                      ? `${selectedAddress.houseNumber}, ${selectedAddress.address}, ${selectedAddress.city}, ${selectedAddress.state}`
-                      : "2065, HOUSE, BALLABGARH FARIDABAD, Haryana"}
+                    { `${selectedAddress?.houseNumber}, ${selectedAddress?.address}, ${selectedAddress?.city}, ${selectedAddress?.state}` }
                   </Typography>
                 </Box>
 
@@ -353,9 +348,11 @@ export default function CartPage() {
                 </AppButton>
               </CardContent>
             </Card>
+             : <></>} */}
+            
 
             {/* OFFER SECTION */}
-            <Card
+            {/* <Card
               sx={{
                 border: "1px solid #e5e5e5",
                 borderRadius: 1,
@@ -378,7 +375,7 @@ export default function CartPage() {
                   7.5% Assured Cashback on minimum spend of ₹100
                 </Typography>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* CART ITEMS */}
             <Stack spacing={{ xs: 1.5, md: 2 }}>
@@ -626,15 +623,6 @@ export default function CartPage() {
                     </Box>
                   )}
 
-                  <Box display="flex" justifyContent="space-between">
-                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-                      Shipping
-                    </Typography>
-                    <Typography sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-                      {shipping === 0 ? "Free" : currency(shipping)}
-                    </Typography>
-                  </Box>
-
                   <Divider />
 
                   <Box display="flex" justifyContent="space-between">
@@ -686,285 +674,6 @@ export default function CartPage() {
           </Grid>
         </Grid>
       </Container>
-      <Dialog
-        open={openAddressPopup}
-        onClose={handleCloseAddressPopup}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle
-          sx={{
-            fontWeight: 700,
-            fontSize: { xs: "1rem", sm: "24px" },
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          Select Delivery Address
-          <IconButton onClick={handleCloseAddressPopup}>✕</IconButton>
-        </DialogTitle>
-
-        <DialogContent>
-          {/* PINCODE */}
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              mb: { xs: 2, sm: 3 },
-              mt: 1,
-            }}
-          >
-            <AppInput fullWidth placeholder="Enter Pincode" />
-
-            <AppButton variant="outlined">CHECK</AppButton>
-          </Box>
-
-          {/* SAVED ADDRESS HEADER */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              mb: { xs: 1.5, sm: 2 },
-            }}
-          >
-            <Typography fontWeight={700} sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-              SAVED ADDRESS
-            </Typography>
-
-            <Typography
-              sx={{
-                color: "#ff3f6c",
-                fontWeight: 600,
-                cursor: "pointer",
-                fontSize: { xs: "0.74rem", sm: "0.875rem" },
-              }}
-              onClick={handleOpenEditPopup}
-            >
-              + Add New Address
-            </Typography>
-          </Box>
-
-          {/* SAVED ADDRESSES */}
-          {addresses.map((addr) => (
-            <Card
-              key={addr.id}
-              sx={{
-                border: "1px solid #e5e5e5",
-                mb: 2,
-                boxShadow: "none",
-              }}
-            >
-              <CardContent>
-                <Stack direction="row" spacing={{ xs: 1, sm: 2 }} alignItems="flex-start">
-                  <Radio
-                    checked={selectedAddress?.id === addr.id}
-                    onChange={() => setSelectedAddress(addr)}
-                  />
-
-                  <Box sx={{ flex: 1 }}>
-                    <Typography fontWeight={700} sx={{ fontSize: { xs: "0.82rem", sm: "1rem" } }}>
-                      {addr.name}
-                    </Typography>
-
-                    <Typography variant="body2" sx={{ fontSize: { xs: "0.72rem", sm: "0.875rem" } }}>
-                      {addr.houseNumber}, {addr.address}, {addr.city},{" "}
-                      {addr.state} - {addr.pinCode}
-                    </Typography>
-
-                    <Typography sx={{ mt: 0.75, fontSize: { xs: "0.72rem", sm: "1rem" } }}>
-                      Mobile: <b>{addr.mobile}</b>
-                    </Typography>
-
-                    <Stack
-                      direction={{ xs: "column", sm: "row" }}
-                      spacing={0.7}
-                      sx={{ mt: 1.25 }}
-                    >
-                      <AppButton
-                        size="small"
-                        onClick={() => {
-                          setSelectedAddress(addr);
-                          handleCloseAddressPopup();
-                          toast.success("Address selected.");
-                        }}
-                        sx={{ fontSize: { xs: "0.66rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
-                      >
-                        DELIVER HERE
-                      </AppButton>
-
-                      <AppButton
-                        variant="outlined"
-                        size="small"
-                        onClick={handleOpenEditPopup}
-                        sx={{ fontSize: { xs: "0.66rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
-                      >
-                        EDIT
-                      </AppButton>
-
-                      <AppButton
-                        variant="outlined"
-                        color="error"
-                        size="small"
-                        onClick={() => {
-                          const updated = addresses.filter(
-                            (a) => a.id !== addr.id
-                          );
-                          setAddresses(updated);
-                          localStorage.setItem(
-                            "addresses",
-                            JSON.stringify(updated)
-                          );
-                          if (selectedAddress?.id === addr.id) {
-                            setSelectedAddress(updated[0] || null);
-                          }
-                          toast.info("Address deleted.");
-                        }}
-                        sx={{ fontSize: { xs: "0.66rem", sm: "0.75rem" }, py: { xs: 0.45, sm: 0.6 } }}
-                      >
-                        DELETE
-                      </AppButton>
-                    </Stack>
-                  </Box>
-                </Stack>
-              </CardContent>
-            </Card>
-          ))}
-        </DialogContent>
-      </Dialog>
-      <Dialog
-        open={openEditAddressPopup}
-        onClose={handleCloseEditPopup}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontWeight: 700,
-            fontSize: { xs: "0.98rem", sm: "22px" },
-          }}
-        >
-          ADD NEW ADDRESS
-          <IconButton onClick={handleCloseEditPopup}>✕</IconButton>
-        </DialogTitle>
-
-        <DialogContent>
-          <Stack spacing={{ xs: 2, sm: 3 }} sx={{ mt: { xs: 1.25, sm: 2 } }}>
-            {/* CONTACT DETAILS */}
-            <Typography fontWeight={700} sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-              CONTACT DETAILS
-            </Typography>
-
-            <AppInput
-              fullWidth
-              placeholder="Name*"
-              value={addressForm.name}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, name: e.target.value })
-              }
-            />
-
-            <AppInput
-              fullWidth
-              placeholder="Mobile No*"
-              value={addressForm.mobile}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, mobile: e.target.value })
-              }
-            />
-
-            {/* ADDRESS */}
-            <Typography fontWeight={700} sx={{ fontSize: { xs: "0.8rem", sm: "1rem" } }}>
-              ADDRESS
-            </Typography>
-
-            <AppInput
-              fullWidth
-              placeholder="Pin Code*"
-              value={addressForm.pinCode}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, pinCode: e.target.value })
-              }
-            />
-
-            <AppInput
-              fullWidth
-              placeholder="House Number/Tower/Block*"
-              value={addressForm.houseNumber}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, houseNumber: e.target.value })
-              }
-            />
-
-            <Typography
-              sx={{
-                color: "#f5a623",
-                fontSize: { xs: 12, sm: 14 },
-                mt: -2,
-              }}
-            >
-              *House Number will allow a doorstep delivery
-            </Typography>
-
-            <AppInput
-              fullWidth
-              placeholder="Address (locality, building, street)*"
-              value={addressForm.address}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, address: e.target.value })
-              }
-            />
-
-            <AppInput
-              fullWidth
-              placeholder="City*"
-              value={addressForm.city}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, city: e.target.value })
-              }
-            />
-
-            <AppInput
-              fullWidth
-              placeholder="State*"
-              value={addressForm.state}
-              onChange={(e) =>
-                setAddressForm({ ...addressForm, state: e.target.value })
-              }
-            />
-
-            {/* BUTTONS */}
-            <Stack direction="row" spacing={1.2} sx={{ mt: { xs: 1.25, sm: 2 } }}>
-              <AppButton
-                fullWidth
-                variant="outlined"
-                onClick={handleCloseEditPopup}
-                sx={{ fontSize: { xs: "0.78rem", sm: "0.875rem" }, py: { xs: 0.55, sm: 0.8 } }}
-              >
-                Cancel
-              </AppButton>
-
-              <AppButton
-                fullWidth
-                onClick={handleSaveAddress}
-                sx={{
-                  bgcolor: "#ff3f6c",
-                  fontSize: { xs: "0.78rem", sm: "0.875rem" },
-                  py: { xs: 0.55, sm: 0.8 },
-                  "&:hover": {
-                    bgcolor: "#ff3f6c",
-                  },
-                }}
-              >
-                Save
-              </AppButton>
-            </Stack>
-          </Stack>
-        </DialogContent>
-      </Dialog>
     </Box>
   );
 }

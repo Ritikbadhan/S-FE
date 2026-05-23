@@ -227,7 +227,7 @@ export default function CheckoutPage() {
   const discountAmount = Math.max(0, Math.min(subtotal, rawDiscountAmount));
   const taxableSubtotal = Math.max(0, subtotal - discountAmount);
   const taxAmount = Math.max(0, Math.round(taxableSubtotal * 0.12));
-  const total = taxableSubtotal + shippingAmount + taxAmount;
+  const total = taxableSubtotal; // + shippingAmount + taxAmount;
 
   const selectedAddress =
     addresses.find((address) => address.id === selectedAddressId) || null;
@@ -688,7 +688,7 @@ export default function CheckoutPage() {
                       : "-"}
                   </Typography>
 
-                  <RadioGroup
+                  {/* <RadioGroup
                     value={selectedShippingId}
                     onChange={(event) =>
                       setSelectedShippingId(event.target.value)
@@ -703,7 +703,7 @@ export default function CheckoutPage() {
                         label={`${option.name} (${currency(option.price)})`}
                       />
                     ))}
-                  </RadioGroup>
+                  </RadioGroup> */}
 
                   <Stack direction="row" spacing={1} sx={{ mb: 1.2 }}>
                     <AppInput

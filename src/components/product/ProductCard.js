@@ -229,7 +229,7 @@ export default function ProductCard({
               sx={{
                 width: "100%",
                 aspectRatio: "4 / 5",
-                objectFit: "cover",
+                objectFit: "contain",
                 transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                 transform: hovered ? "scale(1.08)" : "scale(1)",
               }}
@@ -310,7 +310,7 @@ export default function ProductCard({
                     sx={{
                       width: { xs: 30, sm: 40 },
                       height: { xs: 30, sm: 40 },
-                      bgcolor: "rgba(255, 255, 255, 0.9)",
+                      bgcolor: brand.borderSoft,
                       backdropFilter: "blur(8px)",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                       transition: "all 0.3s ease",

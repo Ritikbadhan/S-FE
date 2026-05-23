@@ -1876,14 +1876,9 @@ export default function AccountPage() {
                           {[
                             { label: "Name", value: user?.name || "-" },
                             { label: "Email", value: user?.email || "-" },
-                            { label: "Phone", value: user?.phone || "-" },
-                            {
-                              label: "Gender",
-                              value: user?.gender
-                                ? String(user.gender).charAt(0).toUpperCase() +
-                                  String(user.gender).slice(1)
-                                : "-",
-                            },
+                            ...(user?.phone
+                              ? [{ label: "Phone", value: user?.phone || "-" }]
+                              : []),
                           ].map((field, index) => (
                             <Grid item xs={12} sm={6} key={field.label}>
                               <Grow in timeout={400 + index * 80}>
@@ -1969,143 +1964,149 @@ export default function AccountPage() {
                     {recentReturns.map((entry, index) => {
                       const returnAlreadyCreated = hasReturnRequest(entry);
                       return (
-                      <Grow in timeout={400 + index * 100} key={entry.id}>
-                        <Card sx={panelCardSx}>
-                          <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
-                            <Typography
-                              sx={{
-                                fontWeight: 700,
-                                fontSize: { xs: "0.938rem", sm: "1rem" },
-                                mb: 0.5,
-                              }}
-                            >
-                              {entry.name}
-                            </Typography>
-                            <Typography
-                              sx={{
-                                opacity: 0.75,
-                                fontSize: { xs: "0.813rem", sm: "0.875rem" },
-                                mb: 1.5,
-                              }}
-                            >
-                              Order: {entry.orderId} | Size: {entry.size} |
-                              Color: {entry.color}
-                            </Typography>
-                            <Stack
-                              direction={{ xs: "column", md: "row" }}
-                              spacing={1.5}
-                              useFlexGap
-                              flexWrap="wrap"
-                              alignItems={{ xs: "stretch", md: "center" }}
-                              sx={{
-                                mt: 2,
-                              }}
-                            >
-                              <AppInput
-                                select
-                                size="small"
-                                label="Reason"
-                                value={entry.reason || ""}
-                                disabled={returnAlreadyCreated}
-                                onChange={(e) =>
-                                  setReturns((prev) =>
-                                    prev.map((item) =>
-                                      item.id === entry.id
-                                        ? { ...item, reason: e.target.value }
-                                        : item
-                                    )
-                                  )
-                                }
-                                sx={{
-                                  minWidth: { xs: "100%", sm: 240 },
-                                  flex: 1,
-                                }}
-                              >
-                                <MenuItem value="">Select reason</MenuItem>
-                                <MenuItem value="size-issue">
-                                  Size issue
-                                </MenuItem>
-                                <MenuItem value="quality-issue">
-                                  Quality issue
-                                </MenuItem>
-                                <MenuItem value="wrong-item">
-                                  Wrong item received
-                                </MenuItem>
-                              </AppInput>
-
-                              <AppButton
-                                component="label"
-                                variant="outlined"
-                                size="small"
-                                disabled={returnAlreadyCreated}
-                                sx={{
-                                  minWidth: 140,
-                                  height: 42,
-                                  borderRadius: "12px",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                Upload Image
-                                <input
-                                  hidden
-                                  type="file"
-                                  onChange={(e) =>
-                                    updateReturnImage(
-                                      entry.id,
-                                      e.target.files?.[0]
-                                    )
-                                  }
-                                />
-                              </AppButton>
-
-                              <AppButton
-                                size="small"
-                                disabled={returnAlreadyCreated}
-                                onClick={() =>
-                                  requestReturn(entry.id, entry.reason)
-                                }
-                                sx={{
-                                  minWidth: 160,
-                                  height: 42,
-                                  borderRadius: "12px",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                {returnAlreadyCreated ? "Request Created" : "Request Return"}
-                              </AppButton>
-
-                              <Chip
-                                size="small"
-                                color={
-                                  ["Requested", "Pending"].includes(entry.status)
-                                    ? "warning"
-                                    : ["Rejected", "Declined"].includes(entry.status)
-                                      ? "error"
-                                    : "success"
-                                }
-                                label={entry.status}
-                                sx={{
-                                  fontWeight: 600,
-                                  height: 34,
-                                  borderRadius: "10px",
-                                  alignSelf: "center",
-                                }}
-                              />
-                            </Stack>
-                            {entry.image && (
+                        <Grow in timeout={400 + index * 100} key={entry.id}>
+                          <Card sx={panelCardSx}>
+                            <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 } }}>
                               <Typography
                                 sx={{
-                                  fontSize: { xs: "0.75rem", sm: "0.813rem" },
-                                  opacity: 0.7,
-                                  mt: 1,
+                                  fontWeight: 700,
+                                  fontSize: { xs: "0.938rem", sm: "1rem" },
+                                  mb: 0.5,
                                 }}
                               >
-                                Uploaded: {entry.image}
+                                {entry.name}
                               </Typography>
-                            )}
-                          </CardContent>
-                        </Card>
-                      </Grow>
+                              <Typography
+                                sx={{
+                                  opacity: 0.75,
+                                  fontSize: { xs: "0.813rem", sm: "0.875rem" },
+                                  mb: 1.5,
+                                }}
+                              >
+                                Order: {entry.orderId} | Size: {entry.size} |
+                                Color: {entry.color}
+                              </Typography>
+                              <Stack
+                                direction={{ xs: "column", md: "row" }}
+                                spacing={1.5}
+                                useFlexGap
+                                flexWrap="wrap"
+                                alignItems={{ xs: "stretch", md: "center" }}
+                                sx={{
+                                  mt: 2,
+                                }}
+                              >
+                                <AppInput
+                                  select
+                                  size="small"
+                                  label="Reason"
+                                  value={entry.reason || ""}
+                                  disabled={returnAlreadyCreated}
+                                  onChange={(e) =>
+                                    setReturns((prev) =>
+                                      prev.map((item) =>
+                                        item.id === entry.id
+                                          ? { ...item, reason: e.target.value }
+                                          : item
+                                      )
+                                    )
+                                  }
+                                  sx={{
+                                    minWidth: { xs: "100%", sm: 240 },
+                                    flex: 1,
+                                  }}
+                                >
+                                  <MenuItem value="">Select reason</MenuItem>
+                                  <MenuItem value="size-issue">
+                                    Size issue
+                                  </MenuItem>
+                                  <MenuItem value="quality-issue">
+                                    Quality issue
+                                  </MenuItem>
+                                  <MenuItem value="wrong-item">
+                                    Wrong item received
+                                  </MenuItem>
+                                </AppInput>
+
+                                <AppButton
+                                  component="label"
+                                  variant="outlined"
+                                  size="small"
+                                  disabled={returnAlreadyCreated}
+                                  sx={{
+                                    minWidth: 140,
+                                    height: 42,
+                                    borderRadius: "12px",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  Upload Image
+                                  <input
+                                    hidden
+                                    type="file"
+                                    onChange={(e) =>
+                                      updateReturnImage(
+                                        entry.id,
+                                        e.target.files?.[0]
+                                      )
+                                    }
+                                  />
+                                </AppButton>
+
+                                <AppButton
+                                  size="small"
+                                  disabled={returnAlreadyCreated}
+                                  onClick={() =>
+                                    requestReturn(entry.id, entry.reason)
+                                  }
+                                  sx={{
+                                    minWidth: 160,
+                                    height: 42,
+                                    borderRadius: "12px",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {returnAlreadyCreated
+                                    ? "Request Created"
+                                    : "Request Return"}
+                                </AppButton>
+
+                                <Chip
+                                  size="small"
+                                  color={
+                                    ["Requested", "Pending"].includes(
+                                      entry.status
+                                    )
+                                      ? "warning"
+                                      : ["Rejected", "Declined"].includes(
+                                            entry.status
+                                          )
+                                        ? "error"
+                                        : "success"
+                                  }
+                                  label={entry.status}
+                                  sx={{
+                                    fontWeight: 600,
+                                    height: 34,
+                                    borderRadius: "10px",
+                                    alignSelf: "center",
+                                  }}
+                                />
+                              </Stack>
+                              {entry.image && (
+                                <Typography
+                                  sx={{
+                                    fontSize: { xs: "0.75rem", sm: "0.813rem" },
+                                    opacity: 0.7,
+                                    mt: 1,
+                                  }}
+                                >
+                                  Uploaded: {entry.image}
+                                </Typography>
+                              )}
+                            </CardContent>
+                          </Card>
+                        </Grow>
                       );
                     })}
                   </Stack>

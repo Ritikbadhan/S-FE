@@ -520,7 +520,27 @@ export default function ProductEditorTab({
                   onChange={(e) => onFieldChange("fit", e.target.value)}
                 />
               </Grid>
-
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Fabric (GSM)"
+                  type="number"
+                  value={form.fabric}
+                  onChange={(e) =>
+                    onFieldChange("fabric", e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Neck Line"
+                  value={form.neckline}
+                  onChange={(e) =>
+                    onFieldChange("neckline", e.target.value)
+                  }
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -530,6 +550,18 @@ export default function ProductEditorTab({
                   value={form.careInstructions}
                   onChange={(e) =>
                     onFieldChange("careInstructions", e.target.value)
+                  }
+                />
+              </Grid>
+               <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  multiline
+                  minRows={3}
+                  label="Pattern"
+                  value={form.pattern}
+                  onChange={(e) =>
+                    onFieldChange("pattern", e.target.value)
                   }
                 />
               </Grid>
