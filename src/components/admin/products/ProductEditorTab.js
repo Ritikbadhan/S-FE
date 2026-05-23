@@ -33,7 +33,7 @@ const steps = [
   "Images",
   "Variants",
   "Specifications",
-  "SEO & Flags",
+  // "SEO & Flags",
 ];
 const fieldStyle = {
   "& .MuiOutlinedInput-root": {
@@ -570,7 +570,7 @@ export default function ProductEditorTab({
 
           {/* STEP 6 SEO */}
 
-          {activeStep === 5 && (
+          {/* {activeStep === 5 && (
             <Stack spacing={2}>
               <TextField
                 fullWidth
@@ -635,7 +635,7 @@ export default function ProductEditorTab({
                 />
               </Stack>
             </Stack>
-          )}
+          )} */}
         </Paper>
 
         {/* NAVIGATION */}
