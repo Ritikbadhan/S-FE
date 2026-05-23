@@ -240,6 +240,8 @@ const removeVariant = (index) => {
       .split("\n")
       .map((item) => item.trim())
       .filter(Boolean);
+    const cleanedMaterial = form.material.trim();
+    const cleanedNeckLine = form.neckline;
 
     const variants = form.variants.map((variant, index) => ({
       id: variant.id,
@@ -268,12 +270,13 @@ const removeVariant = (index) => {
       isLimited: Boolean(form.isLimited),
       slug: toSlug(form.slug || form.name),
       productSpecifications: {
-        material: form.material.trim(),
+        material: cleanedMaterial,
         fit: form.fit.trim(),
         pattern: form.pattern.trim(),
-        neckline: form.neckline.trim(),
+        neckline: cleanedNeckLine,
         sleeveType: form.sleeveType.trim(),
         careInstructions: cleanedCare,
+        fabricWeightGsm: form.fabric.trim(),
       },
       seo: {
         metaTitle: form.metaTitle.trim(),

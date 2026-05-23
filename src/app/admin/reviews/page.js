@@ -133,7 +133,7 @@ export default function AdminReviewsPage() {
                   return (
                     <TableRow key={review.id || review._id} hover>
                       <TableCell sx={{ fontWeight: 800 }}>{review.productId}</TableCell>
-                      <TableCell>{review.userName || "-"}</TableCell>
+                      <TableCell>{review.user.name || "-"}</TableCell>
                       <TableCell><Rating size="small" value={rating} readOnly /></TableCell>
                       <TableCell sx={{ maxWidth: 360 }}>{review.comment || review.text || "-"}</TableCell>
                       <TableCell>

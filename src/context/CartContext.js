@@ -74,7 +74,10 @@ export default function CartProvider({ children }) {
   const addToCart = async (product) => {
     const productId = product.productId || product.id || product._id;
     const quantity = product.quantity || 1;
-    const data = await addToCartApi({ productId, quantity });
+    const size = product.size|| "";
+    const color = product.color || "";
+    const price = product.price || null;
+    const data = await addToCartApi({ productId, quantity, size, color, price });
     setCart(normalizeCart(data));
   };
 

@@ -498,7 +498,7 @@ export default function ProductDetailsPage() {
                           sx={{
 	                             width: { xs: 72, sm: 92, md: 160 },
 	height: { xs: 84, sm: 108, md: 190 },
-                            objectFit: "cover",
+                            objectFit: "contain",
                             display: "block",
                           }}
                         />
@@ -905,20 +905,6 @@ maxWidth: "660px",
                 >
 	                  <Stack spacing={{ xs: 0.75, sm: 1.5 }}>
 	                    <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center">
-                      <LocalShippingOutlinedIcon
-	                        sx={{ color: brand.primary, fontSize: { xs: 17, sm: 22 } }}
-                      />
-                      <Typography
-                        sx={{
-	                          fontSize: { xs: "0.74rem", sm: "0.9375rem" },
-                          color: brand.text,
-                          fontWeight: 500,
-                        }}
-                      >
-                        Free shipping over ₹1999
-                      </Typography>
-                    </Stack>
-	                    <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center">
                       <AutorenewOutlinedIcon
 	                        sx={{ color: brand.primary, fontSize: { xs: 17, sm: 22 } }}
                       />
@@ -990,9 +976,9 @@ maxWidth: "660px",
             <Grid container spacing={{ xs: 1, sm: 2 }}>
               {[
                 {
-                  title: "Fabric",
+                  title: "Fabric (GSM)",
                   value:
-                    specs?.material || "Premium blended weave with soft finish.",
+                    specs?.fabricWeightGsm || "Premium blended weave with soft finish.",
                   // icon: "🧵",
                 },
                 {
@@ -1011,11 +997,20 @@ maxWidth: "660px",
                   // icon: "👔",
                 },
                 {
-                  title: "Occasion",
-                  value: Array.isArray(specs?.occasion) && specs.occasion.length
-                    ? specs.occasion.join(", ")
-                    : "Evening, smart casual, and formal styling.",
-                  // icon: "🎩",
+                  title: "Material",
+                  value: specs.material || "Luxurious blend of natural fibers for comfort and durability.",
+                  // icon: "🧵",
+                },
+                ,
+                {
+                  title: "Neck Line",
+                  value: specs.neckline || "Classic crew neck with a tailored fit.",
+                  // icon: "👔",
+                },
+                {
+                  title: "Pattern",
+                  value: specs.pattern || "Timeless design with subtle texture.",
+                  // icon: "👔",
                 },
               ].map((item, idx) => (
                 <Grid item xs={12} sm={6} md={3} key={idx}>
@@ -1064,185 +1059,6 @@ maxWidth: "660px",
           </Paper>
         </Box>
 
-        {/* Product Specifications */}
-        <Box sx={{ mt: { xs: 3, md: 7 } }}>
-          <Typography
-            variant="h5"
-            sx={{
-              mb: { xs: 1.5, sm: 3 },
-              fontWeight: 600,
-              color: brand.text,
-              fontSize: { xs: "1.15rem", sm: "1.75rem", md: "2rem" },
-            }}
-          >
-            Product Specifications
-          </Typography>
-          <Grid container spacing={{ xs: 1, sm: 2 }}>
-            {specPairs.map((spec, idx) => (
-              <Grid item xs={12} sm={6} md={3} key={idx}>
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: { xs: 1.25, sm: 2.5 },
-                    bgcolor: brand.surface,
-                    border: `1px solid ${brand.borderSoft}`,
-                    borderRadius: 2,
-                    height: "100%",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      transform: "translateY(-4px)",
-                      boxShadow: brand.shadowCard,
-                    },
-                  }}
-                >
-                  <Stack direction="row" spacing={{ xs: 0.75, sm: 1.5 }} alignItems="center" mb={{ xs: 0.25, sm: 0.5 }}>
-                    {/* <Typography sx={{ fontSize: "1.5rem" }}>
-                      {spec.icon}
-                    </Typography> */}
-                    <Typography
-                      sx={{
-                        fontSize: { xs: "0.64rem", sm: "0.8125rem" },
-                        color: brand.textMuted,
-                        textTransform: "uppercase",
-                        letterSpacing: 0.5,
-                        fontWeight: 600,
-                      }}
-                    >
-                      {spec.label}
-                    </Typography>
-                  </Stack>
-                  <Typography
-                    sx={{
-                      fontWeight: 600,
-                      color: brand.text,
-                      fontSize: { xs: "0.78rem", sm: "1rem" },
-                    }}
-                  >
-                    {spec.value || "-"}
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-
-          {/* Size & Fit Accordion */}
-          {specs?.sizeAndFit && (
-            <Accordion
-              elevation={0}
-              sx={{
-                mt: { xs: 1.5, sm: 3 },
-                bgcolor: brand.surface,
-                border: `1px solid ${brand.borderSoft}`,
-                borderRadius: "12px !important",
-                "&:before": { display: "none" },
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                sx={{
-                  "& .MuiAccordionSummary-content": {
-                    my: { xs: 0.75, sm: 1.5 },
-                  },
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 600,
-                    fontSize: { xs: "0.82rem", sm: "1.125rem" },
-                    color: brand.text,
-                  }}
-                >
-                  📐 Size & Fit Guide
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ pt: 0, px: { xs: 1.5, sm: 2 } }}>
-                <Stack spacing={{ xs: 0.75, sm: 1.5 }}>
-                  <Typography sx={{ color: brand.textMuted, fontSize: { xs: "0.76rem", sm: "1rem" } }}>
-                    Model Height: {specs.sizeAndFit.modelHeight || "-"} |
-                    Wearing: {specs.sizeAndFit.modelWearing || "-"}
-                  </Typography>
-                  <Typography sx={{ color: brand.textMuted, fontSize: { xs: "0.76rem", sm: "1rem" } }}>
-                    {specs.sizeAndFit.fitNote || "-"}
-                  </Typography>
-                </Stack>
-              </AccordionDetails>
-            </Accordion>
-          )}
-
-          {/* Size Chart Accordion */}
-          {specs?.measurementsCm && (
-            <Accordion
-              elevation={0}
-              sx={{
-                mt: { xs: 1, sm: 2 },
-                bgcolor: brand.surface,
-                border: `1px solid ${brand.borderSoft}`,
-                borderRadius: "12px !important",
-                "&:before": { display: "none" },
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                sx={{
-                  "& .MuiAccordionSummary-content": {
-                    my: { xs: 0.75, sm: 1.5 },
-                  },
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 600,
-                    fontSize: { xs: "0.82rem", sm: "1.125rem" },
-                    color: brand.text,
-                  }}
-                >
-                  📏 Size Chart (cm)
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ pt: 0, px: { xs: 1.5, sm: 2 } }}>
-                <Grid container spacing={{ xs: 1, sm: 2 }}>
-                  {Object.entries(specs.measurementsCm).map(([sizeKey, values]) => (
-                    <Grid item xs={12} md={6} key={sizeKey}>
-                      <Paper
-                        elevation={0}
-                        sx={{
-                          p: { xs: 1.25, sm: 2 },
-                          bgcolor: `${brand.primary}05`,
-                          border: `1px solid ${brand.borderSoft}`,
-                          borderRadius: 2,
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontWeight: 600,
-                            mb: { xs: 0.5, sm: 1 },
-                            color: brand.primary,
-                            fontSize: { xs: "0.78rem", sm: "1rem" },
-                          }}
-                        >
-                          Size {sizeKey}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: { xs: "0.7rem", sm: "0.875rem" },
-                            color: brand.textMuted,
-                            lineHeight: 1.8,
-                          }}
-                        >
-                          Chest: {values?.chest ?? "-"} | Length:{" "}
-                          {values?.length ?? "-"}
-                          <br />
-                          Shoulder: {values?.shoulder ?? "-"} | Sleeve:{" "}
-                          {values?.sleeve ?? "-"}
-                        </Typography>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          )}
-        </Box>
 
         {/* Craft & Detail */}
         {/* <Box sx={{ mt: { xs: 5, md: 7 } }}>
@@ -1477,7 +1293,7 @@ maxWidth: "660px",
                       fontSize: { xs: "0.8rem", sm: "1rem" },
                     }}
                   >
-                    {review.name || review.userName || "Anonymous User"}
+                    {review.user.name || "Anonymous User"}
                   </Typography>
                   <Typography
                     sx={{
