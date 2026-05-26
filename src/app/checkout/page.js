@@ -866,6 +866,17 @@ export default function CheckoutPage() {
                   <Typography sx={{ opacity: 0.8 }}>Shipping</Typography>
                   <Typography>{currency(shippingAmount)}</Typography>
                 </Stack>
+                <Typography
+                  sx={{
+                    fontSize: 12,
+                    color: "text.secondary",
+                    fontStyle: "italic",
+                    mt: -0.5,
+                    mb: 1.5,
+                  }}
+                >
+                  GST included in the total price
+                </Typography>
                 <Divider sx={{ my: 1.5 }} />
                 <Stack
                   direction="row"
@@ -877,6 +888,7 @@ export default function CheckoutPage() {
                     {currency(total)}
                   </Typography>
                 </Stack>
+                
                 <Typography sx={{ opacity: 0.75, fontSize: 14 }}>
                   {cart.length} item(s) in order
                 </Typography>
