@@ -27,7 +27,23 @@ import { addressesApi, checkoutApi, ordersApi, paymentsApi } from "@/lib/api";
 
 const CHECKOUT_STEPS = ["Address", "Review"];
 
-const PAYMENT_METHOD = "RAZORPAY";
+const PAYMENT_METHODS = {
+  RAZORPAY: "RAZORPAY",
+  COD: "COD",
+};
+
+const PAYMENT_OPTIONS = [
+  {
+    value: PAYMENT_METHODS.RAZORPAY,
+    label: "Online Payment",
+    description: "Pay securely with Razorpay.",
+  },
+  {
+    value: PAYMENT_METHODS.COD,
+    label: "Cash on Delivery",
+    description: "Pay in cash when your order arrives.",
+  },
+];
 
 const DEFAULT_SHIPPING_OPTION = {
   id: "standard",
@@ -196,6 +212,9 @@ export default function CheckoutPage() {
   const [placedOrderId, setPlacedOrderId] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
+    PAYMENT_METHODS.RAZORPAY
+  );
 
   const [addressForm, setAddressForm] = useState({
     name: "",
@@ -414,7 +433,7 @@ export default function CheckoutPage() {
           instructions: selectedAddress.instructions,
         },
 
-        paymentMethod: PAYMENT_METHOD,
+        paymentMethod: selectedPaymentMethod,
 
         couponCode: appliedCoupon?.code || undefined,
       };
@@ -437,10 +456,21 @@ export default function CheckoutPage() {
 
       setPlacedOrderId(orderId);
 
+      if (selectedPaymentMethod === PAYMENT_METHODS.COD) {
+        await clearCart();
+        setIsActionLoading(false);
+        goToStatus(
+          "success",
+          "Order placed successfully. Please pay cash on delivery.",
+          orderId
+        );
+        return;
+      }
+
       // CREATE RAZORPAY ORDER
       const paymentResponse = await paymentsApi.create({
         orderId,
-        paymentMethod: PAYMENT_METHOD,
+        paymentMethod: selectedPaymentMethod,
       });
 
       const paymentRoot = paymentResponse?.data || paymentResponse;
@@ -705,6 +735,58 @@ export default function CheckoutPage() {
                     ))}
                   </RadioGroup> */}
 
+                  <Divider sx={{ my: 2 }} />
+                  <Typography sx={{ fontWeight: 600, mb: 1.2 }}>
+                    Payment Method
+                  </Typography>
+                  <RadioGroup
+                    value={selectedPaymentMethod}
+                    onChange={(event) =>
+                      setSelectedPaymentMethod(event.target.value)
+                    }
+                    sx={{ mb: 2 }}
+                  >
+                    <Stack spacing={1.2}>
+                      {PAYMENT_OPTIONS.map((option) => (
+                        <Box
+                          key={option.value}
+                          sx={{
+                            border: (theme) =>
+                              `1px solid ${
+                                selectedPaymentMethod === option.value
+                                  ? theme.palette.primary.main
+                                  : theme.palette.brand.border
+                              }`,
+                            borderRadius: 2,
+                            px: 1.5,
+                            py: 1,
+                            bgcolor:
+                              selectedPaymentMethod === option.value
+                                ? "action.hover"
+                                : "transparent",
+                          }}
+                        >
+                          <FormControlLabel
+                            value={option.value}
+                            control={<Radio />}
+                            label={
+                              <Box>
+                                <Typography sx={{ fontWeight: 600 }}>
+                                  {option.label}
+                                </Typography>
+                                <Typography
+                                  sx={{ opacity: 0.75, fontSize: 13 }}
+                                >
+                                  {option.description}
+                                </Typography>
+                              </Box>
+                            }
+                          />
+                        </Box>
+                      ))}
+                    </Stack>
+                  </RadioGroup>
+
                   <Stack direction="row" spacing={1} sx={{ mb: 1.2 }}>
                     <AppInput
                       size="small"
@@ -736,7 +818,11 @@ export default function CheckoutPage() {
                       Back
                     </AppButton>
                     <AppButton onClick={createOrder} disabled={isActionLoading}>
-                      {isActionLoading ? "Creating..." : "Pay Now"}
+                      {isActionLoading
+                        ? "Creating..."
+                        : selectedPaymentMethod === PAYMENT_METHODS.COD
+                          ? "Place Order"
+                          : "Pay Now"}
                     </AppButton>
                   </Stack>
                 </CardContent>

@@ -42,6 +42,7 @@ import AdminGuard from "@/components/admin/AdminGuard";
 import AdminShell from "@/components/admin/AdminShell";
 import { AdminPanel, AdminStatCard, AdminTableWrap } from "@/components/admin/AdminUi";
 import { adminApi } from "@/lib/api";
+import { printInvoice } from "./printInvoice";
 
 function currency(v) {
   return `Rs ${Number(v || 0).toLocaleString("en-IN")}`;
@@ -129,35 +130,165 @@ export default function AdminOrdersPage() {
     setSelectedOrder(data?.order || data?.data || data);
   };
 
-  const exportOrders = () => {
-    const blob = new Blob([JSON.stringify(orders, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "orders-export.json";
-    link.click();
-    URL.revokeObjectURL(url);
-  };
+ const exportOrders = () => {
+  if (!orders?.length) return;
 
-  const printInvoice = (order) => {
-    const popup = window.open("", "_blank", "width=700,height=900");
-    if (!popup || !order) return;
+  const headers = [
+    "Order ID",
+    "Date",
+    "Customer Name",
+    "Customer Email",
+    "Phone",
+    "City",
+    "State",
+    "Pincode",
+    "Address",
+    "Products",
+    "Sizes",
+    "Colors",
+    "Quantity",
+    "Subtotal",
+    "GST Rate",
+    "GST Amount",
+    "Total Amount",
+    "Payment Type",
+    "Payment Status",
+    "Order Status",
+  ];
 
-    popup.document.write(`
-      <h2>Sharq Label</h2>
-      <hr/>
-      <p>Order ID: ${order._id}</p>
-      <p>Customer: ${order.userEmail || "-"}</p>
-      <p>Total: ${currency(order.totalAmount)}</p>
-      <h3>Items</h3>
-      <ul>
-        ${(order.items || [])
-          .map((i) => `<li>${i.name || i.productName} x ${i.quantity || i.qty} - ${currency(i.price)}</li>`)
-          .join("")}
-      </ul>
-    `);
-    popup.print();
-  };
+  const rows = orders.map((order) => {
+    const shipping = order.shippingAddress || {};
+
+    const subtotal = Number(order.subtotalAmount || 0);
+
+    const gstRate = subtotal <= 1000 ? 5 : 12;
+
+    const taxableAmount =
+      subtotal / (1 + gstRate / 100);
+
+    const gstAmount =
+      subtotal - taxableAmount;
+
+    const items = order.items || [];
+
+    return [
+
+      // Order ID
+      order._id || "",
+
+      // Date
+      order.createdAt
+        ? new Date(order.createdAt).toLocaleString()
+        : "",
+
+      // Customer Name
+      order.userId?.name || "",
+
+      // Email
+      order.userId?.email || "",
+
+      // Phone
+      shipping.phone || "",
+
+      // City
+      shipping.city || "",
+
+      // State
+      shipping.state || "",
+
+      // Pincode
+      shipping.pincode || "",
+
+      // Full Address
+      `${shipping.line1 || ""} ${shipping.line2 || ""}`.trim(),
+
+      // Products
+      items
+        .map((item) => item.name || item.productName)
+        .join(" | "),
+
+      // Sizes
+      items
+        .map((item) => item.size || "-")
+        .join(" | "),
+
+      // Colors
+      items
+        .map((item) => item.color || "-")
+        .join(" | "),
+
+      // Quantity
+      items
+        .map(
+          (item) =>
+            item.quantity || item.qty || 1
+        )
+        .join(" | "),
+
+      // Subtotal
+      subtotal,
+
+      // GST Rate
+      `${gstRate}%`,
+
+      // GST Amount
+      gstAmount.toFixed(2),
+
+      // Total
+      order.totalAmount || 0,
+
+      // Payment Type
+      order.paymentMethod === "RAZORPAY"
+        ? "ONLINE"
+        : "COD",
+
+      // Payment Status
+      order.paymentStatus || "",
+
+      // Order Status
+      order.orderStatus || "",
+    ];
+  });
+
+  const csvContent = [
+    headers.join(","),
+
+    ...rows.map((row) =>
+      row
+        .map((field) =>
+          `"${String(field).replace(/"/g, '""')}"`
+        )
+        .join(",")
+    ),
+  ].join("\n");
+
+  const blob = new Blob(
+    [csvContent],
+    {
+      type: "text/csv;charset=utf-8;",
+    }
+  );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+
+  link.download = `orders-export-${
+    new Date().toISOString().split("T")[0]
+  }.csv`;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+};
 
   return (
     <AdminGuard>
@@ -213,8 +344,10 @@ export default function AdminOrdersPage() {
                   <TableCell>Customer</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Payment</TableCell>
+                  <TableCell>Payment Method</TableCell>
                   <TableCell>Total</TableCell>
                   <TableCell>Date</TableCell>
+
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -236,6 +369,7 @@ export default function AdminOrdersPage() {
                       </TableCell>
                       <TableCell><StatusChip status={status} /></TableCell>
                       <TableCell><Chip size="small" label={order.paymentStatus || "Paid"} color={order.paymentStatus === "Failed" ? "error" : "success"} /></TableCell>
+                      <TableCell>{order.paymentMethod || "Unknown"}</TableCell>
                       <TableCell sx={{ fontWeight: 800 }}>{currency(order.totalAmount || order.total)}</TableCell>
                       <TableCell>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "-"}</TableCell>
                       <TableCell align="right">
@@ -257,46 +391,228 @@ export default function AdminOrdersPage() {
           </AdminTableWrap>
         </AdminPanel>
 
-        <Dialog open={Boolean(selectedOrder)} onClose={() => setSelectedOrder(null)} fullWidth maxWidth="md" PaperProps={{ sx: { borderRadius: 6 } }}>
-          <DialogTitle>Order Details</DialogTitle>
-          <DialogContent>
-            {selectedOrder ? (
-              <Stack spacing={2}>
-                <Typography><b>Order ID:</b> {selectedOrder._id || selectedOrder.id}</Typography>
-                <Typography><b>Customer:</b> {selectedOrder.user?.email || selectedOrder.userEmail || "-"}</Typography>
-                <Typography><b>Total:</b> {currency(selectedOrder.totalAmount)}</Typography>
-                <Box>
-                  <Typography fontWeight={700} sx={{ mb: 0.5 }}>Shipping Address</Typography>
-                  {selectedOrder.shippingAddress ? (
-                    <Stack spacing={0.5}>
-                      <Typography>{selectedOrder.shippingAddress.name} | {selectedOrder.shippingAddress.phone}</Typography>
-                      <Typography>{selectedOrder.shippingAddress.line1}{selectedOrder.shippingAddress.line2 ? `, ${selectedOrder.shippingAddress.line2}` : ""}</Typography>
-                      <Typography>{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} - {selectedOrder.shippingAddress.pincode}</Typography>
-                    </Stack>
-                  ) : (
-                    <Typography>-</Typography>
-                  )}
-                </Box>
-                <Box>
-                  <Typography fontWeight={700} sx={{ mb: 0.5 }}>Items</Typography>
-                  <Stack spacing={0.5}>
-                    {(selectedOrder.items || []).map((item, i) => (
-                      <Typography key={i}>
-                        {item.name || item.productName} | Qty {item.quantity || item.qty || 1}
-                        {item.size ? ` | Size ${item.size}` : ""}
-                        {item.color ? ` | Color ${item.color}` : ""}
-                      </Typography>
-                    ))}
-                  </Stack>
-                </Box>
-              </Stack>
-            ) : null}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => printInvoice(selectedOrder)}>Print Invoice</Button>
+
+        <Dialog
+  open={Boolean(selectedOrder)}
+  onClose={() => setSelectedOrder(null)}
+  fullWidth
+  maxWidth="md"
+  PaperProps={{ sx: { borderRadius: 2 } }}
+>
+  <DialogTitle>Order Details</DialogTitle>
+
+  <DialogContent>
+    {selectedOrder ? (
+      <Stack spacing={3}>
+        {/* Order Info */}
+        <Box>
+          <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
+            Order Information
+          </Typography>
+
+          <Stack spacing={0.7}>
+            <Typography>
+              <b>Order ID:</b> {selectedOrder._id || selectedOrder.id}
+            </Typography>
+
+            <Typography>
+              <b>Order Status:</b> {selectedOrder.orderStatus || "-"}
+            </Typography>
+
+            <Typography>
+              <b>Payment Status:</b> {selectedOrder.paymentStatus || "-"}
+            </Typography>
+
+            <Typography>
+              <b>Payment Method:</b> {selectedOrder.paymentMethod || "-"}
+            </Typography>
+
+            <Typography>
+              <b>Currency:</b> {selectedOrder.paymentCurrency || "-"}
+            </Typography>
+
+            <Typography>
+              <b>Created At:</b>{" "}
+              {selectedOrder.createdAt
+                ? new Date(selectedOrder.createdAt).toLocaleString()
+                : "-"}
+            </Typography>
+          </Stack>
+        </Box>
+
+        {/* Customer Info */}
+        <Box>
+          <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
+            Customer Details
+          </Typography>
+
+          <Stack spacing={0.7}>
+            <Typography>
+              <b>Name:</b>{" "}
+              {selectedOrder.userId?.name ||
+                selectedOrder.user?.name ||
+                "-"}
+            </Typography>
+
+            <Typography>
+              <b>Email:</b>{" "}
+              {selectedOrder.userId?.email ||
+                selectedOrder.user?.email ||
+                selectedOrder.userEmail ||
+                "-"}
+            </Typography>
+
+            <Typography>
+              <b>Phone:</b>{" "}
+              {selectedOrder.shippingAddress?.phone || "-"}
+            </Typography>
+          </Stack>
+        </Box>
+
+        {/* Shipping Address */}
+        <Box>
+          <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
+            Shipping Address
+          </Typography>
+
+          {selectedOrder.shippingAddress ? (
+            <Stack spacing={0.5}>
+              <Typography>
+                {selectedOrder.shippingAddress.name}
+              </Typography>
+
+              <Typography>
+                {selectedOrder.shippingAddress.line1}
+                {selectedOrder.shippingAddress.line2
+                  ? `, ${selectedOrder.shippingAddress.line2}`
+                  : ""}
+              </Typography>
+
+              <Typography>
+                {selectedOrder.shippingAddress.city},{" "}
+                {selectedOrder.shippingAddress.state} -{" "}
+                {selectedOrder.shippingAddress.pincode}
+              </Typography>
+
+              {selectedOrder.shippingAddress.landmark && (
+                <Typography>
+                  <b>Landmark:</b>{" "}
+                  {selectedOrder.shippingAddress.landmark}
+                </Typography>
+              )}
+
+              {selectedOrder.shippingAddress.instructions && (
+                <Typography>
+                  <b>Instructions:</b>{" "}
+                  {selectedOrder.shippingAddress.instructions}
+                </Typography>
+              )}
+            </Stack>
+          ) : (
+            <Typography>-</Typography>
+          )}
+        </Box>
+
+        {/* Items */}
+        <Box>
+          <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
+            Order Items
+          </Typography>
+
+          <Stack spacing={2}>
+            {(selectedOrder.items || []).map((item, i) => (
+              <Box
+                key={i}
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  border: "1px solid #eee",
+                  borderRadius: 2,
+                  p: 1.5,
+                }}
+              >
+                <Box
+                  component="img"
+                  src={item.image}
+                  alt={item.name}
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    objectFit: "cover",
+                    borderRadius: 1,
+                    border: "1px solid #ddd",
+                  }}
+                />
+
+                <Stack spacing={0.5}>
+                  <Typography fontWeight={600}>
+                    {item.name || item.productName}
+                  </Typography>
+
+                  <Typography>
+                    <b>Qty:</b> {item.quantity || item.qty || 1}
+                  </Typography>
+
+                  <Typography>
+                    <b>Size:</b> {item.size || "-"}
+                  </Typography>
+
+                  <Typography>
+                    <b>Color:</b> {item.color || "-"}
+                  </Typography>
+
+                  <Typography>
+                    <b>Price:</b> {currency(item.price || 0)}
+                  </Typography>
+                </Stack>
+              </Box>
+            ))}
+          </Stack>
+        </Box>
+
+        {/* Price Breakdown */}
+        <Box>
+          <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
+            Pricing Details
+          </Typography>
+
+          <Stack spacing={0.5}>
+            <Typography>
+              <b>Subtotal:</b>{" "}
+              {currency(selectedOrder.subtotalAmount || 0)}
+            </Typography>
+
+            <Typography>
+              <b>Shipping:</b>{" "}
+              {currency(selectedOrder.shippingAmount || 0)}
+            </Typography>
+
+            <Typography>
+              <b>Tax:</b>{" "}
+              {currency(selectedOrder.taxAmount || 0)}
+            </Typography>
+
+            <Typography>
+              <b>Discount:</b>{" "}
+              {currency(selectedOrder.discountAmount || 0)}
+            </Typography>
+
+            <Typography fontWeight={700}>
+              <b>Total:</b>{" "}
+              {currency(selectedOrder.totalAmount || 0)}
+            </Typography>
+          </Stack>
+        </Box>
+
+        
+      </Stack>
+    ) : null}
+  </DialogContent>
+   <DialogActions>
+            <Button onClick={() => printInvoice(selectedOrder, currency)}>Print Invoice</Button>
             <Button onClick={() => setSelectedOrder(null)}>Close</Button>
           </DialogActions>
-        </Dialog>
+</Dialog>
       </AdminShell>
     </AdminGuard>
   );

@@ -13,10 +13,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
   IconButton,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -28,7 +28,8 @@ import { CartContext } from "@/context/CartContext";
 import { useProducts } from "@/hooks/useProducts";
 import { getRecentlyViewedIds } from "@/lib/recentlyViewed";
 
-const getProductId = (product) => product?._id || product?.id || product?.productId;
+const getProductId = (product) =>
+  product?._id || product?.id || product?.productId;
 const getName = (product) => product?.name || "Saved Piece";
 const getPrice = (product) => Number(product?.price || 0);
 const getOriginalPrice = (product) => {
@@ -66,8 +67,12 @@ const stockLabel = (product) => {
 export default function WishlistPage() {
   const router = useRouter();
   const toast = useToast();
+  const theme = useTheme();
+  const brand = theme.palette.brand;
+
   const { products } = useProducts();
-  const { wishlist, removeFromWishlist, clearWishlist } = useContext(WishlistContext);
+  const { wishlist, removeFromWishlist, clearWishlist } =
+    useContext(WishlistContext);
   const { addToCart } = useContext(CartContext);
 
   const [hoveredId, setHoveredId] = useState(null);
@@ -78,8 +83,12 @@ export default function WishlistPage() {
   const savedCount = wishlist.length;
 
   const recentlyViewed = useMemo(() => {
-    const wishlistIds = new Set(wishlist.map((item) => String(getProductId(item))));
-    const productMap = new Map(products.map((product) => [String(getProductId(product)), product]));
+    const wishlistIds = new Set(
+      wishlist.map((item) => String(getProductId(item)))
+    );
+    const productMap = new Map(
+      products.map((product) => [String(getProductId(product)), product])
+    );
     return recentlyViewedIds
       .filter((id) => !wishlistIds.has(String(id)))
       .map((id) => productMap.get(String(id)))
@@ -114,7 +123,8 @@ export default function WishlistPage() {
 
   const handleAddToBag = async (product) => {
     const sizes = getSizes(product);
-    const selectedSize = selectedSizes[getProductId(product)] || product?.selectedSize || "";
+    const selectedSize =
+      selectedSizes[getProductId(product)] || product?.selectedSize || "";
     const requiresSize = sizes.length > 0;
     const stock = getStock(product);
 
@@ -198,7 +208,10 @@ export default function WishlistPage() {
         <AppButton
           component={Link}
           href="/collection"
-          sx={{ px: { xs: 2.25, md: 3 }, fontSize: { xs: "0.8rem", md: "0.875rem" } }}
+          sx={{
+            px: { xs: 2.25, md: 3 },
+            fontSize: { xs: "0.8rem", md: "0.875rem" },
+          }}
         >
           Explore Collection
         </AppButton>
@@ -214,11 +227,20 @@ export default function WishlistPage() {
         color: "text.primary",
       }}
     >
-      <Container maxWidth="xl">
+      <Container
+        maxWidth="xl"
+        sx={{
+          px: {
+            xs: 1.5,
+            sm: 2,
+            md: 3,
+          },
+        }}
+      >
         <Stack
           direction={{ xs: "column", md: "row" }}
           justifyContent="space-between"
-          alignItems={{ xs: "start", md: "center" }}
+          alignItems={{ xs: "flex-start", md: "center" }}
           spacing={{ xs: 1, md: 1.5 }}
           sx={{ mb: { xs: 2.5, md: 4 } }}
         >
@@ -233,16 +255,27 @@ export default function WishlistPage() {
             >
               YOUR WISHLIST
             </Typography>
-            <Typography sx={{ opacity: 0.75, fontSize: { xs: "0.82rem", md: "1rem" } }}>
+            <Typography
+              sx={{ opacity: 0.75, fontSize: { xs: "0.82rem", md: "1rem" } }}
+            >
               {savedCount} Saved {savedCount > 1 ? "Pieces" : "Piece"}
             </Typography>
           </Box>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 0.8, sm: 1.2 }}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={{ xs: 0.8, sm: 1.2 }}
+            sx={{ width: { xs: "100%", sm: "auto" } }}
+          >
             <AppButton
               component={Link}
               href="/shop"
               variant="outlined"
-              sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.6, md: 0.8 } }}
+              fullWidth
+              sx={{
+                fontSize: { xs: "0.78rem", md: "0.875rem" },
+                py: { xs: 0.6, md: 0.8 },
+                width: { xs: "100%", sm: "auto" },
+              }}
             >
               Continue Shopping
             </AppButton>
@@ -250,46 +283,79 @@ export default function WishlistPage() {
               variant="outlined"
               color="error"
               onClick={handleClearAll}
-              sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.6, md: 0.8 } }}
+              fullWidth
+              sx={{
+                fontSize: { xs: "0.78rem", md: "0.875rem" },
+                py: { xs: 0.6, md: 0.8 },
+                width: { xs: "100%", sm: "auto" },
+              }}
             >
               Clear All
             </AppButton>
           </Stack>
         </Stack>
 
-        <Grid container spacing={{ xs: 1.5, sm: 2.5, md: 3 }}>
+        <Box
+          sx={{
+            display: "grid",
+            gap: { xs: 1.5, sm: 2.5, md: 4 },
+            gridTemplateColumns: {
+              xs: "repeat(2, minmax(0, 1fr))",
+              sm: "repeat(2, minmax(0, 1fr))",
+              md: "repeat(3, minmax(0, 1fr))",
+              lg: "repeat(4, minmax(0, 1fr))",
+            },
+          }}
+        >
           {wishlist.map((product) => {
             const id = getProductId(product);
             const sizes = getSizes(product);
-            const selectedSize = selectedSizes[id] || product?.selectedSize || product?.size || "";
+            const selectedSize =
+              selectedSizes[id] || product?.selectedSize || product?.size || "";
             const price = getPrice(product);
             const originalPrice = getOriginalPrice(product);
-            const dropped = originalPrice > price;
             const stock = stockLabel(product);
 
             return (
-              <Grid item xs={12} sm={6} md={3} key={id}>
+              <Box key={id} sx={{ minWidth: 0 }}>
                 <Card
                   onMouseEnter={() => setHoveredId(id)}
                   onMouseLeave={() => setHoveredId(null)}
                   sx={{
-                    borderRadius: 3,
-                    border: (theme) => `1px solid ${theme.palette.brand.border}`,
-                    transition: "all 0.28s ease",
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    maxWidth: { xs: "100%", sm: 320 },
+                    mx: "auto",
+                    borderRadius: { xs: 2, sm: 3 },
                     overflow: "hidden",
+                    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    border: `1px solid ${brand.borderSoft}`,
+                    bgcolor: brand.surface,
+                    boxShadow: brand.shadowCard,
                     "&:hover": {
-                      transform: "translateY(-6px)",
-                      boxShadow: (theme) => theme.palette.brand.shadowCardStrong,
+                      transform: "translateY(-8px)",
+                      boxShadow: brand.shadowCardStrong,
+                      borderColor: brand.border,
                     },
                   }}
                 >
-                  <Box sx={{ position: "relative" }}>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      overflow: "hidden",
+                      bgcolor: brand.bg,
+                    }}
+                  >
                     <CardMedia
                       component="img"
-                      height={"320"}
                       image={getImage(product, hoveredId === id)}
                       alt={getName(product)}
-                      sx={{ objectFit: "cover", height: { xs: 240, md: 320 } }}
+                      sx={{
+                        width: "100%",
+                        aspectRatio: "4 / 5",
+                        objectFit: "contain",
+                      }}
                     />
 
                     <IconButton
@@ -298,37 +364,36 @@ export default function WishlistPage() {
                         position: "absolute",
                         top: 8,
                         right: 8,
+                        width: { xs: 30, sm: 40 },
+                        height: { xs: 30, sm: 40 },
                         bgcolor: theme.palette.brand.navGlass,
-                        "&:hover": { bgcolor: theme.palette.background.paper },
+                        "&:hover": {
+                          bgcolor: "#FFFFFF",
+                          transform: "scale(1.1)",
+                          boxShadow: `0 4px 12px ${brand.primary}40`,
+                        },
                       })}
                     >
                       <FavoriteIcon sx={{ color: "primary.main" }} />
                     </IconButton>
-
-                    <Stack
-                      direction="row"
-                      spacing={0.8}
-                      sx={{
-                        position: "absolute",
-                        top: 8,
-                        left: 8,
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {dropped ? <Chip size="small" color="error" label="Price Dropped" /> : null}
-                      {stock.label === "Back in stock" ? (
-                        <Chip size="small" color="success" label="Back in Stock" />
-                      ) : null}
-                    </Stack>
                   </Box>
 
-                  <CardContent sx={{ p: { xs: 1.25, md: 2 } }}>
+                  <CardContent
+                    sx={{
+                      p: { xs: 0.75, sm: 2 },
+                      "&:last-child": { pb: { xs: 0.75, sm: 2 } },
+                    }}
+                  >
                     <Typography
                       sx={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
                         fontWeight: 600,
-                        minHeight: { xs: 36, md: 44 },
-                        fontSize: { xs: "0.9rem", md: "1rem" },
-                        lineHeight: { xs: 1.35, md: 1.5 },
+                        minHeight: { xs: 24, sm: 40 },
+                        fontSize: { xs: "0.7rem", sm: "1rem" },
+                        lineHeight: { xs: 1.18, sm: 1.4 },
                       }}
                     >
                       {getName(product)}
@@ -338,9 +403,18 @@ export default function WishlistPage() {
                       direction="row"
                       spacing={1}
                       alignItems="center"
-                      sx={{ mt: 0.6, mb: 0.6 }}
+                      sx={{
+                        mt: { xs: 0.35, sm: 0.6 },
+                        mb: { xs: 0.5, sm: 0.6 },
+                        flexWrap: "wrap",
+                      }}
                     >
-                      <Typography sx={{ fontWeight: 700, fontSize: { xs: "0.9rem", md: "1rem" } }}>
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: { xs: "0.8rem", sm: "1rem" },
+                        }}
+                      >
                         {currency(price)}
                       </Typography>
                       {originalPrice > price ? (
@@ -348,7 +422,7 @@ export default function WishlistPage() {
                           sx={{
                             textDecoration: "line-through",
                             opacity: 0.6,
-                            fontSize: { xs: "0.8rem", md: "0.95rem" },
+                            fontSize: { xs: "0.62rem", sm: "0.95rem" },
                           }}
                         >
                           {currency(originalPrice)}
@@ -360,38 +434,70 @@ export default function WishlistPage() {
                       size="small"
                       color={stock.color}
                       label={stock.label}
-                      sx={{ mb: 1, fontSize: { xs: "0.66rem", md: "0.75rem" } }}
+                      sx={{
+                        mb: { xs: 0.45, sm: 1 },
+                        height: { xs: 18, sm: 24 },
+                        fontSize: { xs: 8, sm: 11 },
+                        fontWeight: 600,
+                        "& .MuiChip-label": { px: { xs: 0.7, sm: 1.5 } },
+                      }}
                     />
 
                     {sizes.length > 0 ? (
-                      <Box sx={{ mb: 1.1 }}>
+                      <Box sx={{ mb: { xs: 0.55, sm: 1.1 } }}>
                         <Typography
                           sx={{
-                            fontSize: { xs: 11.5, md: 13 },
+                            fontSize: { xs: 8, sm: 13 },
                             opacity: 0.75,
-                            mb: 0.5,
+                            mb: { xs: 0.3, sm: 0.5 },
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                            letterSpacing: { xs: 0.35, sm: 0.5 },
                           }}
                         >
                           Available sizes
                         </Typography>
-                        <Stack direction="row" spacing={0.6} flexWrap="wrap" useFlexGap>
+                        <Stack
+                          direction="row"
+                          spacing={{ xs: 0.3, sm: 0.6 }}
+                          flexWrap="wrap"
+                          useFlexGap
+                        >
                           {sizes.slice(0, 6).map((size) => (
                             <Chip
                               key={size}
                               label={size}
                               size="small"
-                              variant={selectedSize === size ? "filled" : "outlined"}
-                              color={selectedSize === size ? "secondary" : "default"}
-                              onClick={() =>
-                                setSelectedSizes((prev) => ({ ...prev, [id]: size }))
+                              variant={
+                                selectedSize === size ? "filled" : "outlined"
                               }
-                              sx={{ fontSize: { xs: "0.66rem", md: "0.75rem" } }}
+                              color={
+                                selectedSize === size ? "secondary" : "default"
+                              }
+                              onClick={() =>
+                                setSelectedSizes((prev) => ({
+                                  ...prev,
+                                  [id]: size,
+                                }))
+                              }
+                              sx={{
+                                height: { xs: 18, sm: 26 },
+                                fontSize: { xs: 8, sm: 12 },
+                                fontWeight: 600,
+                                "& .MuiChip-label": {
+                                  px: { xs: 0.55, sm: 1.5 },
+                                },
+                              }}
                             />
                           ))}
                         </Stack>
                         {selectedSize ? (
                           <Typography
-                            sx={{ fontSize: { xs: 11, md: 12 }, opacity: 0.75, mt: 0.5 }}
+                            sx={{
+                              fontSize: { xs: 8, sm: 12 },
+                              opacity: 0.75,
+                              mt: 0.5,
+                            }}
                           >
                             Selected size: {selectedSize}
                           </Typography>
@@ -405,17 +511,22 @@ export default function WishlistPage() {
                         startIcon={<ShoppingBagOutlinedIcon />}
                         onClick={() => handleAddToBag(product)}
                         disabled={getStock(product) <= 0}
-                        sx={{ py: { xs: 0.6, md: 0.875 }, fontSize: { xs: "0.8rem", md: "0.875rem" } }}
+                        sx={{
+                          borderRadius: "24px",
+                          minHeight: { xs: 32, sm: 42 },
+                          py: { xs: 0.625, sm: 0.875 },
+                          fontSize: { xs: "0.7rem", sm: "0.875rem" },
+                        }}
                       >
                         Add to Bag
                       </AppButton>
                     </Stack>
                   </CardContent>
                 </Card>
-              </Grid>
+              </Box>
             );
           })}
-        </Grid>
+        </Box>
 
         {/* {recentlyViewed.length ? (
           <Box sx={{ mt: 8 }}>
@@ -448,10 +559,23 @@ export default function WishlistPage() {
         ) : null} */}
       </Container>
 
-      <Dialog open={sizeModal.open} onClose={closeSizeModal} fullWidth maxWidth="xs">
-        <DialogTitle sx={{ fontSize: { xs: "1rem", md: "1.25rem" } }}>Select Size</DialogTitle>
+      <Dialog
+        open={sizeModal.open}
+        onClose={closeSizeModal}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle sx={{ fontSize: { xs: "1rem", md: "1.25rem" } }}>
+          Select Size
+        </DialogTitle>
         <DialogContent>
-          <Stack direction="row" spacing={0.8} flexWrap="wrap" useFlexGap sx={{ pt: 0.75 }}>
+          <Stack
+            direction="row"
+            spacing={0.8}
+            flexWrap="wrap"
+            useFlexGap
+            sx={{ pt: 0.75 }}
+          >
             {getSizes(sizeModal.product || {}).map((size) => {
               const productId = getProductId(sizeModal.product || {});
               const active = selectedSizes[productId] === size;
@@ -475,13 +599,19 @@ export default function WishlistPage() {
           <AppButton
             variant="outlined"
             onClick={closeSizeModal}
-            sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.55, md: 0.8 } }}
+            sx={{
+              fontSize: { xs: "0.78rem", md: "0.875rem" },
+              py: { xs: 0.55, md: 0.8 },
+            }}
           >
             Cancel
           </AppButton>
           <AppButton
             onClick={confirmSizeSelection}
-            sx={{ fontSize: { xs: "0.78rem", md: "0.875rem" }, py: { xs: 0.55, md: 0.8 } }}
+            sx={{
+              fontSize: { xs: "0.78rem", md: "0.875rem" },
+              py: { xs: 0.55, md: 0.8 },
+            }}
           >
             Add to Bag
           </AppButton>

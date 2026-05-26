@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { Tooltip } from "@mui/material";
 import {
   Box,
   Card,
@@ -28,6 +29,7 @@ import {
   Breadcrumbs,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
@@ -522,6 +524,24 @@ export default function ProductDetailsPage() {
                     <Box
   component="img"
   src={activeImage}
+  onTouchStart={(e) => {
+                        window.touchStartX = e.changedTouches[0].screenX;
+                      }}
+                      onTouchEnd={(e) => {
+                        const touchEndX = e.changedTouches[0].screenX;
+                        if (window.touchStartX - touchEndX > 50) {
+                          // Swipe Left
+                          setSelectedImageIndex((prev) =>
+                            prev === images.length - 1 ? 0 : prev + 1
+                          );
+                        }
+                        if (touchEndX - window.touchStartX > 50) {
+                          // Swipe Right
+                          setSelectedImageIndex((prev) =>
+                            prev === 0 ? images.length - 1 : prev - 1
+                          );
+                        }
+                      }}
   alt={getName(product)}
   sx={{
 	 width: { xs: "100%", sm: "96%" },
@@ -553,6 +573,46 @@ maxWidth: "660px",
                         }}
                       />
                     )}
+                    <Tooltip title="Share Product" arrow>
+                      <IconButton
+                        onClick={() => {
+                          if (navigator.share) {
+                            navigator.share({
+                              title: getName(product),
+                              text: `Check out this product: ${getName(product)}`,
+                              url: window.location.href,
+                            });
+                          } else {
+                            navigator.clipboard.writeText(window.location.href);
+                            toast.success("Product link copied!");
+                          }
+                        }}
+                        sx={{
+                          position: "absolute",
+                          top: { xs: 8, sm: 16 },
+                          right: { xs: 8, sm: 16 },
+                          zIndex: 3,
+                           bgcolor: brand.borderSoft,
+                          backdropFilter: "blur(6px)",
+                          border: `1px solid ${brand.borderSoft}`,
+                          width: { xs: 34, sm: 42 },
+                          height: { xs: 34, sm: 42 },
+
+                          "&:hover": {
+                        bgcolor: "#FFFFFF",
+                        transform: "scale(1.1)",
+                        boxShadow: `0 4px 12px ${brand.primary}40`,
+                      },
+                        }}
+                      >
+                        <ShareOutlinedIcon
+                          sx={{
+                            fontSize: { xs: 18, sm: 22 },
+                            color: brand.text,
+                          }}
+                        />
+                      </IconButton>
+                    </Tooltip>
                   </Paper>
                 </Grid>
               </Grid>
